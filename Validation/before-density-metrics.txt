@@ -1,0 +1,3 @@
+Engine: 6000.3.25f1; resolution: 470x1024; rendered capture: 588x1280.
+Errors: 0; sampled frames: 4453; mean FPS including captures: 57.1; mean recorded GC bytes/frame: 457; peak draw calls: 38.
+Desktop development build measurement; not an Android performance result. Images rendered by the running game's camera and UGUI into a RenderTexture.

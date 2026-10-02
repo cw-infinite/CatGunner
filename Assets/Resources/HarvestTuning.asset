@@ -1,0 +1,63 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 613b83841c275a8c27b0a6a553e13e29, type: 3}
+  m_Name: HarvestTuning
+  m_EditorClassIdentifier: 
+  movementSpeed: 1.9
+  engagementRange: 3.2
+  cameraDamping: 15
+  baseDamage: 92
+  damageGrowth: 1.077
+  shotInterval: 0.62
+  speedStep: 0.078
+  projectileSpeed: 27
+  baseHealth: 140
+  healthGrowth: 1.29
+  baseReward: 16
+  rewardGrowth: 1.15
+  baseCost: 46
+  costGrowth: 1.365
+  clearDuration: 2
+  transferDuration: 1.5
+  finaleHealthMultiplier: 20
+  finaleRewardMultiplier: 8
+  finaleScale: 1.65
+  stageTargetCounts:
+  - 44
+  - 72
+  - 62
+  - 68
+  - 72
+  - 40
+  - 66
+  - 76
+  - 80
+  - 84
+  targetsPerCluster: 6
+  firstClusterDistance: 3.1
+  clusterSpacing: 3
+  clusterDepth: 2.6
+  clusterWidth: 4.4
+  clusterLateralOffset: -0.9
+
+  challengeUnlockStage: 2
+  challengeGemReward: 36
+  challengeSeconds: 60
+  arenaRadius: 7.5
+  challengeCounts:
+  - 24
+  - 40
+  - 64
+  challengeHealth:
+  - 1
+  - 1.45
+  - 2.2

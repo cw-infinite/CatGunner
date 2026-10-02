@@ -1,0 +1,89 @@
+PASS: Drag moves character through live Update
+PASS: Release stops manual movement
+PASS: UI raycast found button
+PASS: Upgrade 0 responds to UI click
+PASS: UI raycast found button
+PASS: Upgrade 1 responds to UI click
+PASS: UI raycast found button
+PASS: Upgrade 2 responds to UI click
+PASS: UI raycast found button
+PASS: Unaffordable upgrade cannot debit
+PASS: UI raycast found button
+PASS: Settings opens
+PASS: Simulation continues beneath settings
+PASS: UI raycast found button
+PASS: Settings closes
+PASS: 19 filesystem checks for backup/temp recovery, archival, equipment/reward persistence, future-version protection and failed-write retry.
+PASS: Unity JSON save/load roundtrip in isolated path
+PASS: Future save disables writes
+PASS: Future save is not overwritten
+PASS: UI raycast found button
+PASS: Settings disables saving for protected files
+PASS: UI raycast found button
+PASS: UI raycast found button
+PASS: Settings reports recovery and permits saving
+PASS: UI raycast found button
+PASS: Unity JSON version-one migration
+PASS: Two-unit targeting is active
+PASS: Clear phase triggered
+PASS: Travel follows clear
+PASS: Next stage resumes
+PASS: UI raycast found button
+PASS: UI raycast found button
+PASS: Trial starts with live countdown
+PASS: Trial success grants crystals once
+PASS: UI raycast found button
+PASS: Trial restores exact normal-stage progress
+PASS: UI raycast found button
+PASS: UI raycast found button
+PASS: UI raycast found button
+PASS: Collection previews unowned tool without granting it
+PASS: UI raycast found button
+PASS: UI raycast found button
+PASS: Crystal delivery adds one tool
+PASS: Drag/drop equips second tool and recruits shooter
+PASS: UI raycast found button
+PASS: Collection shows current ownership and equipped count
+PASS: UI raycast found button
+PASS: Equipment and challenge wins persist in v4 save
+PASS: UI raycast found button
+PASS: Timeout returns no success reward
+PASS: UI raycast found button
+PASS: UI raycast found button
+PASS: Manual exit returns to original grove
+PASS: Gold finale survives opening volley and blocks stage clear
+PASS: Squad clears gold tree through normal shooting
+PASS: Gold finale transitions into palm biome
+PASS: UI raycast found button
+PASS: UI raycast found button
+PASS: UI raycast found button
+PASS: Daily UI grants one reward despite repeated click
+PASS: UI raycast found button
+PASS: UI raycast found button
+PASS: UI raycast found button
+PASS: UI raycast found button
+PASS: UI raycast found button
+PASS: Mission UI claims completed objectives once
+PASS: UI raycast found button
+PASS: UI raycast found button
+PASS: Pass UI pays earned crystals once
+PASS: Reward claims persist in v4 filesystem save
+PASS: UI raycast found button
+PASS: Closing tasks restores battlefield controls
+PASS: Active controls fit safe portrait viewport: layout_reference_play.png
+PASS: Active controls fit safe portrait viewport: layout_reference_gear.png
+PASS: UI raycast found button
+PASS: Active controls fit safe portrait viewport: layout_wide_phone_play.png
+PASS: Active controls fit safe portrait viewport: layout_wide_phone_gear.png
+PASS: UI raycast found button
+PASS: Active controls fit safe portrait viewport: layout_notched_phone_play.png
+PASS: Active controls fit safe portrait viewport: layout_notched_phone_gear.png
+PASS: UI raycast found button
+PASS: Active controls fit safe portrait viewport: layout_tablet_play.png
+PASS: Active controls fit safe portrait viewport: layout_tablet_gear.png
+PASS: UI raycast found button
+PASS: Safe-area screen-to-HUD drag coordinates roundtrip
+PASS: Dragged tool remains under pointer with safe-area inset
+Engine: 6000.3.25f1; resolution: 470x1024; rendered capture: 588x1280.
+Errors: 0; sampled frames: 1507; mean FPS including captures: 50.4; mean recorded GC bytes/frame: 4283; peak draw calls: 29.
+Desktop development build measurement; not an Android performance result. Images rendered by the running game's camera and UGUI into a RenderTexture.

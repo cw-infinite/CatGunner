@@ -1,0 +1,2 @@
+
+PASS: all runtime and editor C# sources compile against Unity managed assemblies.

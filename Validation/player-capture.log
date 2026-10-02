@@ -1,0 +1,48 @@
+Mono path[0] = 'C:/Users/deadm/Desktop/Code/OpenAI/catgunner/Builds/Windows/VerdantTrail_Data/Managed'
+Mono config path = 'C:/Users/deadm/Desktop/Code/OpenAI/catgunner/Builds/Windows/MonoBleedingEdge/etc'
+Found 1 interfaces on host : 0) 192.168.1.151
+Player connection [29484]  Target information:
+
+Player connection [29484]  * "[IP] 192.168.1.151 [Port] 55000 [Flags] 2 [Guid] 3488089037 [EditorId] 3536145778 [Version] 1048832 [Id] WindowsPlayer(2,CW-PC1991) [Debug] 0 [PackageName] WindowsPlayer [ProjectName] Verdant Trail" 
+
+Player connection [29484] Started UDP target info broadcast (1) on [225.0.0.222:54997].
+
+Input System module state changed to: Initialized.
+[Physics::Module] Initialized fallback backend.
+[Physics::Module] Id: 0xdecafbad
+Initialize engine version: 6000.3.25f1 (e1dba0a9aba4)
+[Subsystems] Discovering subsystems at path C:/Users/deadm/Desktop/Code/OpenAI/catgunner/Builds/Windows/VerdantTrail_Data/UnitySubsystems
+[D3D12 Device Filter] Vendor Name: NVIDIA
+[D3D12 Device Filter] Device Name: NVIDIA GeForce GTX 1050 Ti
+[D3D12 Device Filter] Driver Version: 32.0.15.6094
+[D3D12 Device Filter] Feature Level: 12.1
+[D3D12 Device Filter] Graphics Memory: 4004 MB
+[D3D12 Device Filter] Processor Count: 12
+[D3D12 Device Filter] Device Type: Discrete
+GfxDevice: creating device client; kGfxThreadingModeSplitJobs
+d3d12: failed to query info queue interface (0x80004002).
+Direct3D:
+    Version:         Direct3D 12 [level 12.1]
+    Renderer:        NVIDIA GeForce GTX 1050 Ti (ID=0x1c82)
+    Vendor:          NVIDIA
+    VRAM:            4004 MB
+    App VRAM Budget: 3403 MB
+    Driver:          32.0.15.6094
+Begin MonoManager ReloadAssembly
+- Loaded All Assemblies, in  0.325 seconds
+- Finished resetting the current domain, in  0.003 seconds
+[Physics::Module] Selected backend.
+[Physics::Module] Name: PhysX
+[Physics::Module] Id: 0xf2b8ea05
+[Physics::Module] SDK Version: 4.1.2
+[Physics::Module] Integration Version: 1.0.0
+[Physics::Module] Threading Mode: Multi-Threaded
+<RI> Initializing input.
+<RI> Input initialized.
+UnloadTime: 0.602700 ms
+[Physics::Module] Cleanup current backend.
+[Physics::Module] Id: 0xf2b8ea05
+Input System module state changed to: ShutdownInProgress.
+Input System polling thread exited.
+Input System module state changed to: Shutdown.
+PlayerConnection::Cleanup##utp:{"type":"MemoryLeaks","version":2,"phase":"Immediate","time":1790801546323,"processId":27304,"allocatedMemory":64906,"memoryLabels":[{"Default":136},{"NewDelete":776},{"Thread":8128},{"Manager":8662},{"GfxDevice":2128},{"GfxThread":1536},{"Audio":752},{"Serialization":520},{"JobScheduler":32768},{"String":476},{"HashMap":6656},{"PoolAlloc":96},{"CloudService":144},{"VR":1872},{"Video":144},{"Subsystems":96},{"CoreBusinessMetrics":120}]}
