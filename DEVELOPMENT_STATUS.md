@@ -2,7 +2,7 @@
 
 ## Where we are
 
-The game is a playable Windows mechanical prototype. **Visual reconstruction remains active work**, not a completed polish milestone: the previous geometric placeholder direction did not adequately resemble the recording. Original generated sprite atlases now replace the character, vegetation, weapon and major UI surfaces, but composition, typography, cliffs and animation still need closer comparison. Automatic harvesting, movement, upgrades, stage transitions, timed trials, two-shooter equipment with four gun types, a nine-look skin gallery with cumulative ownership bonuses, collection purchases, daily rewards, missions, a free reward track, save recovery, and adaptive portrait layouts are implemented.
+The game is a playable Windows mechanical prototype. **Visual reconstruction remains active work**, not a completed polish milestone: the previous geometric placeholder direction did not adequately resemble the recording. Original generated sprite atlases now replace the character, vegetation, weapon and major UI surfaces, but composition, typography, cliffs and animation still need closer comparison. Automatic harvesting, movement, upgrades, stage transitions, timed trials, three-cat equipment with four gun types, a nine-look skin gallery with cumulative ownership bonuses, collection purchases, daily rewards, missions, a free reward track, save recovery, and adaptive portrait layouts are implemented.
 
 The normal local save inspected on October 2 was at **stage 32, displayed as Grove 7-2**. Validation uses isolated saves and does not advance that player save.
 
@@ -25,3 +25,5 @@ Currency and settings icons, consistent button feedback, ready-to-claim reward b
 ## October 3 content expansion
 
 The skin gallery is implemented: eight purchasable original costumes plus starter, cumulative bonuses independent of outfit, and v5 save migration. Four weapon looks and eight forest/desert props are integrated. Prices and new weapon balance are prototype tuning. See [skin/content validation](Validation/SKINS_CONTENT_UPDATE.md).
+
+Three-cat squads now support separate gear, follower removal, empty middle slots and v6 save migration. See [three-cat update](Validation/THREE_CAT_UPDATE.md).

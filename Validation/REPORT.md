@@ -1,6 +1,6 @@
 # Validation report — working Windows prototype
 
-Latest content pass (2026-10-03): [Skins, guns and scenery](SKINS_CONTENT_UPDATE.md). Windows build: zero warnings/errors; isolated player: 167 PASS entries and zero runtime errors; 26 dedicated editor assertions cover skin bonuses and expanded weapons. See [development status](../DEVELOPMENT_STATUS.md) for campaign scope and remaining platform work. Older measurements below describe their respective earlier passes.
+Latest content pass (2026-10-03): [Three-cat equipment squads](THREE_CAT_UPDATE.md). Windows build: zero warnings/errors; isolated player: 182 PASS entries and zero runtime errors; 20 dedicated editor assertions cover three-cat equipment/combat, alongside 26 skin/weapon assertions. See [development status](../DEVELOPMENT_STATUS.md) for campaign scope and remaining platform work. Older measurements below describe their respective earlier passes.
 
 ## Build and engine checks
 Unity 6000.3.25f1 imported the project and built `Builds/Windows/VerdantTrail.exe` successfully: **zero warnings, zero errors**. The previous license prerequisite is resolved. The invalid legacy-input package entry found on first import was removed.

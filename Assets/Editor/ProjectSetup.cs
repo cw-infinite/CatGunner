@@ -31,7 +31,7 @@ namespace VerdantTrail.Editor {
   [MenuItem("Verdant Trail/Run deterministic checks")]
   public static void Validate() {
    Directory.CreateDirectory("Validation");var t=AssetDatabase.LoadAssetAtPath<HarvestTuning>("Assets/Resources/HarvestTuning.asset");if(t==null)t=ScriptableObject.CreateInstance<HarvestTuning>();
-   var log=new StringBuilder();log.AppendLine(SkinValidation.Run(t));log.AppendLine(ProgressionValidation.Run(t));log.AppendLine(RewardValidation.Run(t));log.AppendLine(DeadlineValidation.Run(t));log.AppendLine(SaveRecoveryChecks.Run("Validation"));var s=new HarvestSimulation(t,new SaveData());
+   var log=new StringBuilder();log.AppendLine(SkinValidation.Run(t));log.AppendLine(SquadValidation.Run(t));log.AppendLine(ProgressionValidation.Run(t));log.AppendLine(RewardValidation.Run(t));log.AppendLine(DeadlineValidation.Run(t));log.AppendLine(SaveRecoveryChecks.Run("Validation"));var s=new HarvestSimulation(t,new SaveData());
    Require(!s.Buy(0),"Cannot buy without cash");s.save.cash=1000;double cost=t.Cost(0);Require(s.Buy(0)&&s.save.force==1&&s.save.cash==1000-cost,"Purchase debits exactly once");
    Require(t.Interval(4)<t.Interval(0),"Tempo shortens interval");Require(t.Damage(4)>t.Damage(0),"Force raises damage");
    var idle=new HarvestSimulation(t,new SaveData());idle.automate=false;var original=idle.units[0].position;

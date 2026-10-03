@@ -1,5 +1,5 @@
 {
-    "version": 5,
+    "version": 6,
     "stage": 1,
     "highestStage": 1,
     "cash": 100.0,
@@ -35,5 +35,5 @@
     "companionProgress": [],
     "prestige": 0,
     "sound": true,
-    "offlineTimestamp": 1791050799
+    "offlineTimestamp": 1791052133
 }

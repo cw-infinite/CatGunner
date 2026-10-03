@@ -28,7 +28,7 @@ namespace VerdantTrail {
    InChallenge=true;ChallengeWon=false;ChallengeRemaining=tuning.challengeSeconds;ChallengeIndex=Math.Min(save.challengeWins,tuning.challengeCounts.Length-1);
    Array.Clear(targets,0,targets.Length);ClearTransient();total=Math.Min(targets.Length,tuning.challengeCounts[ChallengeIndex]);cleared=0;
    for(int i=0;i<total;i++){float angle=i*2.399963f;float radius=1.5f+(tuning.arenaRadius-2)* (float)Math.Sqrt((i+.5f)/total);int kind=ChallengeIndex==0?i%2:ChallengeIndex==1?3:4;float hp=tuning.Health(save.stage)*tuning.challengeHealth[ChallengeIndex];targets[i]=new TargetState{active=true,id=i,kind=kind,position=new Vector2(Mathf.Cos(angle),Mathf.Sin(angle))*radius,hp=hp,maxHp=hp};}
-   for(int i=0;i<units.Length;i++)units[i]=new UnitState{position=new Vector2(-i,-i*.6f),target=-1,aim=Vector2.right};phaseTime=0;stageSerial++;return true;
+   for(int i=0;i<units.Length;i++)units[i]=new UnitState{position=new Vector2(i==2?1:-i,i==0?0:-.6f),target=-1,aim=Vector2.right};phaseTime=0;stageSerial++;return true;
   }
   void FinishChallenge(bool won){if(!InChallenge||phase==StagePhase.ChallengeResult)return;SettleDrops();ChallengeWon=won;if(won){save.gems+=tuning.challengeGemReward;save.challengeWins++;}phase=StagePhase.ChallengeResult;phaseTime=0;}
   public void LeaveChallenge(){if(!InChallenge)return;SettleDrops();Array.Copy(suspendedTargets,targets,targets.Length);Array.Copy(suspendedUnits,units,units.Length);total=suspendedTotal;cleared=suspendedCleared;ClearTransient();InChallenge=false;phase=StagePhase.Harvest;phaseTime=0;stageSerial++;suspendedTargets=null;suspendedUnits=null;}
@@ -65,7 +65,7 @@ namespace VerdantTrail {
    }
    // Only the first world's gold-tree finale is confirmed by the recording.
    if(save.stage==5){float end=0;for(int i=0;i<total-1;i++)end=Mathf.Max(end,Vector2.Dot(targets[i].position,Direction));float hp=tuning.Health(save.stage)*tuning.finaleHealthMultiplier;targets[total-1]=new TargetState{active=true,id=total-1,kind=5,position=Direction*(end+4)+Normal*.5f,hp=hp,maxHp=hp};}
-   for(int i=0;i<units.Length;i++)units[i]=new UnitState{position=new Vector2(-i*.7f,-i*.65f),target=-1,cooldown=i*.17f,aim=Vector2.right};
+   for(int i=0;i<units.Length;i++)units[i]=new UnitState{position=new Vector2(i==2?.7f:-i*.7f,i==0?0:-.65f),target=-1,cooldown=i*.17f,aim=Vector2.right};
    phase=StagePhase.Harvest;phaseTime=0;stageSerial++;
   }
   public bool Buy(int category) {

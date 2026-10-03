@@ -1,9 +1,9 @@
 {
-    "version": 5,
+    "version": 6,
     "stage": 6,
     "highestStage": 6,
-    "cash": 6151.25,
-    "gems": 92,
+    "cash": 6545.0,
+    "gems": 0,
     "force": 15,
     "tempo": 15,
     "yield": 1,
@@ -12,7 +12,7 @@
     "equippedSkin": 2,
     "missionDay": 20729,
     "lastAttendanceDay": 20729,
-    "dailyHarvests": 164,
+    "dailyHarvests": 172,
     "dailyStages": 2,
     "missionClaims": 9,
     "passPoints": 20,
@@ -21,13 +21,13 @@
     "ownedWeapons": [
         1,
         1,
-        0,
-        0
+        1,
+        1
     ],
     "equippedWeapons": [
-        0,
+        2,
         1,
-        -1
+        3
     ],
     "unlockedSystems": [],
     "characterProgress": [],
@@ -35,5 +35,5 @@
     "companionProgress": [],
     "prestige": 0,
     "sound": true,
-    "offlineTimestamp": 1791050822
+    "offlineTimestamp": 1791052159
 }

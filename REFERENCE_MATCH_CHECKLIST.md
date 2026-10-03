@@ -16,7 +16,7 @@ MATCHED = directly verified against a reference observation. CLOSE = bounded app
 | Three upgrade categories and layout | CLOSE | All three UGUI controls tested by raycast/click; affordability and portrait layout inspected |
 | Early stage and purchase cadence | CLOSE | In-engine cycles 50.55s / 70.38s; actual player's first advance ~53.7s; schedules differ from recording |
 | Stage clear / short transfer | CLOSE | Clear, transfer and next-stage resumption tested and captured; simpler banner/effects |
-| Later squad progression | CLOSE | Crystal delivery and second-slot equip tested; third slot and merging deferred |
+| Later squad progression | CLOSE | User-confirmed three-cat squads implemented with separate gun stats, follower removal and persistent slots; merging remains deferred |
 | Five-sector world progression | CLOSE | Model advances through five sectors then changes biome; world-one gold tree implemented and clear/transfer tested |
 | Timed harvesting arenas | CLOSE | Countdown, trees/palms/cacti, reward, timeout and grove return implemented; arena tuning inferred |
 | Weapons / appearance / missions | NEEDS WORK | Four guns and collection purchases, nine-look wardrobe with cumulative ownership bonuses, missions/free pass implemented; exact content/prices differ and merging remains deferred |

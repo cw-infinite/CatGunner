@@ -6,7 +6,7 @@ namespace VerdantTrail.Editor {
    int checks=0;void Require(bool ok,string message){checks++;if(!ok)throw new Exception("Skin check: "+message);}
    var catalog=ScriptableObject.CreateInstance<SkinCatalog>();
    var save=SaveStore.Sanitize(JsonUtility.FromJson<SaveData>("{\"version\":4,\"stage\":3,\"highestStage\":3,\"gems\":108,\"ownedWeapons\":[1,2],\"equippedWeapons\":[0,1,-1]}"));
-   Require(save.version==5&&save.ownedSkins==1&&save.equippedSkin==0,"Old save receives starter only");
+   Require(save.version==SaveStore.CurrentVersion&&save.ownedSkins==1&&save.equippedSkin==0,"Old save receives starter only");
    Require(save.ownedWeapons.Length==4&&save.ownedWeapons[1]==2&&save.equippedWeapons[1]==1,"Expanding weapon catalog preserves inventory and loadout");
    var sim=new HarvestSimulation(tuning,save);var skins=new SkinSystem(sim,catalog);float damage=sim.EffectiveDamage,interval=sim.Interval;double reward=sim.Reward;
    Require(!skins.Equip(2)&&!skins.Buy(-1)&&!skins.Buy(99),"Unowned equip and invalid purchases rejected");

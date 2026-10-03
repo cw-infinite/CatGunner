@@ -83,7 +83,7 @@ namespace VerdantTrail {
     Set(shadows[i],active,u.position+Vector2.down*.025f,new Vector2(.45f,.28f));
     Vector2 grip=u.position+Vector2.up*(.47f+bob)-u.aim*(u.flash/.075f*.065f);
     Set(guns[i],active,grip,new Vector2(.31f,.31f));guns[i].flipY=u.aim.x<0;
-    int weaponId=sim.save.equippedWeapons[i];guns[i].sprite=OriginalArt.Get("weapon"+Mathf.Max(0,weaponId));guns[i].color=Color.white;
+    int weaponId=sim.equipment!=null?sim.equipment.WeaponIdForUnit(i):0;guns[i].sprite=OriginalArt.Get("weapon"+Mathf.Max(0,weaponId));guns[i].color=Color.white;
     guns[i].sortingOrder=bodies[i].sortingOrder+1;guns[i].transform.rotation=Quaternion.Euler(0,0,Mathf.Atan2(u.aim.y,u.aim.x)*Mathf.Rad2Deg);
     Set(rings[i],active&&u.target>=0&&sim.targets[u.target].active, u.target>=0?sim.targets[u.target].position+Vector2.up*.35f:Vector2.zero,Vector2.one*.25f);
     Set(flashes[i],active&&u.flash>0,grip+u.aim*.57f,new Vector2(.18f,.22f));flashes[i].transform.rotation=guns[i].transform.rotation;

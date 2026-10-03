@@ -1,4 +1,5 @@
 PASS: 26 skin/expanded-weapon checks: migration, debit, cumulative ownership bonuses, cosmetic equip, combat effects, persistence and increasing tiers.
+PASS: 20 three-cat checks: acquisition, independent combat stats, gaps, removals, reload, trials, capacity and duplicate ownership.
 Natural first trial: 28.02s at level-four upgrades.
 PASS: gold finale, clear gate, trial preservation, single payout and sand-biome transition.
 PASS: v2-to-v5 equipment migration, delivery debit, item ownership, equip/unequip, exact grove restoration, challenge success/timeout/exit and single reward payout.

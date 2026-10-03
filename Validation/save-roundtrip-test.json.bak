@@ -1,18 +1,18 @@
 {
-    "version": 5,
+    "version": 6,
     "stage": 6,
     "highestStage": 6,
-    "cash": 5991.0,
-    "gems": 36,
+    "cash": 6167.0,
+    "gems": 92,
     "force": 15,
     "tempo": 15,
     "yield": 1,
     "challengeWins": 1,
-    "ownedSkins": 1,
-    "equippedSkin": 0,
+    "ownedSkins": 7,
+    "equippedSkin": 2,
     "missionDay": 20729,
     "lastAttendanceDay": 20729,
-    "dailyHarvests": 162,
+    "dailyHarvests": 164,
     "dailyStages": 2,
     "missionClaims": 9,
     "passPoints": 20,
@@ -35,5 +35,5 @@
     "companionProgress": [],
     "prestige": 0,
     "sound": true,
-    "offlineTimestamp": 1791050821
+    "offlineTimestamp": 1791052156
 }

@@ -9,7 +9,7 @@ This is a playable reference-driven prototype with original generated cartoon sp
 - Shooting and approach are automatic. Drag on the battlefield to override movement; WASD/arrows also work. Pausing or leaving the app clears held touch movement and unfinished inventory drags.
 - Buy **Force**, **Tempo**, or **Yield** at the bottom. Dim cards and red prices indicate insufficient cash.
 - **TRIAL** unlocks at stage 2: clear a 60-second arena for crystals, then return to your grove.
-- **GEAR** unlocks at stage 3: spend 36 crystals on a delivery, then drag the tool into slot two to recruit a second shooter.
+- **GEAR** unlocks at stage 3: buy spare guns, then drag or tap-equip them into CAT 2 and CAT 3 to build a **three-cat squad**. Each cat fires its own equipped gun. Removing a follower returns its gear to inventory.
 - **DAILY** offers one crystal claim per UTC day. **TASKS** unlocks at stage 3: claim completed objectives for pass points, then claim earned crystal milestones.
 - Gold badges indicate available rewards. Missions show progress bars; selecting a spare tool highlights the equipment slots that accept it. GEAR also shows your crystal balance and inventory capacity.
 - Open **COLLECTION** inside GEAR to inspect four tools and buy additional guns for crystals, then equip them from inventory.
@@ -40,7 +40,7 @@ Unity 6.3 LTS reference: https://unity.com/blog/unity-6-3-lts-is-now-available
 - `Tools/Build-Windows.ps1`: imports, runs in-engine core checks, and builds the Windows development player. Last build succeeded with zero warnings/errors.
 - `Tools/Check-Compile.ps1`: standalone C# compilation against installed Unity assemblies.
 - `Tools/Check-Core.ps1`: exact core sources tested using a test-only Unity math shim; additional fallback check, not a renderer test.
-- Run the executable with `-validatePrototype` for isolated live UI-event, drag/release, save/load, two-unit and stage-transition checks.
+- Run the executable with `-validatePrototype` for isolated live UI-event, drag/release, save/load, three-cat equipment and stage-transition checks.
 - Run with `-capturePrototype` for an isolated fresh-save, balanced-purchase, 78-second normal-speed run. Camera-rendered images, telemetry and desktop measurements go into `Validation/`.
 
 Validation modes never write the normal player's save. Images are rendered by the actual running game and UGUI into a 588 × 1280 RenderTexture; they are not operating-system window screenshots. Hidden-window screen capture was unavailable. The interactive Windows window defaults to 470 × 1024 to fit ordinary displays.
@@ -71,3 +71,5 @@ Latest layout work: [portrait/safe-area update](Validation/LAYOUT_UPDATE.md), in
 Save reliability: [recovery behavior and validation](Validation/SAVE_RECOVERY_UPDATE.md).
 
 Latest correctness fixes: [input interruption and trial deadlines](Validation/INPUT_DEADLINE_UPDATE.md).
+
+Three-cat equipment, independent weapon stats, empty-slot handling and save version 6 are implemented; see [three-cat validation](Validation/THREE_CAT_UPDATE.md).

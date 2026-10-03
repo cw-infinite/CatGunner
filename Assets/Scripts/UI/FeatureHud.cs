@@ -16,7 +16,7 @@ namespace VerdantTrail {
   HarvestSimulation sim;EquipmentSystem equipment;PortraitHud hud;Canvas canvas;Font font;
   GameObject weapons,offer,result;Button weaponTile,challengeTile,exit,delivery;Text timer,resultTitle,resultDetail,offerDetail,inventoryHint;
   Image[] slotIcons=new Image[3],itemIcons=new Image[12];
-  Image[] slotHighlights=new Image[3],itemHighlights=new Image[12];Text gearWallet;
+  Image[] slotHighlights=new Image[3],itemHighlights=new Image[12];Text gearWallet,squadHeading;Button[] removeSlots=new Button[3];
   Image SelectionFrame(Transform parent){var frame=Panel("Selection frame",parent,-.018f,-.018f,1.036f,1.036f,new Color(1,.75f,.22f));frame.fillCenter=false;frame.pixelsPerUnitMultiplier=7;frame.raycastTarget=false;frame.gameObject.SetActive(false);return frame;}
   Image ToolIcon(Transform parent,float x,float y,float w,float h){var image=Rect("Tool icon",parent,x,y,w,h).gameObject.AddComponent<Image>();image.sprite=OriginalArt.Get("gun");image.preserveAspect=true;image.raycastTarget=false;return image;}
   Image timerFill;Text[] slots=new Text[3];Button[] items=new Button[12];Text[] itemLabels=new Text[12];int[] itemIds=new int[12];
@@ -37,10 +37,10 @@ namespace VerdantTrail {
    timerRoot=Panel("Trial timer",canvas.transform,.2f,.117f,.54f,.023f,ink).gameObject;
    timerFill=Panel("Timer fill",timerRoot.transform,.015f,.13f,.97f,.74f,new Color(.25f,.85f,.83f));timer=Text("Seconds",timerRoot.transform,0,-.08f,1,1.2f,"60s",21);timer.color=Color.white;
    weapons=Overlay("Equipment overlay",.30f,.67f,out var w);
-   Text("Gear heading",w,.02f,.015f,.8f,.055f,"FIELD EQUIPMENT",24);Button("X",w,.9f,.015f,.08f,.05f,()=>Close(weapons));
-   for(int i=0;i<3;i++){int slot=i;var b=Button("",w,.035f+i*.323f,.1f,.29f,.24f,()=>{if(equipment.SelectedWeapon>=0)EquipWeapon(equipment.SelectedWeapon,slot);});b.name="Equipment slot "+i;slotHighlights[i]=SelectionFrame(b.transform);UiFinish.Skin(b.GetComponent<Image>(),"card-art");if(i==2)b.GetComponent<Image>().color=new Color(.60f,.60f,.56f);var drop=b.gameObject.AddComponent<WeaponSlotDrop>();drop.Slot=i;drop.Hud=this;slotIcons[i]=ToolIcon(b.transform,.16f,.05f,.68f,.36f);slots[i]=Text("Equipped",b.transform,.04f,.36f,.92f,.61f,"",18);if(i==1)Button("REMOVE",w,.358f,.348f,.29f,.045f,()=>{equipment.Unequip(1);RefreshEquipment();});}
-   Button("COLLECTION",w,.681f,.348f,.29f,.045f,OpenCollection);
-   Text("Equip instruction",w,.04f,.40f,.92f,.05f,"Drag a tool into an open slot",21);
+   squadHeading=Text("Gear heading",w,.02f,.015f,.8f,.055f,"FIELD EQUIPMENT",24);Button("X",w,.9f,.015f,.08f,.05f,()=>Close(weapons));
+   for(int i=0;i<3;i++){int slot=i;var b=Button("",w,.035f+i*.323f,.1f,.29f,.24f,()=>{if(equipment.SelectedWeapon>=0)EquipWeapon(equipment.SelectedWeapon,slot);});b.name="Equipment slot "+i;slotHighlights[i]=SelectionFrame(b.transform);UiFinish.Skin(b.GetComponent<Image>(),"card-art");var drop=b.gameObject.AddComponent<WeaponSlotDrop>();drop.Slot=i;drop.Hud=this;slotIcons[i]=ToolIcon(b.transform,.16f,.05f,.68f,.36f);Text("Cat number",b.transform,.03f,.025f,.94f,.105f,"CAT "+(i+1),14);slotIcons[i].rectTransform.anchorMin=new Vector2(.16f,.60f);slotIcons[i].rectTransform.anchorMax=new Vector2(.84f,.86f);slots[i]=Text("Equipped",b.transform,.04f,.41f,.92f,.56f,"",16);if(i>0){removeSlots[i]=Button("REMOVE",w,.035f+i*.323f,.348f,.29f,.045f,()=>{if(!equipment.Unequip(slot))hud.ShowToast("Inventory full · Equip a spare tool first");RefreshEquipment();});removeSlots[i].name="Remove cat "+(i+1);}}
+   Button("COLLECTION",w,.035f,.348f,.29f,.045f,OpenCollection);
+   Text("Equip instruction",w,.04f,.40f,.92f,.05f,"Equip gear to recruit up to 3 cats",21);
    for(int i=0;i<items.Length;i++){int index=i;var b=Button("",w,.04f+(i%4)*.235f,.47f+(i/4)*.12f,.215f,.105f,()=>{if(itemIds[index]>=0){equipment.SelectedWeapon=itemIds[index];inventoryHint.text="Choose a slot above";}});b.name="Inventory "+i;itemHighlights[i]=SelectionFrame(b.transform);UiFinish.Skin(b.GetComponent<Image>(),"card-art");var drag=b.gameObject.AddComponent<WeaponDrag>();drag.Hud=this;items[i]=b;itemIcons[i]=ToolIcon(b.transform,.2f,.05f,.6f,.45f);itemLabels[i]=Text("Tool",b.transform,.02f,.51f,.96f,.46f,"",16);}
    inventoryHint=Text("Inventory hint",w,.04f,.825f,.92f,.045f,"",18);
    gearWallet=Text("Gear wallet",w,.04f,.87f,.92f,.027f,"",16);
@@ -53,16 +53,17 @@ namespace VerdantTrail {
    BuildCollection();BuildRewards(rewardSystem);BuildSkins();equipment.Changed+=RefreshEquipment;RefreshEquipment();
   }
   public void OpenWeapons(){if(!equipment.Unlocked||sim.InChallenge)return;weapons.SetActive(true);weapons.transform.SetAsLastSibling();hud.ResetMovement();RefreshEquipment();}
-  public void EquipWeapon(int id,int slot){if(!equipment.Equip(id,slot))hud.ShowToast(slot==2?"This slot is locked":"Tool already equipped");RefreshEquipment();}
+  public void EquipWeapon(int id,int slot){if(!equipment.Equip(id,slot))hud.ShowToast("No spare copy of that tool");RefreshEquipment();}
   public void BeginWeaponDrag(int id,Vector2 position){if(id<0)return;equipment.SelectedWeapon=id;ghost.GetComponent<Image>().sprite=OriginalArt.Get("weapon"+id);ghost.gameObject.SetActive(true);ghost.SetAsLastSibling();MoveWeaponDrag(position);}
   public void MoveWeaponDrag(Vector2 position){ghost.anchoredPosition=hud.Layout.LocalPoint(position);}
   public void EndWeaponDrag(){ghost.gameObject.SetActive(false);}
   public void CancelWeaponDrag(){if(ghost!=null)ghost.gameObject.SetActive(false);equipment.SelectedWeapon=-1;}
   void RefreshEquipment(){
-   for(int i=0;i<3;i++){int id=sim.save.equippedWeapons[i];slotIcons[i].enabled=id>=0&&i<2;slotIcons[i].sprite=OriginalArt.Get("weapon"+Mathf.Max(0,id));slotIcons[i].color=Color.white;slots[i].text=i==2?"LOCKED":id<0?"EMPTY\n+":equipment.catalog.weapons[id].label+"\n"+Mathf.RoundToInt(sim.EffectiveDamage*equipment.catalog.weapons[id].damageMultiplier)+" force\n"+(sim.Interval*equipment.catalog.weapons[id].intervalMultiplier).ToString("0.00")+"s";}
+   squadHeading.text="CAT SQUAD  "+sim.unitCount+" / 3";for(int i=1;i<3;i++)removeSlots[i].interactable=sim.save.equippedWeapons[i]>=0&&equipment.InventoryCount<equipment.catalog.inventoryCapacity;
+   for(int i=0;i<3;i++){int id=sim.save.equippedWeapons[i];slotIcons[i].enabled=id>=0;slotIcons[i].sprite=OriginalArt.Get("weapon"+Mathf.Max(0,id));slotIcons[i].color=Color.white;slots[i].text=id<0?"ADD CAT\nEquip gear":equipment.catalog.weapons[id].label+"\n"+Mathf.RoundToInt(sim.EffectiveDamage*equipment.catalog.weapons[id].damageMultiplier)+" force\n"+(sim.Interval*equipment.catalog.weapons[id].intervalMultiplier).ToString("0.00")+"s";}
    int n=0;for(int id=0;id<equipment.catalog.weapons.Length;id++)for(int k=0;k<equipment.Available(id)&&n<items.Length;k++){itemIds[n]=id;itemIcons[n].enabled=true;itemIcons[n].sprite=OriginalArt.Get("weapon"+id);itemIcons[n].color=Color.white;items[n].interactable=true;items[n].GetComponent<WeaponDrag>().WeaponId=id;itemLabels[n].text=equipment.catalog.weapons[id].label;n++;}
    while(n<items.Length){itemIds[n]=-1;itemIcons[n].enabled=false;items[n].interactable=false;items[n].GetComponent<WeaponDrag>().WeaponId=-1;itemLabels[n].text="";n++;}
-   for(int i=0;i<3;i++)slotHighlights[i].gameObject.SetActive(i<2&&equipment.SelectedWeapon>=0&&equipment.Available(equipment.SelectedWeapon)>0);
+   for(int i=0;i<3;i++)slotHighlights[i].gameObject.SetActive(equipment.SelectedWeapon>=0&&equipment.Available(equipment.SelectedWeapon)>0);
    for(int i=0;i<items.Length;i++)itemHighlights[i].gameObject.SetActive(itemIds[i]>=0&&itemIds[i]==equipment.SelectedWeapon);
    inventoryHint.text=equipment.SelectedWeapon>=0?"Choose a highlighted slot":equipment.InventoryCount==0?"No spare tools · Claim rewards or play trials":"Drag to equip, or tap a tool then a slot";
    gearWallet.text="CRYSTALS "+sim.save.gems+"    ·    INVENTORY "+equipment.InventoryCount+" / "+equipment.catalog.inventoryCapacity;

@@ -143,6 +143,21 @@ PASS: UI raycast found button
 PASS: UI raycast found button
 PASS: Purchased new gun equips through inventory UI
 PASS: UI raycast found button
+PASS: UI raycast found button
+PASS: UI raycast found button
+PASS: UI raycast found button
+PASS: UI raycast found button
+PASS: UI raycast found button
+PASS: Buying and dragging third gun recruits three differently equipped cats
+PASS: UI raycast found button
+PASS: Removing middle cat retains last cat's own gear
+PASS: UI raycast found button
+PASS: UI raycast found button
+PASS: Inventory can restore middle cat
+PASS: UI raycast found button
+PASS: All three distinct guns persist in filesystem save
+PASS: Three-cat squad enters timed trial
+PASS: Trial return keeps three-cat loadout
 PASS: Active controls fit safe portrait viewport: layout_reference_play.png
 PASS: Active controls fit safe portrait viewport: layout_reference_gear.png
 PASS: UI raycast found button
@@ -166,5 +181,5 @@ PASS: UI raycast found button
 PASS: Safe-area screen-to-HUD drag coordinates roundtrip
 PASS: Dragged tool remains under pointer with safe-area inset
 Engine: 6000.3.25f1; resolution: 470x1024; rendered capture: 588x1280.
-Errors: 0; sampled frames: 1621; mean FPS including captures: 50.4; mean recorded GC bytes/frame: 11523; peak draw calls: 63.
+Errors: 0; sampled frames: 1809; mean FPS including captures: 56.3; mean recorded GC bytes/frame: 10553; peak draw calls: 65.
 Desktop development build measurement; not an Android performance result. Images rendered by the running game's camera and UGUI into a RenderTexture.

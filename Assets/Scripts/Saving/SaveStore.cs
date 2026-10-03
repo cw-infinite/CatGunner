@@ -4,7 +4,7 @@ using System.Text;
 using UnityEngine;
 namespace VerdantTrail {
  [Serializable] public sealed class SaveData {
-  public int version=5, stage=1, highestStage=1;
+  public int version=6, stage=1, highestStage=1;
   public double cash;
   public int gems, force, tempo, yield;
   public int challengeWins;
@@ -19,7 +19,7 @@ namespace VerdantTrail {
   public long offlineTimestamp;
  }
  public static class SaveStore {
-  public const int CurrentVersion=5;
+  public const int CurrentVersion=6;
   static string PathName=>Path.Combine(Application.persistentDataPath,"verdant-trail-v2.json");
   public static string LastError {get;private set;}
   public static bool CanWrite {get;private set;}=true;
@@ -51,12 +51,12 @@ namespace VerdantTrail {
    d.weaponProgress=d.weaponProgress??Array.Empty<int>();d.companionProgress=d.companionProgress??Array.Empty<int>();
    d.gems=Mathf.Clamp(d.gems,0,1000000);d.challengeWins=Mathf.Clamp(d.challengeWins,0,100);
    if(d.ownedWeapons==null)d.ownedWeapons=new[]{1,0,0,0};else if(d.ownedWeapons.Length!=4)Array.Resize(ref d.ownedWeapons,4);
-   // Ownership includes equipped items as well as the twelve inventory cells.
-   d.ownedWeapons[0]=Mathf.Clamp(d.ownedWeapons[0],1,14);for(int i=1;i<4;i++)d.ownedWeapons[i]=Mathf.Clamp(d.ownedWeapons[i],0,14);
+   // Ownership includes equipped items as well as the twelve inventory cells and up to three squad slots.
+   d.ownedWeapons[0]=Mathf.Clamp(d.ownedWeapons[0],1,15);for(int i=1;i<4;i++)d.ownedWeapons[i]=Mathf.Clamp(d.ownedWeapons[i],0,15);
    if(d.equippedWeapons==null||d.equippedWeapons.Length!=3)d.equippedWeapons=new[]{0,-1,-1};
    if(d.equippedWeapons[0]<0||d.equippedWeapons[0]>3||d.ownedWeapons[d.equippedWeapons[0]]==0)d.equippedWeapons[0]=0;
-   int second=d.equippedWeapons[1];if(second<0||second>3||d.ownedWeapons[second]<(d.equippedWeapons[0]==second?2:1))d.equippedWeapons[1]=-1;
-   d.equippedWeapons[2]=-1;
+   var equippedCounts=new int[4];equippedCounts[d.equippedWeapons[0]]++;
+   for(int slot=1;slot<3;slot++){int id=d.equippedWeapons[slot];if(id<0||id>=4||equippedCounts[id]>=d.ownedWeapons[id])d.equippedWeapons[slot]=-1;else equippedCounts[id]++;}
    return d;
   }
   public static SaveData Load()=>LoadFrom(PathName);
