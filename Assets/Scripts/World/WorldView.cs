@@ -74,12 +74,13 @@ namespace VerdantTrail {
    }
    for(int i=0;i<3;i++) {
     var u=sim.units[i];bool active=i<sim.unitCount;float bob=Mathf.Sin(u.walk)*.035f;
-    Set(bodies[i],active,u.position+Vector2.up*bob,new Vector2(.68f,.62f));
+    Set(bodies[i],active,u.position+Vector2.up*bob,new Vector2(.53f,.53f));
+    bodies[i].flipX=u.aim.x<0;
     bodies[i].transform.rotation=Quaternion.Euler(0,0,Mathf.Sin(u.walk)*2);
     bodies[i].sortingOrder=500-Mathf.RoundToInt(u.position.y*10);
     Set(shadows[i],active,u.position+Vector2.down*.025f,new Vector2(.45f,.28f));
-    Vector2 grip=u.position+Vector2.up*(.42f+bob)-u.aim*(u.flash/.075f*.065f);
-    Set(guns[i],active,grip,new Vector2(.37f,.32f));guns[i].flipY=u.aim.x<0;
+    Vector2 grip=u.position+Vector2.up*(.47f+bob)-u.aim*(u.flash/.075f*.065f);
+    Set(guns[i],active,grip,new Vector2(.31f,.31f));guns[i].flipY=u.aim.x<0;
     guns[i].color=sim.equipment!=null&&sim.equipment.ForUnit(i)==sim.equipment.catalog.weapons[1]?new Color(1,.72f,.35f):Color.white;
     guns[i].sortingOrder=bodies[i].sortingOrder+1;guns[i].transform.rotation=Quaternion.Euler(0,0,Mathf.Atan2(u.aim.y,u.aim.x)*Mathf.Rad2Deg);
     Set(rings[i],active&&u.target>=0&&sim.targets[u.target].active, u.target>=0?sim.targets[u.target].position+Vector2.up*.35f:Vector2.zero,Vector2.one*.25f);
@@ -104,21 +105,21 @@ namespace VerdantTrail {
   void BuildTerrain() {
    if(terrain==null){terrain=new GameObject("Stage terrain").transform;terrainMaterial=new Material(Shader.Find("Sprites/Default"));}
    foreach(var batch in terrainBatches.Values){batch.vertices.Clear();batch.triangles.Clear();batch.colors.Clear();}
-   bool sand=sim.InChallenge?sim.ChallengeIndex>0:sim.save.stage>5;cam.backgroundColor=sand?new Color(.85f,.73f,.51f):new Color(.74f,.80f,.5f);
-   var d=HarvestSimulation.Direction;var n=HarvestSimulation.Normal;Color rock=sand?new Color(.62f,.49f,.33f):new Color(.39f,.29f,.22f);Color top=sand?new Color(.84f,.75f,.54f):new Color(.43f,.61f,.34f);
+   bool sand=sim.InChallenge?sim.ChallengeIndex>0:sim.save.stage>5;cam.backgroundColor=sand?new Color(.85f,.73f,.51f):new Color(.79f,.84f,.56f);
+   var d=HarvestSimulation.Direction;var n=HarvestSimulation.Normal;Color rock=sand?new Color(.62f,.49f,.33f):new Color(.42f,.30f,.23f);Color top=sand?new Color(.84f,.75f,.54f):new Color(.48f,.64f,.36f);
    if(sim.InChallenge){
     Color ground=cam.backgroundColor;cam.backgroundColor=new Color(.18f,.15f,.12f);
     for(int j=0;j<64;j++){float a=j*Mathf.PI*2/64,b=(j+1)*Mathf.PI*2/64;Vector2 edgeA=new Vector2(Mathf.Cos(a),Mathf.Sin(a))*sim.tuning.arenaRadius,edgeB=new Vector2(Mathf.Cos(b),Mathf.Sin(b))*sim.tuning.arenaRadius;Quad("Arena floor",Vector2.zero,edgeA,edgeB,Vector2.zero,ground,-1100);}
    }
-   if(!sim.InChallenge)for(int side=-1;side<=1;side+=2)for(int j=-8;j<38;j++) {
-    float t=j*3.5f;float ridge=side>0?5.6f:-5.9f;
-    float edgeA=Mathf.Sin(j*2.17f+side)*.25f,edgeB=Mathf.Sin((j+1)*2.17f+side)*.25f;
-    Vector2 a=d*t+n*(ridge+edgeA),b=d*(t+3.5f)+n*(ridge+edgeB);
-    Quad("Cliff face",a,b,b+Vector2.down*1.65f,a+Vector2.down*1.65f,rock*(1+(j%3)*.035f),-900);
+   if(!sim.InChallenge)for(int side=-1;side<=1;side+=2)for(int j=-80;j<380;j++) {
+    float t=j*.35f;float ridge=side>0?5.6f:-5.9f;
+    float edgeA=Mathf.Sin(j*.217f+side)*.25f+Mathf.Sin(j*1.63f)*.065f,edgeB=Mathf.Sin((j+1)*.217f+side)*.25f+Mathf.Sin((j+1)*1.63f)*.065f;
+    Vector2 a=d*t+n*(ridge+edgeA),b=d*(t+.35f)+n*(ridge+edgeB);
+    Quad("Cliff face",a,b,b+Vector2.down*1.65f,a+Vector2.down*1.65f,rock,-900);
     Quad("Cliff plateau",a,b,b+n*side*25,a+n*side*25,top,-901);
-    Quad("Cliff seam",a+Vector2.down*.2f,a+Vector2.right*.06f+Vector2.down*.2f,a+Vector2.right*.14f+Vector2.down*1.4f,a+Vector2.down*1.4f,rock*.7f,-899);
+    if(j%10==0)Quad("Cliff seam",a+Vector2.down*.2f,a+Vector2.right*.06f+Vector2.down*.2f,a+Vector2.right*.14f+Vector2.down*1.4f,a+Vector2.down*1.4f,rock*.7f,-899);
     Vector2 mid=Vector2.Lerp(a,b,.55f);
-    Quad("Rock stratum",mid+Vector2.down*.65f,mid+d*.65f+Vector2.down*.55f,mid+d*.66f+Vector2.down*.61f,mid+Vector2.down*.71f,rock*.83f,-899);
+    if(j%10==0)Quad("Rock stratum",mid+Vector2.down*.65f,mid+d*.65f+Vector2.down*.55f,mid+d*.66f+Vector2.down*.61f,mid+Vector2.down*.71f,rock*.83f,-899);
     Quad("Cliff lip",a,b,b+Vector2.down*.065f,a+Vector2.down*.065f,rock*.72f,-899);
    }
    foreach(var batch in terrainBatches.Values){batch.mesh.Clear();batch.mesh.SetVertices(batch.vertices);batch.mesh.SetTriangles(batch.triangles,0);batch.mesh.SetColors(batch.colors);batch.mesh.RecalculateBounds();}
@@ -126,7 +127,7 @@ namespace VerdantTrail {
    for(int i=0;i<350;i++) {
     Vector2 p=d*((float)rng.NextDouble()*110-15)+n*((float)rng.NextDouble()*11-5.5f);
     if(sim.InChallenge){float angle=(float)rng.NextDouble()*Mathf.PI*2,radius=(float)rng.NextDouble()*sim.tuning.arenaRadius;p=new Vector2(Mathf.Cos(angle),Mathf.Sin(angle))*radius;}
-    var grass=groundFlecks[i];if(grass==null){grass=OriginalArt.Sprite("Ground fleck","box",terrain,-950);groundFlecks[i]=grass;}grass.transform.position=Pos(p);grass.transform.localScale=new Vector3(.025f,.055f,1);grass.color=sand?new Color(.65f,.54f,.34f,.3f):new Color(.39f,.59f,.31f,.3f);grass.transform.rotation=Quaternion.Euler(0,0,rng.Next(-30,30));
+    var grass=groundFlecks[i];if(grass==null){grass=OriginalArt.Sprite("Ground fleck","grass",terrain,-950);groundFlecks[i]=grass;}grass.transform.position=Pos(p);grass.transform.localScale=new Vector3(.10f,.10f,1);grass.color=sand?new Color(.65f,.54f,.34f,.3f):new Color(.39f,.59f,.31f,.3f);grass.transform.rotation=Quaternion.Euler(0,0,rng.Next(-30,30));
    }
   }
   void OnDestroy(){foreach(var batch in terrainBatches.Values)if(batch.mesh!=null)Destroy(batch.mesh);if(terrainMaterial!=null)Destroy(terrainMaterial);if(terrain!=null)Destroy(terrain.gameObject);}

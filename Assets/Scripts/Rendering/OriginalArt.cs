@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 namespace VerdantTrail {
- // Independently authored geometric sprites. No reference image is loaded by the game.
+ // Generated original sprite sheets with procedural fallback/effects. Reference frames are never loaded by the game.
  public static class OriginalArt {
   static readonly Dictionary<string,Sprite> cache=new Dictionary<string,Sprite>();
   static readonly Color32 Ink=new Color32(53,59,46,255);
@@ -15,6 +15,7 @@ namespace VerdantTrail {
   }
   public static Sprite Get(string key) {
    if(cache.TryGetValue(key,out var result))return result;
+   result=SpriteArt.Load(key);if(result!=null){cache.Add(key,result);return result;}
    Paint p=new Paint();Vector2 pivot=new Vector2(.5f,0);
    if(key.StartsWith("tree")) {
     int kind=int.Parse(key.Substring(4));
@@ -67,6 +68,18 @@ namespace VerdantTrail {
    }else if(key=="ring") {
     pivot=new Vector2(.5f,.5f);p.Ellipse(128,128,110,110,Ink);p.Ellipse(128,128,99,99,C("#fffbe1"));p.Ellipse(128,128,87,87,new Color32(0,0,0,0));
     p.Box(119,1,18,49,C("#fffbe1"));p.Box(119,206,18,49,C("#fffbe1"));p.Box(1,119,49,18,C("#fffbe1"));p.Box(206,119,49,18,C("#fffbe1"));
+   }else if(key=="gem") {
+    pivot=new Vector2(.5f,.5f);p.Poly(Ink,new Vector2(63,216),new Vector2(185,216),new Vector2(242,140),new Vector2(128,22),new Vector2(14,140));
+    p.Poly(C("#65c6dc"),new Vector2(69,204),new Vector2(178,204),new Vector2(227,140),new Vector2(128,39),new Vector2(30,140));
+    p.Poly(C("#b5f3f0"),new Vector2(69,204),new Vector2(110,145),new Vector2(30,140));
+    p.Poly(C("#39899e"),new Vector2(110,145),new Vector2(227,140),new Vector2(128,39));
+    p.Poly(C("#e5ffef"),new Vector2(69,204),new Vector2(178,204),new Vector2(110,145));
+   }else if(key=="gear") {
+    pivot=new Vector2(.5f,.5f);
+    for(int i=0;i<8;i++){float a=i*Mathf.PI/4;Vector2 d=new Vector2(Mathf.Cos(a),Mathf.Sin(a)),n=new Vector2(-d.y,d.x),c=new Vector2(128,128);p.Poly(Ink,c+d*72+n*23,c+d*110+n*23,c+d*110-n*23,c+d*72-n*23);}
+    p.Ellipse(128,128,87,87,Ink);p.Ellipse(128,128,40,40,new Color32(0,0,0,0));
+   }else if(key=="grass") {
+    pivot=new Vector2(.5f,0);p.Ellipse(74,66,20,51,Color.white);p.Ellipse(124,85,22,72,Color.white);p.Ellipse(174,66,20,51,Color.white);
    }else if(key=="disc") {
     pivot=new Vector2(.5f,.5f);p.Ellipse(128,128,122,122,Color.white);
    }else if(key=="panel") {

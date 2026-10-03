@@ -77,6 +77,12 @@ namespace VerdantTrail {
    return result;
   }
   public void Step(float dt) {
+   if(dt<=0||float.IsNaN(dt)||float.IsInfinity(dt))return;
+   if(InChallenge&&phase==StagePhase.Harvest){
+    if(ChallengeRemaining<=0){FinishChallenge(cleared>=total);return;}
+    // Only simulate time that actually remains; a long frame cannot grant late hits.
+    dt=Mathf.Min(dt,ChallengeRemaining);
+   }
    elapsed+=dt;
    if(InChallenge&&phase==StagePhase.Harvest)ChallengeRemaining=Mathf.Max(0,ChallengeRemaining-dt);
    for(int i=0;i<total;i++)targets[i].hit=Mathf.Max(0,targets[i].hit-dt);

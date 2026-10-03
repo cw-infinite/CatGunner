@@ -20,8 +20,10 @@ namespace VerdantTrail {
    var catalog=Resources.Load<EquipmentCatalog>("EquipmentCatalog");if(catalog==null)catalog=ScriptableObject.CreateInstance<EquipmentCatalog>();equipment=new EquipmentSystem(Simulation,catalog);
    var rewards=Resources.Load<RewardCatalog>("RewardCatalog");if(rewards==null)rewards=ScriptableObject.CreateInstance<RewardCatalog>();Rewards=new RewardSystem(Simulation,rewards);
    Rewards.Claimed+=()=>{if(!capture)SaveStore.Save(Simulation.save);};
+   foreach(string art in new[]{"tree0","tree1","tree2","tree3","tree4","tree5","ranger","gun","button-art","menu-art","card-art","pill-art","note","gem","power-art","speed-art"})OriginalArt.Get(art);
    world=new GameObject("Following orthographic camera").AddComponent<WorldView>();world.Initialize(Simulation);
    hud=gameObject.AddComponent<PortraitHud>();hud.Initialize(Simulation);features=gameObject.AddComponent<FeatureHud>();features.Initialize(Simulation,equipment,hud,Rewards);
+   equipment.Changed+=()=>{if(!capture)SaveStore.Save(Simulation.save);};
    if(!capture&&(SaveStore.Recovered||!SaveStore.CanWrite))hud.ShowToast(SaveStore.StatusMessage);
    sound=gameObject.AddComponent<AudioSource>();shot=Tone("Pulse",640,190,.055f,.025f);impact=Tone("Leaf tick",190,80,.065f,.018f);upgrade=Tone("Upgrade",450,1150,.1f,.06f);
    Simulation.ShotFired+=()=>Play(shot);Simulation.TargetDestroyed+=()=>Play(impact);Simulation.UpgradeBought+=()=>Play(upgrade);
@@ -43,8 +45,9 @@ namespace VerdantTrail {
    saveTimer+=Time.unscaledDeltaTime;if(saveTimer>=10){saveTimer=0;if(!capture)SaveStore.Save(Simulation.save);}
    
   }
-  void OnApplicationFocus(bool focus){if(!focus&&hud!=null)hud.ResetMovement();if(!focus&&!capture&&Simulation!=null)SaveStore.Save(Simulation.save);}
-  void OnApplicationPause(bool pause){if(pause&&!capture&&Simulation!=null)SaveStore.Save(Simulation.save);}
+  public void ResetPlayerInput(){if(hud!=null)hud.ResetMovement();if(features!=null)features.CancelWeaponDrag();if(Simulation!=null)Simulation.manualInput=Vector2.zero;}
+  void OnApplicationFocus(bool focus){if(!focus)ResetPlayerInput();if(!focus&&!capture&&Simulation!=null)SaveStore.Save(Simulation.save);}
+  void OnApplicationPause(bool pause){if(pause)ResetPlayerInput();if(pause&&!capture&&Simulation!=null)SaveStore.Save(Simulation.save);}
   void OnApplicationQuit(){if(!capture&&Simulation!=null)SaveStore.Save(Simulation.save);}
  }
 }

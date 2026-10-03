@@ -33,6 +33,8 @@ namespace VerdantTrail {
   void Click(Button b){Check(b!=null,"UI raycast found button");if(b!=null)ExecuteEvents.Execute(b.gameObject,new PointerEventData(EventSystem.current){button=PointerEventData.InputButton.Left},ExecuteEvents.pointerClickHandler);}
   IEnumerator CheckInteractions() {
    yield return new WaitForSecondsRealtime(2);
+   foreach(string art in new[]{"tree0","tree1","tree2","tree3","tree4","tree5","ranger","gun","button-art","menu-art","card-art","pill-art","note","gem","power-art","speed-art"})Check(OriginalArt.Get(art).name=="Painted_"+art,"Generated atlas sprite loaded: "+art);
+   Capture("runtime_art_forest.png");
    var sim=root.Simulation;sim.automate=false;
    var drag=FindFirstObjectByType<DragSurface>();Vector2 pos=sim.units[0].position;
    var pointer=new PointerEventData(EventSystem.current){pointerId=17,position=new Vector2(Screen.width*.35f,Screen.height*.35f)};
@@ -41,6 +43,13 @@ namespace VerdantTrail {
    yield return new WaitForSecondsRealtime(.3f);Check(sim.units[0].position.x<pos.x-.2f,"Drag moves character through live Update");
    ExecuteEvents.Execute(drag.gameObject,pointer,ExecuteEvents.pointerUpHandler);pos=sim.units[0].position;
    yield return new WaitForSecondsRealtime(.2f);Check((sim.units[0].position-pos).sqrMagnitude<.001f,"Release stops manual movement");
+   pointer.position=new Vector2(Screen.width*.5f,Screen.height*.5f);ExecuteEvents.Execute(drag.gameObject,pointer,ExecuteEvents.pointerDownHandler);pointer.position+=Vector2.left*Screen.width*.1f;ExecuteEvents.Execute(drag.gameObject,pointer,ExecuteEvents.dragHandler);
+   var secondPointer=new PointerEventData(EventSystem.current){pointerId=18,position=pointer.position+Vector2.right*100};
+   ExecuteEvents.Execute(drag.gameObject,secondPointer,ExecuteEvents.pointerDownHandler);ExecuteEvents.Execute(drag.gameObject,secondPointer,ExecuteEvents.dragHandler);ExecuteEvents.Execute(drag.gameObject,secondPointer,ExecuteEvents.pointerUpHandler);
+   Check(drag.Held&&drag.Value.x<0,"Second pointer cannot steal or release active joystick");
+   yield return new WaitForSecondsRealtime(.05f);root.SendMessage("OnApplicationPause",true);Check(!drag.Held&&drag.Value==Vector2.zero&&sim.manualInput==Vector2.zero,"Application pause clears held movement");
+   ExecuteEvents.Execute(drag.gameObject,pointer,ExecuteEvents.dragHandler);Check(drag.Value==Vector2.zero,"Stale drag after pause cannot restart movement");root.SendMessage("OnApplicationPause",false);
+   root.Features.BeginWeaponDrag(0,pointer.position);var focusGhost=GameObject.Find("Dragged tool");root.SendMessage("OnApplicationFocus",false);Check(!focusGhost.activeSelf&&root.Equipment.SelectedWeapon==-1,"Focus loss cancels equipment drag and selection");root.SendMessage("OnApplicationFocus",true);
    sim.automate=true;sim.save.cash=1000;
    for(int i=0;i<3;i++){int before=i==0?sim.save.force:i==1?sim.save.tempo:sim.save.yield;Click(ButtonAt(.2f+i*.298f,.91f));int after=i==0?sim.save.force:i==1?sim.save.tempo:sim.save.yield;Check(after==before+1,"Upgrade "+i+" responds to UI click");}
    sim.save.cash=0;int level=sim.save.force;Click(ButtonAt(.2f,.91f));Check(sim.save.force==level,"Unaffordable upgrade cannot debit");
@@ -56,7 +65,7 @@ namespace VerdantTrail {
    var recoveryPath=Path.Combine(directory,"save-ui-recovery.json");File.WriteAllText(recoveryPath,"{interrupted");File.WriteAllText(recoveryPath+".bak",JsonUtility.ToJson(sim.save));var recovered=SaveStore.LoadFrom(recoveryPath);
    Click(NamedButton("*"));yield return new WaitForSecondsRealtime(.15f);Check(NamedButton("Save progress").interactable&&GameObject.Find("Save status").GetComponent<Text>().text.Contains("Recovered"),"Settings reports recovery and permits saving");Capture("runtime_save_recovered.png");Click(NamedButton("Resume"));yield return null;SaveStore.SaveTo(recovered,recoveryPath);
    File.WriteAllText(path,"{\"version\":1,\"stage\":2,\"cash\":123}");var migrated=SaveStore.LoadFrom(path);Check(migrated.version==4&&migrated.stage==2&&migrated.cash==123,"Unity JSON version-one migration");
-   sim.unitCount=2;sim.Jump(3);yield return new WaitForSecondsRealtime(2);Capture("runtime_squad.png");Check(sim.units[0].target>=0||sim.units[1].target>=0,"Two-unit targeting is active");
+   sim.unitCount=2;sim.Jump(3);bool leadTarget=false,followerTarget=false;float targetingDeadline=Time.realtimeSinceStartup+5;while(Time.realtimeSinceStartup<targetingDeadline&&!(leadTarget&&followerTarget)){leadTarget|=sim.units[0].target>=0;followerTarget|=sim.units[1].target>=0;yield return null;}Capture("runtime_squad.png");Check(leadTarget&&followerTarget,"Both squad units acquire targets during live play");
    for(int i=0;i<sim.total;i++)sim.Damage(i,sim.targets[i].hp);
    yield return new WaitForSecondsRealtime(.3f);Check(sim.phase==StagePhase.Clear,"Clear phase triggered");Capture("runtime_clear.png");
    yield return new WaitForSecondsRealtime(2);Check(sim.phase==StagePhase.Transfer,"Travel follows clear");Capture("runtime_transfer.png");
@@ -73,14 +82,14 @@ namespace VerdantTrail {
    Check(GameObject.Find("Collection stats").GetComponent<Text>().text.Contains("Owned 0"),"Collection previews unowned tool without granting it");Capture("runtime_collection_unowned.png");
    Click(NamedButton("BACK TO GEAR"));yield return null;
    Click(NamedButton("DELIVERY  <> "+root.Equipment.catalog.deliveryCost));yield return null;Check(root.Equipment.Available(1)==1,"Crystal delivery adds one tool");Capture("runtime_equipment_inventory.png");
-   var inventory=NamedButton("Inventory 0");var slot=NamedButton("Equipment slot 1");var dragEvent=new PointerEventData(EventSystem.current){pointerId=29,pointerDrag=inventory.gameObject,position=new Vector2(Screen.width*.15f,Screen.height*.35f)};
+   var inventory=NamedButton("Inventory 0");Click(inventory);yield return new WaitForSecondsRealtime(.15f);Capture("runtime_equipment_selected.png");var slot=NamedButton("Equipment slot 1");var dragEvent=new PointerEventData(EventSystem.current){pointerId=29,pointerDrag=inventory.gameObject,position=new Vector2(Screen.width*.15f,Screen.height*.35f)};
    ExecuteEvents.Execute(inventory.gameObject,dragEvent,ExecuteEvents.beginDragHandler);ExecuteEvents.Execute(slot.gameObject,dragEvent,ExecuteEvents.dropHandler);ExecuteEvents.Execute(inventory.gameObject,dragEvent,ExecuteEvents.endDragHandler);
    yield return null;Check(sim.unitCount==2&&sim.save.equippedWeapons[1]==1,"Drag/drop equips second tool and recruits shooter");Capture("runtime_equipment_equipped.png");
    Click(NamedButton("COLLECTION"));yield return new WaitForSecondsRealtime(.15f);
    Check(GameObject.Find("Collection stats").GetComponent<Text>().text.Contains("Owned 1    |    Equipped 1"),"Collection shows current ownership and equipped count");Capture("runtime_collection_owned.png");
    Click(NamedButton("BACK TO GEAR"));yield return null;
    SaveStore.SaveTo(sim.save,path);var equippedSave=SaveStore.LoadFrom(path);Check(equippedSave.equippedWeapons[1]==1&&equippedSave.challengeWins==1,"Equipment and challenge wins persist in v4 save");
-   Click(NamedButton("X"));yield return new WaitForSecondsRealtime(2);Capture("runtime_equipped_squad.png");
+   root.Features.BeginWeaponDrag(0,pointer.position);var closingGhost=GameObject.Find("Dragged tool");Click(NamedButton("X"));Check(!closingGhost.activeSelf&&root.Equipment.SelectedWeapon==-1,"Closing equipment cancels unfinished drag");yield return new WaitForSecondsRealtime(2);Capture("runtime_equipped_squad.png");
    float usualDuration=sim.tuning.challengeSeconds;sim.tuning.challengeSeconds=1;gemsBefore=sim.save.gems;sim.EnterChallenge();yield return new WaitForSecondsRealtime(1.3f);
    Check(sim.phase==StagePhase.ChallengeResult&&!sim.ChallengeWon&&sim.save.gems==gemsBefore,"Timeout returns no success reward");Capture("runtime_trial_timeout.png");
    Click(NamedButton("CONTINUE"));sim.tuning.challengeSeconds=usualDuration;yield return null;
@@ -92,8 +101,10 @@ namespace VerdantTrail {
    float finaleDeadline=Time.realtimeSinceStartup+20;while(sim.phase==StagePhase.Harvest&&Time.realtimeSinceStartup<finaleDeadline)yield return null;
    Check(sim.phase==StagePhase.Clear&&!sim.targets[gold].active,"Squad clears gold tree through normal shooting");Capture("runtime_gold_clear.png");
    yield return new WaitForSecondsRealtime(3.7f);Check(sim.save.stage==6&&sim.targets[0].kind==3,"Gold finale transitions into palm biome");Capture("runtime_world_two.png");
+   var dailyBadge=root.Hud.ContentRoot.Find("DAILY/Daily ready badge").gameObject;Check(dailyBadge.activeSelf,"Daily badge shows an available reward");
    Click(ButtonAt(.07f,.745f));yield return new WaitForSecondsRealtime(.15f);Capture("runtime_daily_ready.png");
    int dailyBefore=sim.save.gems;Click(NamedButton("CLAIM DAILY"));Click(NamedButton("CLAIM DAILY"));yield return new WaitForSecondsRealtime(.15f);
+   Check(!dailyBadge.activeSelf,"Daily badge clears after collecting reward");
    Check(sim.save.gems==dailyBefore+root.Rewards.catalog.dailyGems[0]&&sim.save.attendanceClaims==1,"Daily UI grants one reward despite repeated click");Capture("runtime_daily_collected.png");Click(NamedButton("CLOSE DAILY"));yield return new WaitForSecondsRealtime(.15f);
    Click(ButtonAt(.93f,.745f));yield return new WaitForSecondsRealtime(.15f);Capture("runtime_missions_ready.png");
    int pointsBefore=sim.save.passPoints;Click(NamedButton("Claim mission 0"));Click(NamedButton("Claim mission 0"));Click(NamedButton("Claim mission 3"));yield return new WaitForSecondsRealtime(.15f);

@@ -1,5 +1,25 @@
+PASS: Generated atlas sprite loaded: tree0
+PASS: Generated atlas sprite loaded: tree1
+PASS: Generated atlas sprite loaded: tree2
+PASS: Generated atlas sprite loaded: tree3
+PASS: Generated atlas sprite loaded: tree4
+PASS: Generated atlas sprite loaded: tree5
+PASS: Generated atlas sprite loaded: ranger
+PASS: Generated atlas sprite loaded: gun
+PASS: Generated atlas sprite loaded: button-art
+PASS: Generated atlas sprite loaded: menu-art
+PASS: Generated atlas sprite loaded: card-art
+PASS: Generated atlas sprite loaded: pill-art
+PASS: Generated atlas sprite loaded: note
+PASS: Generated atlas sprite loaded: gem
+PASS: Generated atlas sprite loaded: power-art
+PASS: Generated atlas sprite loaded: speed-art
 PASS: Drag moves character through live Update
 PASS: Release stops manual movement
+PASS: Second pointer cannot steal or release active joystick
+PASS: Application pause clears held movement
+PASS: Stale drag after pause cannot restart movement
+PASS: Focus loss cancels equipment drag and selection
 PASS: UI raycast found button
 PASS: Upgrade 0 responds to UI click
 PASS: UI raycast found button
@@ -24,7 +44,7 @@ PASS: UI raycast found button
 PASS: Settings reports recovery and permits saving
 PASS: UI raycast found button
 PASS: Unity JSON version-one migration
-PASS: Two-unit targeting is active
+PASS: Both squad units acquire targets during live play
 PASS: Clear phase triggered
 PASS: Travel follows clear
 PASS: Next stage resumes
@@ -41,12 +61,14 @@ PASS: Collection previews unowned tool without granting it
 PASS: UI raycast found button
 PASS: UI raycast found button
 PASS: Crystal delivery adds one tool
+PASS: UI raycast found button
 PASS: Drag/drop equips second tool and recruits shooter
 PASS: UI raycast found button
 PASS: Collection shows current ownership and equipped count
 PASS: UI raycast found button
 PASS: Equipment and challenge wins persist in v4 save
 PASS: UI raycast found button
+PASS: Closing equipment cancels unfinished drag
 PASS: Timeout returns no success reward
 PASS: UI raycast found button
 PASS: UI raycast found button
@@ -54,9 +76,11 @@ PASS: Manual exit returns to original grove
 PASS: Gold finale survives opening volley and blocks stage clear
 PASS: Squad clears gold tree through normal shooting
 PASS: Gold finale transitions into palm biome
+PASS: Daily badge shows an available reward
 PASS: UI raycast found button
 PASS: UI raycast found button
 PASS: UI raycast found button
+PASS: Daily badge clears after collecting reward
 PASS: Daily UI grants one reward despite repeated click
 PASS: UI raycast found button
 PASS: UI raycast found button
@@ -85,5 +109,5 @@ PASS: UI raycast found button
 PASS: Safe-area screen-to-HUD drag coordinates roundtrip
 PASS: Dragged tool remains under pointer with safe-area inset
 Engine: 6000.3.25f1; resolution: 470x1024; rendered capture: 588x1280.
-Errors: 0; sampled frames: 1507; mean FPS including captures: 50.4; mean recorded GC bytes/frame: 4283; peak draw calls: 29.
+Errors: 0; sampled frames: 1447; mean FPS including captures: 50.1; mean recorded GC bytes/frame: 9375; peak draw calls: 25.
 Desktop development build measurement; not an Android performance result. Images rendered by the running game's camera and UGUI into a RenderTexture.

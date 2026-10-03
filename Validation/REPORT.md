@@ -1,5 +1,7 @@
 # Validation report — working Windows prototype
 
+Latest art pass (2026-10-02): [Original art integration](ART_REPLACEMENT_UPDATE.md). Windows build: zero warnings/errors; isolated player: 110 PASS entries and zero runtime errors. See [development status](../DEVELOPMENT_STATUS.md) for campaign scope and remaining platform work. Older measurements below describe their respective earlier passes.
+
 ## Build and engine checks
 Unity 6000.3.25f1 imported the project and built `Builds/Windows/VerdantTrail.exe` successfully: **zero warnings, zero errors**. The previous license prerequisite is resolved. The invalid legacy-input package entry found on first import was removed.
 
@@ -59,3 +61,6 @@ The HUD now preserves portrait composition inside the reported safe area, and jo
 
 ## Save recovery — 2026-09-30
 Backup and interrupted-write recovery, preservation of damaged primary files, and visible Settings status are implemented. The build succeeds with zero warnings/errors. Nineteen filesystem cases pass in both editor and player, and the full player run exits 0 with zero runtime errors. Protected/recovered Settings screenshots were inspected. See [SAVE_RECOVERY_UPDATE.md](SAVE_RECOVERY_UPDATE.md) for recovery order, expected diagnostic warnings and limits; hardware power-loss and mobile filesystem behavior remain unverified.
+
+## Input and deadline correctness — 2026-10-02
+Pause/focus loss now clears held touch movement and inventory dragging; equipment changes save immediately in normal play. Trials cannot process projectile impacts beyond their remaining simulation time. Unity deadline regressions and the full Windows interaction run pass, including five new pointer/lifecycle cases. Build: zero warnings/errors; player: exit 0, zero runtime errors. See [INPUT_DEADLINE_UPDATE.md](INPUT_DEADLINE_UPDATE.md) for exact coverage and device-test limitations.

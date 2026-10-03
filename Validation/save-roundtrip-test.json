@@ -2,15 +2,15 @@
     "version": 4,
     "stage": 6,
     "highestStage": 6,
-    "cash": 6019.0,
+    "cash": 5991.0,
     "gems": 36,
     "force": 15,
     "tempo": 15,
     "yield": 1,
     "challengeWins": 1,
-    "missionDay": 20727,
-    "lastAttendanceDay": 20727,
-    "dailyHarvests": 162,
+    "missionDay": 20729,
+    "lastAttendanceDay": 20729,
+    "dailyHarvests": 161,
     "dailyStages": 2,
     "missionClaims": 9,
     "passPoints": 20,
@@ -31,5 +31,5 @@
     "companionProgress": [],
     "prestige": 0,
     "sound": true,
-    "offlineTimestamp": 1790825010
+    "offlineTimestamp": 1790995193
 }

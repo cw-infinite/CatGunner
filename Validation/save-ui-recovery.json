@@ -8,7 +8,7 @@
     "tempo": 1,
     "yield": 1,
     "challengeWins": 0,
-    "missionDay": 20727,
+    "missionDay": 20729,
     "lastAttendanceDay": 0,
     "dailyHarvests": 1,
     "dailyStages": 0,
@@ -31,5 +31,5 @@
     "companionProgress": [],
     "prestige": 0,
     "sound": true,
-    "offlineTimestamp": 1790824988
+    "offlineTimestamp": 1790995172
 }

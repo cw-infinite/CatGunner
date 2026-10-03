@@ -2,21 +2,22 @@
 
 A working **Windows development build** is available at `Builds/Windows/VerdantTrail.exe`. Run it from that folder and keep the accompanying `VerdantTrail_Data`, DLLs and Mono runtime beside it. The Unity project uses **6000.3.25f1 (Unity 6.3 LTS)** and the built-in 2D renderer.
 
-This is the minimum reference-driven prototype, with independently authored geometric artwork. It reproduces the core harvesting/shooting loop; it is not the finished reference recreation. Android Build Support is not installed, so no APK exists yet.
+This is a playable reference-driven prototype with original generated cartoon sprite atlases and procedural terrain/effects. It reproduces the core harvesting/shooting loop; visual reconstruction is still underway. Android Build Support is not installed, so no APK exists yet. See [development status and remaining milestones](DEVELOPMENT_STATUS.md) and [art assets and generation prompts](Assets/Resources/Art/PROVENANCE.md).
 
 ## Play
 - The HUD fits inside the reported safe area and keeps its portrait proportions on wider displays.
-- Shooting and approach are automatic. Drag on the battlefield to override movement; WASD/arrows also work.
+- Shooting and approach are automatic. Drag on the battlefield to override movement; WASD/arrows also work. Pausing or leaving the app clears held touch movement and unfinished inventory drags.
 - Buy **Force**, **Tempo**, or **Yield** at the bottom. Dim cards and red prices indicate insufficient cash.
 - **TRIAL** unlocks at stage 2: clear a 60-second arena for crystals, then return to your grove.
 - **GEAR** unlocks at stage 3: spend 36 crystals on a delivery, then drag the tool into slot two to recruit a second shooter.
 - **DAILY** offers one crystal claim per UTC day. **TASKS** unlocks at stage 3: claim completed objectives for pass points, then claim earned crystal milestones.
+- Gold badges indicate available rewards. Missions show progress bars; selecting a spare tool highlights the equipment slots that accept it. GEAR also shows your crystal balance and inventory capacity.
 - Open **COLLECTION** inside GEAR to inspect tool stats, ownership and equipped counts.
 - Stage **1-5** ends with a durable gold tree before the sand biome.
 - The upper-left settings button opens sound and save controls. Combat continues underneath.
 - The **DEV** button is present in this development build: currency, next stage, clear targets, two-unit test, automatic-approach toggle and 1x/2x/5x/10x speeds.
 - Settings shows save status. Valid backups or interrupted-write files can recover a damaged save; unrecoverable/newer-version files are protected from overwrite.
-- Progress saves locally every ten seconds, on focus loss and on exit. Current stage and upgrades persist; in-stage vegetation restarts on reopening.
+- Progress saves locally every ten seconds, after reward/equipment changes, on focus loss and on exit. Current stage and upgrades persist; in-stage vegetation restarts on reopening.
 
 The automatic-approach default is a documented inference: the video proves joystick input and automatic shooting, but does not establish the exact movement-automation policy or magnet Auto button's function.
 
@@ -67,3 +68,5 @@ Player-facing equipment, a second shooter and timed trials are now implemented a
 Latest layout work: [portrait/safe-area update](Validation/LAYOUT_UPDATE.md), including simulated phone/tablet captures and input checks.
 
 Save reliability: [recovery behavior and validation](Validation/SAVE_RECOVERY_UPDATE.md).
+
+Latest correctness fixes: [input interruption and trial deadlines](Validation/INPUT_DEADLINE_UPDATE.md).

@@ -28,19 +28,19 @@ namespace VerdantTrail {
   public bool FeatureOverlay;
   public bool IsOverlayOpen=>CoreOverlayOpen||FeatureOverlay;
   readonly int[] upgradeLevels=new int[3];
-  readonly Color ink=new Color(.18f,.24f,.22f),paper=new Color(.98f,.92f,.75f),mint=new Color(.56f,.94f,.76f),dark=new Color(.24f,.34f,.27f);
+  readonly Color ink=new Color(.30f,.18f,.10f),paper=new Color(.98f,.92f,.75f),mint=new Color(.56f,.94f,.76f),dark=new Color(.24f,.34f,.27f);
   RectTransform Rect(string name,Transform parent,float x,float y,float w,float h) {
    if(parent==canvas.transform)parent=ContentRoot;
    var go=new GameObject(name,typeof(RectTransform));var rt=go.GetComponent<RectTransform>();rt.SetParent(parent,false);
    rt.anchorMin=new Vector2(x,1-y-h);rt.anchorMax=new Vector2(x+w,1-y);rt.offsetMin=rt.offsetMax=Vector2.zero;return rt;
   }
-  Image Panel(string name,Transform parent,float x,float y,float w,float h,Color color) {var rt=Rect(name,parent,x,y,w,h);var im=rt.gameObject.AddComponent<Image>();im.color=color;if(name.EndsWith("pill")||name=="Upgrade border"||name=="Settings"||name=="Developer tools"){im.sprite=OriginalArt.Get("panel");im.type=Image.Type.Sliced;}return im;}
+  Image Panel(string name,Transform parent,float x,float y,float w,float h,Color color) {var rt=Rect(name,parent,x,y,w,h);var im=rt.gameObject.AddComponent<Image>();im.color=color;if(name.EndsWith("pill")||name=="Upgrade border"||name=="Settings"||name=="Developer tools"){im.sprite=OriginalArt.Get("panel");im.type=Image.Type.Sliced;if(name=="Cash pill"||name=="Gem pill")UiFinish.Skin(im,"pill-art");if(name=="Settings"||name=="Developer tools")UiFinish.Skin(im,"menu-art");}return im;}
   Text Label(string name,Transform parent,float x,float y,float w,float h,string text,int size,Color color,TextAnchor anchor=TextAnchor.MiddleCenter) {
    var rt=Rect(name,parent,x,y,w,h);var t=rt.gameObject.AddComponent<Text>();t.font=font;t.text=text;t.fontSize=size;t.fontStyle=FontStyle.Bold;t.color=color;t.alignment=anchor;t.raycastTarget=false;return t;
   }
   Button Button(string title,Transform parent,float x,float y,float w,float h,Color color,UnityEngine.Events.UnityAction action,int fontSize=22) {
-   var panel=Panel(title,parent,x,y,w,h,color);panel.sprite=OriginalArt.Get("panel");panel.type=Image.Type.Sliced;var b=panel.gameObject.AddComponent<Button>();b.targetGraphic=panel;b.onClick.AddListener(action);
-   var colors=b.colors;colors.pressedColor=new Color(.78f,.85f,.7f);colors.highlightedColor=Color.white;b.colors=colors;
+   var panel=Panel(title,parent,x,y,w,h,color);panel.sprite=OriginalArt.Get("panel");panel.type=Image.Type.Sliced;UiFinish.Skin(panel,"button-art");var b=panel.gameObject.AddComponent<Button>();b.targetGraphic=panel;b.onClick.AddListener(action);
+   UiFinish.Button(b);
    Label("Caption",panel.transform,0,0,1,1,title,fontSize,ink);return b;
   }
   public void Initialize(HarvestSimulation model) {
@@ -49,23 +49,26 @@ namespace VerdantTrail {
    var scaler=go.GetComponent<CanvasScaler>();Layout=new PortraitLayout(canvas,scaler);
    if(FindFirstObjectByType<EventSystem>()==null)new GameObject("Touch event system",typeof(EventSystem),typeof(StandaloneInputModule));
    var touch=Panel("Movement surface",canvas.transform,0,.17f,1,.68f,new Color(0,0,0,0));input=touch.gameObject.AddComponent<DragSurface>();
-   Panel("Top breathing room",canvas.transform,0,0,1,.073f,new Color(.25f,.29f,.22f));
+   Panel("Top breathing room",canvas.transform,0,0,1,.073f,new Color(.30f,.19f,.10f));
    var track=Panel("Clearing progress track",canvas.transform,0,.074f,1,.014f,ink);
    progress=Panel("Fill",track.transform,0,0,1,1,new Color(.94f,.72f,.37f));percent=Label("Percent",track.transform,0,-.25f,1,1.5f,"0%",17,Color.white);
-   Button("*",canvas.transform,.016f,.1f,.065f,.03f,paper,()=>Toggle(settings),25);
-   stage=Label("Stage",canvas.transform,.3f,.122f,.4f,.027f,"",22,Color.white);
+   var settingsButton=Button("*",canvas.transform,.016f,.1f,.065f,.03f,paper,()=>Toggle(settings),25);settingsButton.GetComponentInChildren<Text>().text="";
+   var settingsIcon=Panel("Settings icon",settingsButton.transform,.16f,.16f,.68f,.68f,Color.white);settingsIcon.sprite=OriginalArt.Get("gear");settingsIcon.preserveAspect=true;settingsIcon.raycastTarget=false;
+   stage=Label("Stage",canvas.transform,.3f,.122f,.4f,.027f,"",22,Color.white);UiFinish.WhiteText(stage);UiFinish.WhiteText(percent);
    sectorLine=Panel("Sector line",canvas.transform,.282f,.109f,.345f,.003f,paper);
    for(int i=0;i<5;i++){var node=Panel("Sector "+i,canvas.transform,.272f+i*.083f,.103f,.032f,.015f,paper);node.sprite=OriginalArt.Get("disc");sectorNodes[i]=node;}
-   cash=Label("Cash",Panel("Cash pill",canvas.transform,.79f,.1f,.196f,.029f,paper).transform,0,0,1,1,"",22,ink);
-   gems=Label("Gems",Panel("Gem pill",canvas.transform,.79f,.136f,.196f,.027f,paper).transform,0,0,1,1,"",20,new Color(.22f,.5f,.65f));
-   string[] names={"FORCE","TEMPO","YIELD"};string[] symbols={"+","/","$"};
+   var cashPill=Panel("Cash pill",canvas.transform,.79f,.1f,.196f,.029f,paper);var gemPill=Panel("Gem pill",canvas.transform,.79f,.136f,.196f,.027f,paper);
+   var noteIcon=Panel("Notes icon",cashPill.transform,.05f,.12f,.23f,.76f,Color.white);noteIcon.sprite=OriginalArt.Get("note");noteIcon.preserveAspect=true;noteIcon.raycastTarget=false;
+   var gemIcon=Panel("Crystals icon",gemPill.transform,.05f,.12f,.23f,.76f,Color.white);gemIcon.sprite=OriginalArt.Get("gem");gemIcon.preserveAspect=true;gemIcon.raycastTarget=false;
+   cash=Label("Cash",cashPill.transform,.27f,0,.70f,1,"",22,ink);gems=Label("Gems",gemPill.transform,.27f,0,.70f,1,"",20,new Color(.22f,.5f,.65f));
+   string[] names={"FORCE","TEMPO","YIELD"};string[] symbols={"power-art","speed-art","note"};
    for(int i=0;i<3;i++) {
-    int k=i;float x=.065f+i*.298f;Panel("Upgrade border",canvas.transform,x-.005f,.863f,.282f,.084f,ink);
+    int k=i;float x=.065f+i*.298f;
     var b=Button("",canvas.transform,x,.867f,.272f,.075f,mint,()=>Purchase(k));upgrades[i]=b;cards[i]=b.GetComponent<Image>();
     Label("Category",canvas.transform,x,.845f,.2f,.02f,names[i],18,Color.white);
     levels[i]=Label("Level",canvas.transform,x+.18f,.851f,.092f,.017f,"",14,Color.white);
-    Label("Symbol",b.transform,.015f,.02f,.12f,.25f,symbols[i],17,ink);
-    values[i]=Label("Stat",b.transform,.07f,.03f,.86f,.48f,"",29,ink);
+    var upgradeIcon=Panel("Upgrade icon",b.transform,-.05f,-.08f,.23f,.31f,Color.white);upgradeIcon.sprite=OriginalArt.Get(symbols[i]);upgradeIcon.preserveAspect=true;upgradeIcon.raycastTarget=false;
+    values[i]=Label("Stat",b.transform,.07f,.10f,.86f,.43f,"",29,ink);UiFinish.WhiteText(values[i]);
     var price=Panel("Cost pill",b.transform,.06f,.58f,.88f,.3f,ink);prices[i]=Label("Price",price.transform,0,0,1,1,"",20,Color.white);
    }
    notice=Label("Hint",canvas.transform,.15f,.79f,.7f,.035f,"AUTO FIRE  /  DRAG TO MOVE",15,new Color(.27f,.36f,.25f));
@@ -115,14 +118,14 @@ namespace VerdantTrail {
    if(toastTime>0){toastTime-=dt;if(toastTime<=0)toast.text="";}
    refresh-=dt;if(refresh>0)return;refresh=.1f;
    if(settings.activeSelf){saveStatus.text=SaveStore.StatusMessage;saveButton.interactable=SaveStore.CanWrite;}
-   cash.text="$ "+HarvestSimulation.Format(sim.save.cash);gems.text="<> "+sim.save.gems;
+   cash.text=HarvestSimulation.Format(sim.save.cash);gems.text=HarvestSimulation.Format(sim.save.gems);
    sectorLine.enabled=!sim.InChallenge;stage.enabled=!sim.InChallenge;foreach(var node in sectorNodes)node.enabled=!sim.InChallenge;
    stage.text="GROVE "+((sim.save.stage-1)/5+1)+" - "+((sim.save.stage-1)%5+1);
    percent.text=Mathf.RoundToInt(sim.Progress*100)+"%";progress.rectTransform.anchorMax=new Vector2(sim.Progress,1);
    var lv=upgradeLevels;lv[0]=sim.save.force;lv[1]=sim.save.tempo;lv[2]=sim.save.yield;
    for(int i=0;i<3;i++) {
     levels[i].text="L."+lv[i];double cost=sim.tuning.Cost(lv[i]);prices[i].text="$ "+HarvestSimulation.Format(cost);
-    bool can=sim.save.cash>=cost&&lv[i]<100;cards[i].color=can?mint:dark;prices[i].color=can?Color.white:new Color(1,.5f,.48f);values[i].color=can?ink:paper;
+    bool can=sim.save.cash>=cost&&lv[i]<100;cards[i].color=can?Color.white:new Color(.73f,.76f,.62f);prices[i].color=can?Color.white:new Color(1,.5f,.48f);values[i].color=Color.white;
     values[i].text=i==0?Mathf.RoundToInt(sim.tuning.Damage(lv[i])).ToString():i==1?Mathf.RoundToInt(100*(1+sim.tuning.speedStep*lv[i])).ToString():Mathf.RoundToInt(100*Mathf.Pow(sim.tuning.damageGrowth,lv[i])).ToString();
    }
    if(shownStage!=sim.save.stage){shownStage=sim.save.stage;for(int i=0;i<sectorNodes.Length;i++)sectorNodes[i].color=i==(shownStage-1)%5?new Color(1,.7f,.25f):i<(shownStage-1)%5?mint:paper;noticeText=shownStage==1?"AUTO FIRE  /  DRAG TO MOVE":"";notice.text=noticeText;}

@@ -6,7 +6,8 @@ MATCHED = directly verified against a reference observation. CLOSE = bounded app
 |---|---|---|
 | Video coverage and system discovery | MATCHED | Full 11:52 duration sampled, including menus, success and timeout |
 | Stationary targets / automatic shooting | CLOSE | Implemented, rendered and exercised in the 78-second player run |
-| Original assets | MATCHED | Procedural artwork and synthesized sounds; no reference media under Assets |
+| Original asset provenance | MATCHED | Generated original sprite atlases, procedural effects and synthesized sounds; no reference media under Assets; prompts recorded |
+| Visual art direction / composition | NEEDS WORK | Cat, rounded trees and textured UI integrated after user feedback; tree distribution, cliffs, typography and animation still differ |
 | Portrait camera / diagonal canyon | CLOSE | Actual captures inspected; camera follows without zoom/rotation; connected uneven cliff rims and rock details added; geometry remains simplified |
 | Leader position / sprite scale | CLOSE | Centered, slightly above mid-screen; silhouette enlarged after comparison, character shape differs |
 | Manual drag + auto approach | UNKNOWN | Drag/release tested; exact reference automation policy remains uncertain |
@@ -27,7 +28,7 @@ MATCHED = directly verified against a reference observation. CLOSE = bounded app
 | Pooling / performance | CLOSE | Fixed core pools; reused terrain; final desktop sample 59.8 FPS / 22 peak draws; mobile and long-duration profiling pending |
 | Android / iOS | NEEDS WORK | Editor license now active; Android module still absent; no mobile build |
 
-The minimum Windows mechanical prototype is playable and engine-tested. The overall recreation remains incomplete; composition and early cadence are approximate, with original placeholder visuals and secondary systems deferred. See `Validation/VISUAL_COMPARISON.md` for inspected images and `Validation/REPORT.md` for test boundaries.
+The minimum Windows mechanical prototype is playable and engine-tested. The overall recreation remains incomplete; composition and early cadence are approximate, with original generated sprite artwork, unfinished visual matching and some secondary systems deferred. See `Validation/VISUAL_COMPARISON.md` for inspected images and `Validation/REPORT.md` for test boundaries.
 
 Collection and world-one finale evidence: Validation/COLLECTION_FINALE_UPDATE.md. Current desktop interaction sample is transition-heavy; older steady-state figures are retained only as baseline measurements.
 
