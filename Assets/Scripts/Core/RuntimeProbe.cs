@@ -34,6 +34,7 @@ namespace VerdantTrail {
   IEnumerator CheckInteractions() {
    yield return new WaitForSecondsRealtime(2);
    foreach(string art in new[]{"tree0","tree1","tree2","tree3","tree4","tree5","ranger","gun","button-art","menu-art","card-art","pill-art","note","gem","power-art","speed-art"})Check(OriginalArt.Get(art).name=="Painted_"+art,"Generated atlas sprite loaded: "+art);
+   for(int i=0;i<8;i++){Check(OriginalArt.Get("skin"+i).name=="Painted_skin"+i,"Costume sprite loaded: "+i);Check(OriginalArt.Get("scenery"+i).name=="Painted_scenery"+i,"Scenery sprite loaded: "+i);}for(int i=0;i<4;i++)Check(OriginalArt.Get("weapon"+i).name=="Painted_weapon"+i,"Weapon sprite loaded: "+i);
    Capture("runtime_art_forest.png");
    var sim=root.Simulation;sim.automate=false;
    var drag=FindFirstObjectByType<DragSurface>();Vector2 pos=sim.units[0].position;
@@ -64,7 +65,7 @@ namespace VerdantTrail {
    Click(NamedButton("*"));yield return new WaitForSecondsRealtime(.15f);Check(!NamedButton("Save progress").interactable,"Settings disables saving for protected files");Capture("runtime_save_protected.png");Click(NamedButton("Resume"));yield return null;
    var recoveryPath=Path.Combine(directory,"save-ui-recovery.json");File.WriteAllText(recoveryPath,"{interrupted");File.WriteAllText(recoveryPath+".bak",JsonUtility.ToJson(sim.save));var recovered=SaveStore.LoadFrom(recoveryPath);
    Click(NamedButton("*"));yield return new WaitForSecondsRealtime(.15f);Check(NamedButton("Save progress").interactable&&GameObject.Find("Save status").GetComponent<Text>().text.Contains("Recovered"),"Settings reports recovery and permits saving");Capture("runtime_save_recovered.png");Click(NamedButton("Resume"));yield return null;SaveStore.SaveTo(recovered,recoveryPath);
-   File.WriteAllText(path,"{\"version\":1,\"stage\":2,\"cash\":123}");var migrated=SaveStore.LoadFrom(path);Check(migrated.version==4&&migrated.stage==2&&migrated.cash==123,"Unity JSON version-one migration");
+   File.WriteAllText(path,"{\"version\":1,\"stage\":2,\"cash\":123}");var migrated=SaveStore.LoadFrom(path);Check(migrated.version==SaveStore.CurrentVersion&&migrated.stage==2&&migrated.cash==123,"Unity JSON version-one migration");
    sim.unitCount=2;sim.Jump(3);bool leadTarget=false,followerTarget=false;float targetingDeadline=Time.realtimeSinceStartup+5;while(Time.realtimeSinceStartup<targetingDeadline&&!(leadTarget&&followerTarget)){leadTarget|=sim.units[0].target>=0;followerTarget|=sim.units[1].target>=0;yield return null;}Capture("runtime_squad.png");Check(leadTarget&&followerTarget,"Both squad units acquire targets during live play");
    for(int i=0;i<sim.total;i++)sim.Damage(i,sim.targets[i].hp);
    yield return new WaitForSecondsRealtime(.3f);Check(sim.phase==StagePhase.Clear,"Clear phase triggered");Capture("runtime_clear.png");
@@ -88,7 +89,7 @@ namespace VerdantTrail {
    Click(NamedButton("COLLECTION"));yield return new WaitForSecondsRealtime(.15f);
    Check(GameObject.Find("Collection stats").GetComponent<Text>().text.Contains("Owned 1    |    Equipped 1"),"Collection shows current ownership and equipped count");Capture("runtime_collection_owned.png");
    Click(NamedButton("BACK TO GEAR"));yield return null;
-   SaveStore.SaveTo(sim.save,path);var equippedSave=SaveStore.LoadFrom(path);Check(equippedSave.equippedWeapons[1]==1&&equippedSave.challengeWins==1,"Equipment and challenge wins persist in v4 save");
+   SaveStore.SaveTo(sim.save,path);var equippedSave=SaveStore.LoadFrom(path);Check(equippedSave.equippedWeapons[1]==1&&equippedSave.challengeWins==1,"Equipment and challenge wins persist in v5 save");
    root.Features.BeginWeaponDrag(0,pointer.position);var closingGhost=GameObject.Find("Dragged tool");Click(NamedButton("X"));Check(!closingGhost.activeSelf&&root.Equipment.SelectedWeapon==-1,"Closing equipment cancels unfinished drag");yield return new WaitForSecondsRealtime(2);Capture("runtime_equipped_squad.png");
    float usualDuration=sim.tuning.challengeSeconds;sim.tuning.challengeSeconds=1;gemsBefore=sim.save.gems;sim.EnterChallenge();yield return new WaitForSecondsRealtime(1.3f);
    Check(sim.phase==StagePhase.ChallengeResult&&!sim.ChallengeWon&&sim.save.gems==gemsBefore,"Timeout returns no success reward");Capture("runtime_trial_timeout.png");
@@ -111,8 +112,21 @@ namespace VerdantTrail {
    Check(sim.save.passPoints==pointsBefore+2*root.Rewards.catalog.pointsPerMission,"Mission UI claims completed objectives once");
    int passBefore=sim.save.gems;Click(NamedButton("Claim pass 0"));Click(NamedButton("Claim pass 0"));yield return new WaitForSecondsRealtime(.15f);
    Check(sim.save.gems==passBefore+root.Rewards.catalog.passGems[0],"Pass UI pays earned crystals once");Capture("runtime_missions_claimed.png");
-   SaveStore.SaveTo(sim.save,path);var rewardSave=SaveStore.LoadFrom(path);Check(rewardSave.version==4&&rewardSave.attendanceClaims==1&&rewardSave.passPoints==20&&rewardSave.passClaims==1&&rewardSave.missionClaims==9,"Reward claims persist in v4 filesystem save");
+   SaveStore.SaveTo(sim.save,path);var rewardSave=SaveStore.LoadFrom(path);Check(rewardSave.version==SaveStore.CurrentVersion&&rewardSave.attendanceClaims==1&&rewardSave.passPoints==20&&rewardSave.passClaims==1&&rewardSave.missionClaims==9,"Reward claims persist in v5 filesystem save");
    Click(NamedButton("CLOSE TASKS"));yield return null;Check(!root.Hud.IsOverlayOpen,"Closing tasks restores battlefield controls");
+   sim.save.gems=200;yield return new WaitForSecondsRealtime(.15f);Click(NamedButton("SKINS"));yield return new WaitForSecondsRealtime(.15f);Capture("runtime_skins_gallery.png");
+   Click(NamedButton("Skin card 1"));yield return null;Click(NamedButton("BUY SKIN"));yield return new WaitForSecondsRealtime(.15f);
+   Check(root.Skins.Owns(1)&&sim.save.gems==164&&root.Skins.Equipped==0,"Skin purchase activates ownership without changing outfit");
+   Click(NamedButton("Skin card 2"));yield return null;Click(NamedButton("BUY SKIN"));yield return new WaitForSecondsRealtime(.15f);
+   Check(root.Skins.ForceBonus==13&&root.Skins.TempoBonus==8&&root.Skins.YieldBonus==13&&sim.save.gems==92,"Skin UI purchases stack all three permanent bonuses");
+   Click(NamedButton("BUY SKIN"));yield return new WaitForSecondsRealtime(.15f);Check(root.Skins.Equipped==2&&sim.save.gems==92,"Equip changes outfit without another debit");Capture("runtime_skins_owned.png");
+   Click(NamedButton("Skin card 0"));Click(NamedButton("BUY SKIN"));yield return new WaitForSecondsRealtime(.15f);Check(root.Skins.Equipped==0&&root.Skins.ForceBonus==13,"Starter outfit retains purchased bonuses");
+   Click(NamedButton("Skin card 8"));yield return new WaitForSecondsRealtime(.15f);Check(!NamedButton("BUY SKIN").interactable,"Unaffordable skin purchase is disabled");Capture("runtime_skin_preview.png");
+   Click(NamedButton("Skin card 2"));Click(NamedButton("BUY SKIN"));Click(NamedButton("CLOSE SKINS"));yield return new WaitForSecondsRealtime(.2f);Capture("runtime_skin_equipped.png");
+   SaveStore.SaveTo(sim.save,path);var skinSave=SaveStore.LoadFrom(path);Check(skinSave.version==5&&skinSave.ownedSkins==7&&skinSave.equippedSkin==2,"Skin ownership and equipped look persist in filesystem save");
+   Click(NamedButton("GEAR"));Click(NamedButton("COLLECTION"));yield return new WaitForSecondsRealtime(.15f);Click(NamedButton("Collection tool 2"));yield return null;Capture("runtime_weapon_shop.png");Click(NamedButton("BUY TOOL"));yield return new WaitForSecondsRealtime(.15f);
+   Check(sim.save.gems==2&&root.Equipment.Available(2)==1,"Expanded weapon shop debits price and grants correct tool");root.Features.BeginWeaponDrag(2,Vector2.zero);Check(GameObject.Find("Dragged tool").GetComponent<Image>().sprite.name=="Painted_weapon2","Drag preview uses selected gun artwork");root.Features.EndWeaponDrag();Click(NamedButton("BACK TO GEAR"));yield return new WaitForSecondsRealtime(.15f);Click(NamedButton("Inventory 0"));Click(NamedButton("Equipment slot 0"));yield return new WaitForSecondsRealtime(.15f);
+   Check(sim.save.equippedWeapons[0]==2,"Purchased new gun equips through inventory UI");Click(NamedButton("X"));yield return new WaitForSecondsRealtime(.15f);
    yield return CheckLayouts();
    Finish();
   }
@@ -123,6 +137,8 @@ namespace VerdantTrail {
     Capture("layout_"+names[i]+"_play.png",widths[i],heights[i],safe);yield return null;
     root.Features.OpenWeapons();yield return null;Capture("layout_"+names[i]+"_gear.png",widths[i],heights[i],safe);Click(NamedButton("X"));yield return new WaitForSecondsRealtime(.15f);
    }
+   Click(NamedButton("SKINS"));yield return new WaitForSecondsRealtime(.15f);Capture("layout_notched_skins.png",600,1400,new Rect(18,40,564,1270));Capture("layout_tablet_skins.png",768,1024);Click(NamedButton("CLOSE SKINS"));yield return new WaitForSecondsRealtime(.15f);
+   root.Features.OpenWeapons();Click(NamedButton("COLLECTION"));yield return new WaitForSecondsRealtime(.15f);Capture("layout_notched_collection.png",600,1400,new Rect(18,40,564,1270));Click(NamedButton("BACK TO GEAR"));Click(NamedButton("X"));yield return new WaitForSecondsRealtime(.15f);
    root.Hud.Layout.Apply(Screen.width,Screen.height,new Rect(20,30,Screen.width-40,Screen.height-80));Canvas.ForceUpdateCanvases();
    var content=root.Hud.ContentRoot;Vector2 point=RectTransformUtility.WorldToScreenPoint(null,content.TransformPoint(Vector3.zero));Vector2 local=root.Hud.Layout.LocalPoint(point);
    Check((local-content.rect.size*.5f).sqrMagnitude<.01f,"Safe-area screen-to-HUD drag coordinates roundtrip");

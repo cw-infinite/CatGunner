@@ -1,11 +1,11 @@
 Mono path[0] = 'C:/Users/deadm/Desktop/Code/OpenAI/catgunner/Builds/Windows/VerdantTrail_Data/Managed'
 Mono config path = 'C:/Users/deadm/Desktop/Code/OpenAI/catgunner/Builds/Windows/MonoBleedingEdge/etc'
 Found 1 interfaces on host : 0) 192.168.1.151
-Player connection [33548]  Target information:
+Player connection [30488]  Target information:
 
-Player connection [33548]  * "[IP] 192.168.1.151 [Port] 55000 [Flags] 2 [Guid] 1656428803 [EditorId] 1442052371 [Version] 1048832 [Id] WindowsPlayer(2,CW-PC1991) [Debug] 0 [PackageName] WindowsPlayer [ProjectName] Verdant Trail" 
+Player connection [30488]  * "[IP] 192.168.1.151 [Port] 55000 [Flags] 2 [Guid] 3787677778 [EditorId] 712006070 [Version] 1048832 [Id] WindowsPlayer(2,CW-PC1991) [Debug] 0 [PackageName] WindowsPlayer [ProjectName] Verdant Trail" 
 
-Player connection [33548] Started UDP target info broadcast (1) on [225.0.0.222:54997].
+Player connection [30488] Started UDP target info broadcast (1) on [225.0.0.222:54997].
 
 Input System module state changed to: Initialized.
 [Physics::Module] Initialized fallback backend.
@@ -29,7 +29,7 @@ Direct3D:
     App VRAM Budget: 3403 MB
     Driver:          32.0.15.6094
 Begin MonoManager ReloadAssembly
-- Loaded All Assemblies, in  0.445 seconds
+- Loaded All Assemblies, in  3.677 seconds
 - Finished resetting the current domain, in  0.003 seconds
 [Physics::Module] Selected backend.
 [Physics::Module] Name: PhysX
@@ -39,7 +39,7 @@ Begin MonoManager ReloadAssembly
 [Physics::Module] Threading Mode: Multi-Threaded
 <RI> Initializing input.
 <RI> Input initialized.
-UnloadTime: 17.596600 ms
+UnloadTime: 0.743200 ms
 Save load failed; existing files protected: Save is from a newer version.
 UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
 UnityEngine.StackTraceUtility:ExtractStackTrace () (at C:/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
@@ -47,9 +47,9 @@ UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOpt
 UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[]) (at C:/build/output/unity/unity/Runtime/Export/Logging/DebugLogHandler.cs:9)
 UnityEngine.Logger:Log (UnityEngine.LogType,object) (at C:/build/output/unity/unity/Runtime/Export/Logging/Logger.cs:60)
 UnityEngine.Debug:LogWarning (object) (at C:/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs:213)
-VerdantTrail.SaveStore:LoadFrom (string) (at C:/Users/deadm/Desktop/Code/OpenAI/catgunner/Assets/Scripts/Saving/SaveStore.cs:74)
+VerdantTrail.SaveStore:LoadFrom (string) (at C:/Users/deadm/Desktop/Code/OpenAI/catgunner/Assets/Scripts/Saving/SaveStore.cs:77)
 VerdantTrail.SaveRecoveryChecks:Run (string) (at C:/Users/deadm/Desktop/Code/OpenAI/catgunner/Assets/Scripts/Core/SaveRecoveryChecks.cs:28)
-VerdantTrail.RuntimeProbe/<CheckInteractions>d__27:MoveNext () (at C:/Users/deadm/Desktop/Code/OpenAI/catgunner/Assets/Scripts/Core/RuntimeProbe.cs:60)
+VerdantTrail.RuntimeProbe/<CheckInteractions>d__27:MoveNext () (at C:/Users/deadm/Desktop/Code/OpenAI/catgunner/Assets/Scripts/Core/RuntimeProbe.cs:61)
 UnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr) (at C:/build/output/unity/unity/Runtime/Export/Scripting/Coroutines.cs:17)
 
 (Filename: C:/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs Line: 213)
@@ -61,9 +61,9 @@ UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOpt
 UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[]) (at C:/build/output/unity/unity/Runtime/Export/Logging/DebugLogHandler.cs:9)
 UnityEngine.Logger:Log (UnityEngine.LogType,object) (at C:/build/output/unity/unity/Runtime/Export/Logging/Logger.cs:60)
 UnityEngine.Debug:LogWarning (object) (at C:/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs:213)
-VerdantTrail.SaveStore:LoadFrom (string) (at C:/Users/deadm/Desktop/Code/OpenAI/catgunner/Assets/Scripts/Saving/SaveStore.cs:74)
+VerdantTrail.SaveStore:LoadFrom (string) (at C:/Users/deadm/Desktop/Code/OpenAI/catgunner/Assets/Scripts/Saving/SaveStore.cs:77)
 VerdantTrail.SaveRecoveryChecks:Run (string) (at C:/Users/deadm/Desktop/Code/OpenAI/catgunner/Assets/Scripts/Core/SaveRecoveryChecks.cs:29)
-VerdantTrail.RuntimeProbe/<CheckInteractions>d__27:MoveNext () (at C:/Users/deadm/Desktop/Code/OpenAI/catgunner/Assets/Scripts/Core/RuntimeProbe.cs:60)
+VerdantTrail.RuntimeProbe/<CheckInteractions>d__27:MoveNext () (at C:/Users/deadm/Desktop/Code/OpenAI/catgunner/Assets/Scripts/Core/RuntimeProbe.cs:61)
 UnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr) (at C:/build/output/unity/unity/Runtime/Export/Scripting/Coroutines.cs:17)
 
 (Filename: C:/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs Line: 213)
@@ -75,23 +75,23 @@ UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOpt
 UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[]) (at C:/build/output/unity/unity/Runtime/Export/Logging/DebugLogHandler.cs:9)
 UnityEngine.Logger:Log (UnityEngine.LogType,object) (at C:/build/output/unity/unity/Runtime/Export/Logging/Logger.cs:60)
 UnityEngine.Debug:LogWarning (object) (at C:/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs:213)
-VerdantTrail.SaveStore:LoadFrom (string) (at C:/Users/deadm/Desktop/Code/OpenAI/catgunner/Assets/Scripts/Saving/SaveStore.cs:74)
+VerdantTrail.SaveStore:LoadFrom (string) (at C:/Users/deadm/Desktop/Code/OpenAI/catgunner/Assets/Scripts/Saving/SaveStore.cs:77)
 VerdantTrail.SaveRecoveryChecks:Run (string) (at C:/Users/deadm/Desktop/Code/OpenAI/catgunner/Assets/Scripts/Core/SaveRecoveryChecks.cs:30)
-VerdantTrail.RuntimeProbe/<CheckInteractions>d__27:MoveNext () (at C:/Users/deadm/Desktop/Code/OpenAI/catgunner/Assets/Scripts/Core/RuntimeProbe.cs:60)
+VerdantTrail.RuntimeProbe/<CheckInteractions>d__27:MoveNext () (at C:/Users/deadm/Desktop/Code/OpenAI/catgunner/Assets/Scripts/Core/RuntimeProbe.cs:61)
 UnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr) (at C:/build/output/unity/unity/Runtime/Export/Scripting/Coroutines.cs:17)
 
 (Filename: C:/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs Line: 213)
 
-Save write: Access to the path 'C:\Users\deadm\Desktop\Code\OpenAI\catgunner\Validation\save-recovery-4b83981b3eb04044915792ae853946ed\blocked.json.tmp' is denied.
+Save write: Access to the path 'C:\Users\deadm\Desktop\Code\OpenAI\catgunner\Validation\save-recovery-503ae390245849c49a51d13bb9e119fc\blocked.json.tmp' is denied.
 UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
 UnityEngine.StackTraceUtility:ExtractStackTrace () (at C:/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
 UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
 UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[]) (at C:/build/output/unity/unity/Runtime/Export/Logging/DebugLogHandler.cs:9)
 UnityEngine.Logger:Log (UnityEngine.LogType,object) (at C:/build/output/unity/unity/Runtime/Export/Logging/Logger.cs:60)
 UnityEngine.Debug:LogWarning (object) (at C:/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs:213)
-VerdantTrail.SaveStore:SaveTo (VerdantTrail.SaveData,string) (at C:/Users/deadm/Desktop/Code/OpenAI/catgunner/Assets/Scripts/Saving/SaveStore.cs:93)
+VerdantTrail.SaveStore:SaveTo (VerdantTrail.SaveData,string) (at C:/Users/deadm/Desktop/Code/OpenAI/catgunner/Assets/Scripts/Saving/SaveStore.cs:96)
 VerdantTrail.SaveRecoveryChecks:Run (string) (at C:/Users/deadm/Desktop/Code/OpenAI/catgunner/Assets/Scripts/Core/SaveRecoveryChecks.cs:31)
-VerdantTrail.RuntimeProbe/<CheckInteractions>d__27:MoveNext () (at C:/Users/deadm/Desktop/Code/OpenAI/catgunner/Assets/Scripts/Core/RuntimeProbe.cs:60)
+VerdantTrail.RuntimeProbe/<CheckInteractions>d__27:MoveNext () (at C:/Users/deadm/Desktop/Code/OpenAI/catgunner/Assets/Scripts/Core/RuntimeProbe.cs:61)
 UnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr) (at C:/build/output/unity/unity/Runtime/Export/Scripting/Coroutines.cs:17)
 
 (Filename: C:/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs Line: 213)
@@ -103,8 +103,8 @@ UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOpt
 UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[]) (at C:/build/output/unity/unity/Runtime/Export/Logging/DebugLogHandler.cs:9)
 UnityEngine.Logger:Log (UnityEngine.LogType,object) (at C:/build/output/unity/unity/Runtime/Export/Logging/Logger.cs:60)
 UnityEngine.Debug:LogWarning (object) (at C:/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs:213)
-VerdantTrail.SaveStore:LoadFrom (string) (at C:/Users/deadm/Desktop/Code/OpenAI/catgunner/Assets/Scripts/Saving/SaveStore.cs:74)
-VerdantTrail.RuntimeProbe/<CheckInteractions>d__27:MoveNext () (at C:/Users/deadm/Desktop/Code/OpenAI/catgunner/Assets/Scripts/Core/RuntimeProbe.cs:63)
+VerdantTrail.SaveStore:LoadFrom (string) (at C:/Users/deadm/Desktop/Code/OpenAI/catgunner/Assets/Scripts/Saving/SaveStore.cs:77)
+VerdantTrail.RuntimeProbe/<CheckInteractions>d__27:MoveNext () (at C:/Users/deadm/Desktop/Code/OpenAI/catgunner/Assets/Scripts/Core/RuntimeProbe.cs:64)
 UnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr) (at C:/build/output/unity/unity/Runtime/Export/Scripting/Coroutines.cs:17)
 
 (Filename: C:/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs Line: 213)
@@ -114,4 +114,4 @@ UnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr
 Input System module state changed to: ShutdownInProgress.
 Input System polling thread exited.
 Input System module state changed to: Shutdown.
-PlayerConnection::Cleanup##utp:{"type":"MemoryLeaks","version":2,"phase":"Immediate","time":1790995194907,"processId":21400,"allocatedMemory":88458,"memoryLabels":[{"Default":136},{"NewDelete":776},{"Thread":8640},{"Manager":8662},{"GfxDevice":2128},{"GfxThread":3072},{"Audio":752},{"Serialization":520},{"JobScheduler":32768},{"String":476},{"HashMap":28160},{"PoolAlloc":96},{"CloudService":144},{"VR":1872},{"Video":144},{"Subsystems":96},{"CoreBusinessMetrics":120}]}
+PlayerConnection::Cleanup##utp:{"type":"MemoryLeaks","version":2,"phase":"Immediate","time":1791050825683,"processId":31844,"allocatedMemory":89482,"memoryLabels":[{"Default":136},{"NewDelete":776},{"Thread":8896},{"Manager":8662},{"GfxDevice":2128},{"GfxThread":3840},{"Audio":752},{"Serialization":520},{"JobScheduler":32768},{"String":476},{"HashMap":28160},{"PoolAlloc":96},{"CloudService":144},{"VR":1872},{"Video":144},{"Subsystems":96},{"CoreBusinessMetrics":120}]}

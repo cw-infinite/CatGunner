@@ -13,6 +13,7 @@ namespace VerdantTrail.Editor {
    if(!File.Exists("Assets/Resources/HarvestTuning.asset")){var data=ScriptableObject.CreateInstance<HarvestTuning>();AssetDatabase.CreateAsset(data,"Assets/Resources/HarvestTuning.asset");}
    if(!File.Exists("Assets/Resources/EquipmentCatalog.asset"))AssetDatabase.CreateAsset(ScriptableObject.CreateInstance<EquipmentCatalog>(),"Assets/Resources/EquipmentCatalog.asset");
    if(!File.Exists("Assets/Resources/RewardCatalog.asset"))AssetDatabase.CreateAsset(ScriptableObject.CreateInstance<RewardCatalog>(),"Assets/Resources/RewardCatalog.asset");
+   if(!File.Exists("Assets/Resources/SkinCatalog.asset"))AssetDatabase.CreateAsset(ScriptableObject.CreateInstance<SkinCatalog>(),"Assets/Resources/SkinCatalog.asset");
    var scene=EditorSceneManager.NewScene(NewSceneSetup.EmptyScene,NewSceneMode.Single);
    new GameObject("Verdant Trail bootstrap").AddComponent<GameRoot>();
    EditorSceneManager.SaveScene(scene,"Assets/Scenes/Harvest.unity");
@@ -30,7 +31,7 @@ namespace VerdantTrail.Editor {
   [MenuItem("Verdant Trail/Run deterministic checks")]
   public static void Validate() {
    Directory.CreateDirectory("Validation");var t=AssetDatabase.LoadAssetAtPath<HarvestTuning>("Assets/Resources/HarvestTuning.asset");if(t==null)t=ScriptableObject.CreateInstance<HarvestTuning>();
-   var log=new StringBuilder();log.AppendLine(ProgressionValidation.Run(t));log.AppendLine(RewardValidation.Run(t));log.AppendLine(DeadlineValidation.Run(t));log.AppendLine(SaveRecoveryChecks.Run("Validation"));var s=new HarvestSimulation(t,new SaveData());
+   var log=new StringBuilder();log.AppendLine(SkinValidation.Run(t));log.AppendLine(ProgressionValidation.Run(t));log.AppendLine(RewardValidation.Run(t));log.AppendLine(DeadlineValidation.Run(t));log.AppendLine(SaveRecoveryChecks.Run("Validation"));var s=new HarvestSimulation(t,new SaveData());
    Require(!s.Buy(0),"Cannot buy without cash");s.save.cash=1000;double cost=t.Cost(0);Require(s.Buy(0)&&s.save.force==1&&s.save.cash==1000-cost,"Purchase debits exactly once");
    Require(t.Interval(4)<t.Interval(0),"Tempo shortens interval");Require(t.Damage(4)>t.Damage(0),"Force raises damage");
    var idle=new HarvestSimulation(t,new SaveData());idle.automate=false;var original=idle.units[0].position;
@@ -40,7 +41,7 @@ namespace VerdantTrail.Editor {
    double expected=0;for(int i=0;i<reward.total;i++){expected+=Math.Round(t.Reward(1,0)*(reward.targets[i].kind==0?1:1.6));reward.Damage(i,float.MaxValue);reward.Damage(i,float.MaxValue);}
    for(int i=0;i<130;i++)reward.Step(1f/60);Require(Math.Abs(reward.save.cash-expected)<.01,"Drops credited once including full pool overflow");Require(reward.cleared==reward.total,"Dead targets counted once");
    log.AppendLine("PASS: affordability, debit, stat scaling, manual override/release, duplicate damage, drop accounting and pool overflow.");
-   var migrated=SaveStore.Sanitize(new SaveData{version=1,stage=-9,cash=double.NaN,force=-2});Require(migrated.version==4&&migrated.stage==1&&migrated.cash==0&&migrated.force==0,"Save migration and sanitization");
+   var migrated=SaveStore.Sanitize(new SaveData{version=1,stage=-9,cash=double.NaN,force=-2});Require(migrated.version==SaveStore.CurrentVersion&&migrated.stage==1&&migrated.cash==0&&migrated.force==0,"Save migration and sanitization");
    bool rejected=false;try{SaveStore.Sanitize(new SaveData{version=900});}catch(InvalidDataException){rejected=true;}Require(rejected,"Future saves rejected");
    log.AppendLine("PASS: v1 migration, malformed number sanitization, future-version rejection.");
    s=new HarvestSimulation(t,new SaveData());int serial=s.stageSerial,last=1;float start=0,purchaseTimer=0;double minCash=double.MaxValue;int maxShots=0,maxDrops=0;

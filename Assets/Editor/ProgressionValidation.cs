@@ -5,7 +5,7 @@ namespace VerdantTrail.Editor {
   public static string Run(HarvestTuning tuning){
    void Require(bool ok,string message){if(!ok)throw new Exception("Progression check: "+message);}
    var data=SaveStore.Sanitize(new SaveData{version=2,stage=3,highestStage=3});var sim=new HarvestSimulation(tuning,data);var gear=new EquipmentSystem(sim,ScriptableObject.CreateInstance<EquipmentCatalog>());
-   Require(data.version==4&&data.equippedWeapons[0]==0&&sim.unitCount==1,"v2 migration retains starter weapon");
+   Require(data.version==SaveStore.CurrentVersion&&data.equippedWeapons[0]==0&&sim.unitCount==1,"v2 migration retains starter weapon");
    Require(!gear.BuyDelivery(),"Cannot buy without crystals");data.gems=gear.catalog.deliveryCost;Require(gear.BuyDelivery()&&data.gems==0&&gear.Available(1)==1,"Delivery exact debit");
    Require(gear.Equip(1,1)&&sim.unitCount==2,"Equipping enables follower");Require(!gear.Equip(1,0),"No duplicate use of one item");Require(gear.Unequip(1)&&sim.unitCount==1&&gear.Available(1)==1,"Unequip preserves ownership");gear.Equip(1,1);
    int total=sim.total;sim.Damage(0,sim.targets[0].hp);int cleared=sim.cleared;float hp=sim.targets[1].hp;Require(sim.EnterChallenge(),"Challenge entry");Require(!sim.EnterChallenge(),"Nested challenge rejected");
@@ -27,7 +27,7 @@ namespace VerdantTrail.Editor {
    finale.Damage(gold,originalHp);finale.Damage(gold,originalHp);for(int i=0;i<130;i++)finale.Step(1f/60);
    Require(Math.Abs(finale.save.cash-beforeGold-Math.Round(tuning.Reward(5,0)*tuning.finaleRewardMultiplier))<.01,"Gold payout once");
    for(int i=0;i<130;i++)finale.Step(1f/60);Require(finale.save.stage==6&&finale.targets[0].kind==3,"Finale reaches sand biome");
-   return "Natural first trial: "+elapsed.ToString("0.00")+"s at level-four upgrades.\nPASS: gold finale, clear gate, trial preservation, single payout and sand-biome transition.\nPASS: v2-to-v4 equipment migration, delivery debit, item ownership, equip/unequip, exact grove restoration, challenge success/timeout/exit and single reward payout.";
+   return "Natural first trial: "+elapsed.ToString("0.00")+"s at level-four upgrades.\nPASS: gold finale, clear gate, trial preservation, single payout and sand-biome transition.\nPASS: v2-to-v5 equipment migration, delivery debit, item ownership, equip/unequip, exact grove restoration, challenge success/timeout/exit and single reward payout.";
   }
  }
 }

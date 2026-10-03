@@ -1,6 +1,7 @@
+PASS: 26 skin/expanded-weapon checks: migration, debit, cumulative ownership bonuses, cosmetic equip, combat effects, persistence and increasing tiers.
 Natural first trial: 28.02s at level-four upgrades.
 PASS: gold finale, clear gate, trial preservation, single payout and sand-biome transition.
-PASS: v2-to-v4 equipment migration, delivery debit, item ownership, equip/unequip, exact grove restoration, challenge success/timeout/exit and single reward payout.
+PASS: v2-to-v5 equipment migration, delivery debit, item ownership, equip/unequip, exact grove restoration, challenge success/timeout/exit and single reward payout.
 PASS: reward save migration, kill/clear counters, claim eligibility, single payouts, serialized claims, UTC reset, clock rollback and seven-day cycle.
 PASS: final-frame trial deadline rejects late impacts, accepts timely impacts, pays once and ignores invalid time steps.
 PASS: 19 filesystem checks for backup/temp recovery, archival, equipment/reward persistence, future-version protection and failed-write retry.

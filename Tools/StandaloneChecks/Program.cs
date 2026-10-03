@@ -16,7 +16,7 @@ class Program {
   for(int i=0;i<drops.total;i++){expected+=Math.Round(t.Reward(1,0)*(drops.targets[i].kind==0?1:1.6));drops.Damage(i,float.MaxValue);drops.Damage(i,float.MaxValue);}
   for(int i=0;i<130;i++)drops.Step(1f/60);
   Check(Math.Abs(drops.save.cash-expected)<.001,"Pickup currency not duplicated or lost");Check(drops.cleared==drops.total,"Death count unique");
-  var migrated=SaveStore.Sanitize(new SaveData{version=1,cash=double.NaN,stage=-3,force=-1});Check(migrated.version==4&&migrated.cash==0&&migrated.stage==1&&migrated.force==0,"Migration/sanitize");
+  var migrated=SaveStore.Sanitize(new SaveData{version=1,cash=double.NaN,stage=-3,force=-1});Check(migrated.version==SaveStore.CurrentVersion&&migrated.cash==0&&migrated.stage==1&&migrated.force==0,"Migration/sanitize");
   bool future=false;try{SaveStore.Sanitize(new SaveData{version=20});}catch(InvalidDataException){future=true;}Check(future,"Future save rejected");
   var a=new HarvestSimulation(t,new SaveData());var b=new HarvestSimulation(t,new SaveData());for(int i=0;i<a.total;i++)Check((a.targets[i].position-b.targets[i].position).sqrMagnitude==0,"Seed determinism");
   a=new HarvestSimulation(t,new SaveData());a.automate=false;int target=a.Nearest(a.units[0].position,10000);a.units[0].position=a.targets[target].position-Vector2.right*2;a.units[0].target=target;

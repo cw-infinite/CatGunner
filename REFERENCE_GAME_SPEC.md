@@ -67,3 +67,7 @@ All visual replacements must be independently authored. No enemy speed or attack
 13. Appearance and collection viewer, mission/pass flows, daily claim; use original names/icons.
 14. Do not invent locked modes, offline gains, prestige resets or monetization. Obtain additional reference footage when these enter scope.
 15. Device profiling and Android build after platform module installation; iOS after Android validation.
+
+## Skin clarification - 2026-10-03
+
+At 05:12 the appearance panel explicitly says effects apply without equipping the skin. The user confirms that purchased skins cumulatively increase Force, Tempo and Yield, while equipped appearance is independent. Implemented in the v5 prototype with nine original looks. The ownership rule is confirmed; crystal prices and per-skin bonus values are configurable prototype tuning, not measured values from the video. See `Validation/SKINS_CONTENT_UPDATE.md`.

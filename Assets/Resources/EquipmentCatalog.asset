@@ -19,6 +19,16 @@ MonoBehaviour:
   - label: Trail pulse
     damageMultiplier: 1
     intervalMultiplier: 1
+    price: 0
   - label: Quick spark
     damageMultiplier: 0.8
     intervalMultiplier: 0.84
+    price: 36
+  - label: Briar burst
+    damageMultiplier: 1.35
+    intervalMultiplier: 0.92
+    price: 90
+  - label: Sun flare
+    damageMultiplier: 1.8
+    intervalMultiplier: 0.8
+    price: 180

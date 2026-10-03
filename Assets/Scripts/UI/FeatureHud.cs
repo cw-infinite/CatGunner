@@ -22,7 +22,7 @@ namespace VerdantTrail {
   Image timerFill;Text[] slots=new Text[3];Button[] items=new Button[12];Text[] itemLabels=new Text[12];int[] itemIds=new int[12];
   GameObject timerRoot;RectTransform ghost;float refresh;
   readonly Color ink=new Color(.30f,.18f,.10f),paper=new Color(.98f,.92f,.75f),mint=new Color(.56f,.94f,.76f);
-  public bool IsOpen=>weapons.activeSelf||offer.activeSelf||result.activeSelf||collection.activeSelf||dailyPanel.activeSelf||missionPanel.activeSelf;
+  public bool IsOpen=>weapons.activeSelf||offer.activeSelf||result.activeSelf||collection.activeSelf||dailyPanel.activeSelf||missionPanel.activeSelf||skinsPanel.activeSelf;
   RectTransform Rect(string name,Transform parent,float x,float y,float w,float h){if(parent==canvas.transform)parent=hud.ContentRoot;var rt=new GameObject(name,typeof(RectTransform)).GetComponent<RectTransform>();rt.SetParent(parent,false);rt.anchorMin=new Vector2(x,1-y-h);rt.anchorMax=new Vector2(x+w,1-y);rt.offsetMin=rt.offsetMax=Vector2.zero;return rt;}
   Image Panel(string name,Transform parent,float x,float y,float w,float h,Color c){var rt=Rect(name,parent,x,y,w,h);var im=rt.gameObject.AddComponent<Image>();im.color=c;im.sprite=OriginalArt.Get("panel");im.type=Image.Type.Sliced;if(name.EndsWith(" content"))UiFinish.Skin(im,"menu-art");return im;}
   Text Text(string name,Transform parent,float x,float y,float w,float h,string value,int size=21){var rt=Rect(name,parent,x,y,w,h);var t=rt.gameObject.AddComponent<Text>();t.font=font;t.fontSize=size;t.fontStyle=FontStyle.Bold;t.alignment=TextAnchor.MiddleCenter;t.color=ink;t.text=value;t.raycastTarget=false;return t;}
@@ -50,17 +50,17 @@ namespace VerdantTrail {
    offer=Overlay("Trial offer",.32f,.34f,out var o);Text("Trial title",o,.05f,.05f,.9f,.12f,"TIMED HARVEST",27);offerDetail=Text("Objective",o,.08f,.22f,.84f,.36f,"",23);Button("START TRIAL",o,.15f,.64f,.7f,.15f,()=>{if(sim.EnterChallenge())Close(offer);});Button("BACK",o,.3f,.83f,.4f,.1f,()=>Close(offer));offer.SetActive(false);
    result=Overlay("Trial result",.31f,.36f,out var r);resultTitle=Text("Result title",r,.04f,.08f,.92f,.17f,"",28);resultDetail=Text("Result detail",r,.08f,.3f,.84f,.28f,"",24);Button("CONTINUE",r,.15f,.7f,.7f,.16f,()=>{sim.LeaveChallenge();Close(result);});result.SetActive(false);
    ghost=Rect("Dragged tool",canvas.transform,0,0,0,0);ghost.anchorMin=ghost.anchorMax=Vector2.zero;ghost.sizeDelta=new Vector2(95,75);var image=ghost.gameObject.AddComponent<Image>();image.sprite=OriginalArt.Get("gun");image.raycastTarget=false;ghost.gameObject.SetActive(false);
-   BuildCollection();BuildRewards(rewardSystem);equipment.Changed+=RefreshEquipment;RefreshEquipment();
+   BuildCollection();BuildRewards(rewardSystem);BuildSkins();equipment.Changed+=RefreshEquipment;RefreshEquipment();
   }
   public void OpenWeapons(){if(!equipment.Unlocked||sim.InChallenge)return;weapons.SetActive(true);weapons.transform.SetAsLastSibling();hud.ResetMovement();RefreshEquipment();}
   public void EquipWeapon(int id,int slot){if(!equipment.Equip(id,slot))hud.ShowToast(slot==2?"This slot is locked":"Tool already equipped");RefreshEquipment();}
-  public void BeginWeaponDrag(int id,Vector2 position){if(id<0)return;equipment.SelectedWeapon=id;ghost.gameObject.SetActive(true);ghost.SetAsLastSibling();MoveWeaponDrag(position);}
+  public void BeginWeaponDrag(int id,Vector2 position){if(id<0)return;equipment.SelectedWeapon=id;ghost.GetComponent<Image>().sprite=OriginalArt.Get("weapon"+id);ghost.gameObject.SetActive(true);ghost.SetAsLastSibling();MoveWeaponDrag(position);}
   public void MoveWeaponDrag(Vector2 position){ghost.anchoredPosition=hud.Layout.LocalPoint(position);}
   public void EndWeaponDrag(){ghost.gameObject.SetActive(false);}
   public void CancelWeaponDrag(){if(ghost!=null)ghost.gameObject.SetActive(false);equipment.SelectedWeapon=-1;}
   void RefreshEquipment(){
-   for(int i=0;i<3;i++){int id=sim.save.equippedWeapons[i];slotIcons[i].enabled=id>=0&&i<2;slotIcons[i].color=id==1?new Color(1f,.72f,.35f):Color.white;slots[i].text=i==2?"LOCKED":id<0?"EMPTY\n+":equipment.catalog.weapons[id].label+"\n"+Mathf.RoundToInt(sim.tuning.Damage(sim.save.force)*equipment.catalog.weapons[id].damageMultiplier)+" force\n"+(sim.tuning.Interval(sim.save.tempo)*equipment.catalog.weapons[id].intervalMultiplier).ToString("0.00")+"s";}
-   int n=0;for(int id=0;id<equipment.catalog.weapons.Length;id++)for(int k=0;k<equipment.Available(id)&&n<items.Length;k++){itemIds[n]=id;itemIcons[n].enabled=true;itemIcons[n].color=id==1?new Color(1f,.72f,.35f):Color.white;items[n].interactable=true;items[n].GetComponent<WeaponDrag>().WeaponId=id;itemLabels[n].text=equipment.catalog.weapons[id].label;n++;}
+   for(int i=0;i<3;i++){int id=sim.save.equippedWeapons[i];slotIcons[i].enabled=id>=0&&i<2;slotIcons[i].sprite=OriginalArt.Get("weapon"+Mathf.Max(0,id));slotIcons[i].color=Color.white;slots[i].text=i==2?"LOCKED":id<0?"EMPTY\n+":equipment.catalog.weapons[id].label+"\n"+Mathf.RoundToInt(sim.EffectiveDamage*equipment.catalog.weapons[id].damageMultiplier)+" force\n"+(sim.Interval*equipment.catalog.weapons[id].intervalMultiplier).ToString("0.00")+"s";}
+   int n=0;for(int id=0;id<equipment.catalog.weapons.Length;id++)for(int k=0;k<equipment.Available(id)&&n<items.Length;k++){itemIds[n]=id;itemIcons[n].enabled=true;itemIcons[n].sprite=OriginalArt.Get("weapon"+id);itemIcons[n].color=Color.white;items[n].interactable=true;items[n].GetComponent<WeaponDrag>().WeaponId=id;itemLabels[n].text=equipment.catalog.weapons[id].label;n++;}
    while(n<items.Length){itemIds[n]=-1;itemIcons[n].enabled=false;items[n].interactable=false;items[n].GetComponent<WeaponDrag>().WeaponId=-1;itemLabels[n].text="";n++;}
    for(int i=0;i<3;i++)slotHighlights[i].gameObject.SetActive(i<2&&equipment.SelectedWeapon>=0&&equipment.Available(equipment.SelectedWeapon)>0);
    for(int i=0;i<items.Length;i++)itemHighlights[i].gameObject.SetActive(itemIds[i]>=0&&itemIds[i]==equipment.SelectedWeapon);
@@ -71,6 +71,7 @@ namespace VerdantTrail {
   }
   public void Tick(float dt){
    bool available=!hud.CoreOverlayOpen&&!IsOpen;weaponTile.gameObject.SetActive(equipment.Unlocked&&!sim.InChallenge&&available);challengeTile.gameObject.SetActive(sim.ChallengeUnlocked&&!sim.InChallenge&&available&&sim.phase==StagePhase.Harvest);
+   skinsTile.gameObject.SetActive(available&&!sim.InChallenge);
    dailyTile.gameObject.SetActive(available&&!sim.InChallenge);missionTile.gameObject.SetActive(available&&!sim.InChallenge&&rewards.MissionsUnlocked);
    exit.gameObject.SetActive(sim.InChallenge&&sim.phase==StagePhase.Harvest&&!hud.CoreOverlayOpen);timerRoot.SetActive(sim.InChallenge);
    if(sim.phase==StagePhase.ChallengeResult&&!result.activeSelf){result.SetActive(true);result.transform.SetAsLastSibling();resultTitle.text=sim.ChallengeWon?"HARVEST COMPLETE":"TIME'S UP";resultDetail.text=sim.ChallengeWon?"<> +"+sim.tuning.challengeGemReward+" crystals":"Harvested "+sim.cleared+" / "+sim.total+"\nReturn to the grove";hud.ResetMovement();}
@@ -79,6 +80,7 @@ namespace VerdantTrail {
    if(offer.activeSelf)offerDetail.text="Clear every plant in "+sim.tuning.challengeSeconds+" seconds\n\nReward  <> "+sim.tuning.challengeGemReward;
    if(weapons.activeSelf)RefreshEquipment();
    if(collection.activeSelf)RefreshCollection();
+   if(skinsPanel.activeSelf)RefreshSkins();
    if(dailyPanel.activeSelf||missionPanel.activeSelf)RefreshRewards();
   }
  }

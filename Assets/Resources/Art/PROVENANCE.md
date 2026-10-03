@@ -1,5 +1,7 @@
 # Original art pass v2 — 2026-10-02
 
+The October 3 skin, gun and scenery expansion is documented in [EXPANSION_PROMPTS.md](EXPANSION_PROMPTS.md), including all generation/edit prompts and saved asset filenames.
+
 These two transparent PNG atlases were generated with the built-in image-generation tool for this project. Reference video frames were supplied as style guidance only. No sprites were extracted from the reference recording and no third-party asset pack was imported.
 
 - `world-v2.png`: six vegetation variants, original cream-and-ginger cat, separate blaster.

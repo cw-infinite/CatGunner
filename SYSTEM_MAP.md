@@ -8,7 +8,7 @@
 | Challenge play tile | By 00:42 | Yes | Timed vegetation arena; gem success reward, timeout return | Implemented; success/timeout/exit tested |
 | Weapon tile | 03:00 and 05:18 | Yes | Acquisition, inventory, three equip slots, drag-to-equip | Acquisition and two-slot equip implemented; third locked |
 | Collection book | 05:21 | Yes | Weapon encyclopedia and stat detail | Two implemented tools inspectable; live stats and ownership |
-| Appearance tile | 05:12 | Yes | Selection grid and passive summary | Later |
+| Appearance tile | 05:12 | Yes | Selection grid and ownership-based passive summary; user confirmed cumulative bonuses independent of equipped look | Implemented: nine looks; prices/bonuses are prototype tuning |
 | Missions/pass | 04:00, 07:24, 10:57 | Yes | Task claim list and reward track | Daily objectives and finite free pass implemented; season/VIP deferred |
 | Gem animal utility icon | Later right edge | Not confirmed | Unknown | Do not invent |
 | Magnet Auto | Later right edge | Not confirmed | Only label/icon confirmed; could be collection automation | Do not assume movement toggle |

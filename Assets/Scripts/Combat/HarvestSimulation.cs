@@ -10,7 +10,10 @@ namespace VerdantTrail {
  public struct UnitState { public Vector2 position,aim;public int target;public float cooldown,flash,walk; }
  public sealed class HarvestSimulation {
   public readonly HarvestTuning tuning;
-  public EquipmentSystem equipment;
+  public EquipmentSystem equipment;public SkinSystem skins;
+  public float EffectiveDamage=>tuning.Damage(save.force)*(1+(skins?.ForceBonus??0)/100);
+  public float Interval=>tuning.Interval(save.tempo)/(1+(skins?.TempoBonus??0)/100);
+  public double Reward=>tuning.Reward(save.stage,save.yield)*(1+(skins?.YieldBonus??0)/100);
   public bool InChallenge {get;private set;}
   public bool ChallengeWon {get;private set;}
   public float ChallengeRemaining {get;private set;}
@@ -116,7 +119,7 @@ namespace VerdantTrail {
     if(unit.target>=0) {
      unit.aim=(targets[unit.target].position-unit.position).normalized;
      if(unit.cooldown<=0) {
-      Fire(u);unit.cooldown=tuning.Interval(save.tempo)*(equipment!=null?equipment.ForUnit(u).intervalMultiplier:u==0?1:.86f);unit.flash=.075f;
+      Fire(u);unit.cooldown=Interval*(equipment!=null?equipment.ForUnit(u).intervalMultiplier:u==0?1:.86f);unit.flash=.075f;
      }
     }
    }
@@ -134,7 +137,7 @@ namespace VerdantTrail {
   void Fire(int u) {
    for(int i=0;i<shots.Length;i++)if(!shots[i].active) {
     var unit=units[u];shots[i]=new ShotState{active=true,target=unit.target,position=unit.position+unit.aim*.48f+Vector2.up*.28f,
-     aim=targets[unit.target].position+Vector2.up*.38f,damage=tuning.Damage(save.force)*(equipment!=null?equipment.ForUnit(u).damageMultiplier:u==0?1:.8f)};
+     aim=targets[unit.target].position+Vector2.up*.38f,damage=EffectiveDamage*(equipment!=null?equipment.ForUnit(u).damageMultiplier:u==0?1:.8f)};
     shotsFired++;ShotFired?.Invoke();return;
    }
   }
@@ -146,7 +149,7 @@ namespace VerdantTrail {
     sparks[k]=new SparkState{active=true,position=t.position+Vector2.up*.5f,velocity=new Vector2(Mathf.Cos(a),Mathf.Sin(a))*2.5f};}
    if(t.hp>0)return;
    t.active=false;cleared++;targetsDestroyed++;TargetDestroyed?.Invoke();
-   double reward=Math.Round(tuning.Reward(save.stage,save.yield)*(t.kind==5?tuning.finaleRewardMultiplier:t.kind==0?1:1.6));
+   double reward=Math.Round(Reward*(t.kind==5?tuning.finaleRewardMultiplier:t.kind==0?1:1.6));
    Popup(t.position+Vector2.up*.6f,"+"+Format(reward),true);
    for(int j=0;j<4;j++) {
     bool stored=false;

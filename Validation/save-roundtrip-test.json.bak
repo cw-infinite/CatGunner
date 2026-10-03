@@ -1,24 +1,28 @@
 {
-    "version": 4,
-    "stage": 3,
-    "highestStage": 4,
-    "cash": 2683.0,
-    "gems": 0,
-    "force": 1,
-    "tempo": 1,
+    "version": 5,
+    "stage": 6,
+    "highestStage": 6,
+    "cash": 5991.0,
+    "gems": 36,
+    "force": 15,
+    "tempo": 15,
     "yield": 1,
     "challengeWins": 1,
+    "ownedSkins": 1,
+    "equippedSkin": 0,
     "missionDay": 20729,
-    "lastAttendanceDay": 0,
-    "dailyHarvests": 87,
-    "dailyStages": 1,
-    "missionClaims": 0,
-    "passPoints": 0,
-    "passClaims": 0,
-    "attendanceClaims": 0,
+    "lastAttendanceDay": 20729,
+    "dailyHarvests": 162,
+    "dailyStages": 2,
+    "missionClaims": 9,
+    "passPoints": 20,
+    "passClaims": 1,
+    "attendanceClaims": 1,
     "ownedWeapons": [
         1,
-        1
+        1,
+        0,
+        0
     ],
     "equippedWeapons": [
         0,
@@ -31,5 +35,5 @@
     "companionProgress": [],
     "prestige": 0,
     "sound": true,
-    "offlineTimestamp": 1790995180
+    "offlineTimestamp": 1791050821
 }

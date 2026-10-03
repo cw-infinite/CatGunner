@@ -19,7 +19,7 @@ MATCHED = directly verified against a reference observation. CLOSE = bounded app
 | Later squad progression | CLOSE | Crystal delivery and second-slot equip tested; third slot and merging deferred |
 | Five-sector world progression | CLOSE | Model advances through five sectors then changes biome; world-one gold tree implemented and clear/transfer tested |
 | Timed harvesting arenas | CLOSE | Countdown, trees/palms/cacti, reward, timeout and grove return implemented; arena tuning inferred |
-| Weapons / appearance / missions | NEEDS WORK | Basic equipment implemented; collection viewer implemented; missions/free pass implemented; merging and appearance remain deferred |
+| Weapons / appearance / missions | NEEDS WORK | Four guns and collection purchases, nine-look wardrobe with cumulative ownership bonuses, missions/free pass implemented; exact content/prices differ and merging remains deferred |
 | Enemy attacks / player health | UNKNOWN | Not demonstrated; not invented |
 | Conventional boss mode | UNKNOWN | Locked icon only; no attack sequence observed |
 | Offline rewards / prestige / pets | UNKNOWN | No confirmed functional demonstration |
@@ -32,6 +32,6 @@ The minimum Windows mechanical prototype is playable and engine-tested. The over
 
 Collection and world-one finale evidence: Validation/COLLECTION_FINALE_UPDATE.md. Current desktop interaction sample is transition-heavy; older steady-state figures are retained only as baseline measurements.
 
-Daily reward and mission implementation, assumptions and test boundaries: Validation/REWARDS_UPDATE.md. Seasonal resets, VIP rewards and appearance unlock rules remain unverified.
+Daily reward and mission implementation, assumptions and test boundaries: Validation/REWARDS_UPDATE.md. Seasonal resets and VIP rewards remain unverified. Skin ownership bonuses are confirmed by the user and the 05:12 tip; exact prices/tiers remain prototype tuning.
 
 Portrait usability now includes a fitted safe-area HUD and simulated reference, wide-phone, notched-phone and tablet profiles. See Validation/LAYOUT_UPDATE.md. These Windows render checks do not replace physical Android testing.

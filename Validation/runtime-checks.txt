@@ -14,6 +14,26 @@ PASS: Generated atlas sprite loaded: note
 PASS: Generated atlas sprite loaded: gem
 PASS: Generated atlas sprite loaded: power-art
 PASS: Generated atlas sprite loaded: speed-art
+PASS: Costume sprite loaded: 0
+PASS: Scenery sprite loaded: 0
+PASS: Costume sprite loaded: 1
+PASS: Scenery sprite loaded: 1
+PASS: Costume sprite loaded: 2
+PASS: Scenery sprite loaded: 2
+PASS: Costume sprite loaded: 3
+PASS: Scenery sprite loaded: 3
+PASS: Costume sprite loaded: 4
+PASS: Scenery sprite loaded: 4
+PASS: Costume sprite loaded: 5
+PASS: Scenery sprite loaded: 5
+PASS: Costume sprite loaded: 6
+PASS: Scenery sprite loaded: 6
+PASS: Costume sprite loaded: 7
+PASS: Scenery sprite loaded: 7
+PASS: Weapon sprite loaded: 0
+PASS: Weapon sprite loaded: 1
+PASS: Weapon sprite loaded: 2
+PASS: Weapon sprite loaded: 3
 PASS: Drag moves character through live Update
 PASS: Release stops manual movement
 PASS: Second pointer cannot steal or release active joystick
@@ -66,7 +86,7 @@ PASS: Drag/drop equips second tool and recruits shooter
 PASS: UI raycast found button
 PASS: Collection shows current ownership and equipped count
 PASS: UI raycast found button
-PASS: Equipment and challenge wins persist in v4 save
+PASS: Equipment and challenge wins persist in v5 save
 PASS: UI raycast found button
 PASS: Closing equipment cancels unfinished drag
 PASS: Timeout returns no success reward
@@ -91,9 +111,38 @@ PASS: Mission UI claims completed objectives once
 PASS: UI raycast found button
 PASS: UI raycast found button
 PASS: Pass UI pays earned crystals once
-PASS: Reward claims persist in v4 filesystem save
+PASS: Reward claims persist in v5 filesystem save
 PASS: UI raycast found button
 PASS: Closing tasks restores battlefield controls
+PASS: UI raycast found button
+PASS: UI raycast found button
+PASS: UI raycast found button
+PASS: Skin purchase activates ownership without changing outfit
+PASS: UI raycast found button
+PASS: UI raycast found button
+PASS: Skin UI purchases stack all three permanent bonuses
+PASS: UI raycast found button
+PASS: Equip changes outfit without another debit
+PASS: UI raycast found button
+PASS: UI raycast found button
+PASS: Starter outfit retains purchased bonuses
+PASS: UI raycast found button
+PASS: Unaffordable skin purchase is disabled
+PASS: UI raycast found button
+PASS: UI raycast found button
+PASS: UI raycast found button
+PASS: Skin ownership and equipped look persist in filesystem save
+PASS: UI raycast found button
+PASS: UI raycast found button
+PASS: UI raycast found button
+PASS: UI raycast found button
+PASS: Expanded weapon shop debits price and grants correct tool
+PASS: Drag preview uses selected gun artwork
+PASS: UI raycast found button
+PASS: UI raycast found button
+PASS: UI raycast found button
+PASS: Purchased new gun equips through inventory UI
+PASS: UI raycast found button
 PASS: Active controls fit safe portrait viewport: layout_reference_play.png
 PASS: Active controls fit safe portrait viewport: layout_reference_gear.png
 PASS: UI raycast found button
@@ -106,8 +155,16 @@ PASS: UI raycast found button
 PASS: Active controls fit safe portrait viewport: layout_tablet_play.png
 PASS: Active controls fit safe portrait viewport: layout_tablet_gear.png
 PASS: UI raycast found button
+PASS: UI raycast found button
+PASS: Active controls fit safe portrait viewport: layout_notched_skins.png
+PASS: Active controls fit safe portrait viewport: layout_tablet_skins.png
+PASS: UI raycast found button
+PASS: UI raycast found button
+PASS: Active controls fit safe portrait viewport: layout_notched_collection.png
+PASS: UI raycast found button
+PASS: UI raycast found button
 PASS: Safe-area screen-to-HUD drag coordinates roundtrip
 PASS: Dragged tool remains under pointer with safe-area inset
 Engine: 6000.3.25f1; resolution: 470x1024; rendered capture: 588x1280.
-Errors: 0; sampled frames: 1447; mean FPS including captures: 50.1; mean recorded GC bytes/frame: 9375; peak draw calls: 25.
+Errors: 0; sampled frames: 1621; mean FPS including captures: 50.4; mean recorded GC bytes/frame: 11523; peak draw calls: 63.
 Desktop development build measurement; not an Android performance result. Images rendered by the running game's camera and UGUI into a RenderTexture.

@@ -169,3 +169,5 @@ Assets/Scripts/Combat/HarvestSimulation.cs
 Assets/Scripts/Saving/SaveStore.cs
 Assets/Scripts/Progression/EquipmentSystem.cs
 Assets/Scripts/Progression/EquipmentCatalog.cs
+Assets/Scripts/Progression/SkinCatalog.cs
+Assets/Scripts/Progression/SkinSystem.cs

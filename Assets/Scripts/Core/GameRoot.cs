@@ -10,6 +10,7 @@ namespace VerdantTrail {
   public PortraitHud Hud => hud;
   public FeatureHud Features=>features;
   public EquipmentSystem Equipment=>equipment;
+  public SkinSystem Skins {get;private set;}
   public RewardSystem Rewards {get;private set;}
   [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)] static void Boot(){if(FindFirstObjectByType<GameRoot>()==null)new GameObject("Verdant Trail").AddComponent<GameRoot>();}
   void Awake() {
@@ -17,10 +18,12 @@ namespace VerdantTrail {
    var tuning=Resources.Load<HarvestTuning>("HarvestTuning");if(tuning==null)tuning=ScriptableObject.CreateInstance<HarvestTuning>();
    string[] args=Environment.GetCommandLineArgs();capture=Array.IndexOf(args,"-capturePrototype")>=0 || Array.IndexOf(args,"-validatePrototype")>=0;
    var data=capture?new SaveData():SaveStore.Load();Simulation=new HarvestSimulation(tuning,data);
+   var skinCatalog=Resources.Load<SkinCatalog>("SkinCatalog");if(skinCatalog==null)skinCatalog=ScriptableObject.CreateInstance<SkinCatalog>();Skins=new SkinSystem(Simulation,skinCatalog);Skins.Changed+=()=>{if(!capture)SaveStore.Save(Simulation.save);};
    var catalog=Resources.Load<EquipmentCatalog>("EquipmentCatalog");if(catalog==null)catalog=ScriptableObject.CreateInstance<EquipmentCatalog>();equipment=new EquipmentSystem(Simulation,catalog);
    var rewards=Resources.Load<RewardCatalog>("RewardCatalog");if(rewards==null)rewards=ScriptableObject.CreateInstance<RewardCatalog>();Rewards=new RewardSystem(Simulation,rewards);
    Rewards.Claimed+=()=>{if(!capture)SaveStore.Save(Simulation.save);};
    foreach(string art in new[]{"tree0","tree1","tree2","tree3","tree4","tree5","ranger","gun","button-art","menu-art","card-art","pill-art","note","gem","power-art","speed-art"})OriginalArt.Get(art);
+   for(int i=0;i<8;i++){OriginalArt.Get("skin"+i);OriginalArt.Get("scenery"+i);}for(int i=0;i<4;i++)OriginalArt.Get("weapon"+i);
    world=new GameObject("Following orthographic camera").AddComponent<WorldView>();world.Initialize(Simulation);
    hud=gameObject.AddComponent<PortraitHud>();hud.Initialize(Simulation);features=gameObject.AddComponent<FeatureHud>();features.Initialize(Simulation,equipment,hud,Rewards);
    equipment.Changed+=()=>{if(!capture)SaveStore.Save(Simulation.save);};

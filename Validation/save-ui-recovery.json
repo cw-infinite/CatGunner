@@ -1,5 +1,5 @@
 {
-    "version": 4,
+    "version": 5,
     "stage": 1,
     "highestStage": 1,
     "cash": 100.0,
@@ -8,6 +8,8 @@
     "tempo": 1,
     "yield": 1,
     "challengeWins": 0,
+    "ownedSkins": 1,
+    "equippedSkin": 0,
     "missionDay": 20729,
     "lastAttendanceDay": 0,
     "dailyHarvests": 1,
@@ -18,6 +20,8 @@
     "attendanceClaims": 0,
     "ownedWeapons": [
         1,
+        0,
+        0,
         0
     ],
     "equippedWeapons": [
@@ -31,5 +35,5 @@
     "companionProgress": [],
     "prestige": 0,
     "sound": true,
-    "offlineTimestamp": 1790995172
+    "offlineTimestamp": 1791050799
 }

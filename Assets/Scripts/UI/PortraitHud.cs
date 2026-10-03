@@ -82,7 +82,7 @@ namespace VerdantTrail {
    Button("Sound on / off",settings.transform,.1f,.35f,.8f,.13f,mint,()=>{sim.save.sound=!sim.save.sound;ShowToast(sim.save.sound?"Sound on":"Sound off");});
    saveButton=Button("Save progress",settings.transform,.1f,.53f,.8f,.13f,paper,()=>{SaveStore.Save(sim.save);ShowToast(SaveStore.LastError==null?"Progress saved":"Save failed; see Settings");});
    Button("Resume",settings.transform,.1f,.76f,.8f,.13f,mint,()=>Toggle(settings));settings.SetActive(false);
-   toast=Label("Toast",canvas.transform,.1f,.72f,.8f,.04f,"",21,ink);
+   toast=Label("Toast",canvas.transform,.11f,.60f,.78f,.055f,"",18,ink);
    BuildDebug();
   }
   GameObject Modal(string title) {
@@ -126,7 +126,7 @@ namespace VerdantTrail {
    for(int i=0;i<3;i++) {
     levels[i].text="L."+lv[i];double cost=sim.tuning.Cost(lv[i]);prices[i].text="$ "+HarvestSimulation.Format(cost);
     bool can=sim.save.cash>=cost&&lv[i]<100;cards[i].color=can?Color.white:new Color(.73f,.76f,.62f);prices[i].color=can?Color.white:new Color(1,.5f,.48f);values[i].color=Color.white;
-    values[i].text=i==0?Mathf.RoundToInt(sim.tuning.Damage(lv[i])).ToString():i==1?Mathf.RoundToInt(100*(1+sim.tuning.speedStep*lv[i])).ToString():Mathf.RoundToInt(100*Mathf.Pow(sim.tuning.damageGrowth,lv[i])).ToString();
+    values[i].text=i==0?Mathf.RoundToInt(sim.EffectiveDamage).ToString():i==1?Mathf.RoundToInt(100*(1+sim.tuning.speedStep*lv[i])*(1+(sim.skins?.TempoBonus??0)/100)).ToString():Mathf.RoundToInt(100*Mathf.Pow(sim.tuning.damageGrowth,lv[i])*(1+(sim.skins?.YieldBonus??0)/100)).ToString();
    }
    if(shownStage!=sim.save.stage){shownStage=sim.save.stage;for(int i=0;i<sectorNodes.Length;i++)sectorNodes[i].color=i==(shownStage-1)%5?new Color(1,.7f,.25f):i<(shownStage-1)%5?mint:paper;noticeText=shownStage==1?"AUTO FIRE  /  DRAG TO MOVE":"";notice.text=noticeText;}
    if(debug.activeSelf)debugStats.text="Stage "+sim.save.stage+"  |  targets "+(sim.total-sim.cleared)+"\nShots "+sim.shotsFired+"  |  FPS "+Mathf.RoundToInt(1/Mathf.Max(.001f,Time.unscaledDeltaTime));

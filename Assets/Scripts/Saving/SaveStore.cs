@@ -4,13 +4,14 @@ using System.Text;
 using UnityEngine;
 namespace VerdantTrail {
  [Serializable] public sealed class SaveData {
-  public int version=4, stage=1, highestStage=1;
+  public int version=5, stage=1, highestStage=1;
   public double cash;
   public int gems, force, tempo, yield;
   public int challengeWins;
+  public int ownedSkins=1,equippedSkin;
   public long missionDay,lastAttendanceDay;
   public int dailyHarvests,dailyStages,missionClaims,passPoints,passClaims,attendanceClaims;
-  public int[] ownedWeapons={1,0},equippedWeapons={0,-1,-1};
+  public int[] ownedWeapons={1,0,0,0},equippedWeapons={0,-1,-1};
   public string[] unlockedSystems=Array.Empty<string>();
   public int[] characterProgress=Array.Empty<int>(), weaponProgress=Array.Empty<int>(), companionProgress=Array.Empty<int>();
   public int prestige;
@@ -18,6 +19,7 @@ namespace VerdantTrail {
   public long offlineTimestamp;
  }
  public static class SaveStore {
+  public const int CurrentVersion=5;
   static string PathName=>Path.Combine(Application.persistentDataPath,"verdant-trail-v2.json");
   public static string LastError {get;private set;}
   public static bool CanWrite {get;private set;}=true;
@@ -31,14 +33,15 @@ namespace VerdantTrail {
    if(!json.StartsWith("{")||!json.EndsWith("}"))throw new InvalidDataException("Incomplete save JSON.");
    var header=JsonUtility.FromJson<Header>(json);
    if(header==null||header.version<1)throw new InvalidDataException("Save version is missing.");
-   if(header.version>4)throw new FutureSaveException();
+   if(header.version>CurrentVersion)throw new FutureSaveException();
    var data=JsonUtility.FromJson<SaveData>(json);if(data==null)throw new InvalidDataException("Save is empty.");return Sanitize(data);
   }
   public static SaveData Sanitize(SaveData d) {
    if(d==null)d=new SaveData();
-   if(d.version>4)throw new InvalidDataException("Save is from a newer version.");
+   if(d.version>CurrentVersion)throw new InvalidDataException("Save is from a newer version.");
    // Keep the existing filename; absent reward fields migrate to unclaimed/zero progress.
-   d.version=4; d.stage=Mathf.Clamp(d.stage,1,100); d.highestStage=Mathf.Clamp(Math.Max(d.stage,d.highestStage),1,100);
+   d.version=CurrentVersion;
+   d.ownedSkins=(d.ownedSkins&511)|1;d.equippedSkin=Mathf.Clamp(d.equippedSkin,0,8);if((d.ownedSkins&(1<<d.equippedSkin))==0)d.equippedSkin=0; d.stage=Mathf.Clamp(d.stage,1,100); d.highestStage=Mathf.Clamp(Math.Max(d.stage,d.highestStage),1,100);
    d.missionDay=Math.Max(0,d.missionDay);d.lastAttendanceDay=Math.Max(0,d.lastAttendanceDay);
    d.dailyHarvests=Mathf.Clamp(d.dailyHarvests,0,1000000);d.dailyStages=Mathf.Clamp(d.dailyStages,0,1000000);
    d.missionClaims&=63;d.passClaims&=7;d.passPoints=Mathf.Clamp(d.passPoints,0,1000000);d.attendanceClaims=Mathf.Clamp(d.attendanceClaims,0,1000000);
@@ -47,12 +50,12 @@ namespace VerdantTrail {
    d.unlockedSystems=d.unlockedSystems??Array.Empty<string>();d.characterProgress=d.characterProgress??Array.Empty<int>();
    d.weaponProgress=d.weaponProgress??Array.Empty<int>();d.companionProgress=d.companionProgress??Array.Empty<int>();
    d.gems=Mathf.Clamp(d.gems,0,1000000);d.challengeWins=Mathf.Clamp(d.challengeWins,0,100);
-   if(d.ownedWeapons==null||d.ownedWeapons.Length!=2)d.ownedWeapons=new[]{1,0};
+   if(d.ownedWeapons==null)d.ownedWeapons=new[]{1,0,0,0};else if(d.ownedWeapons.Length!=4)Array.Resize(ref d.ownedWeapons,4);
    // Ownership includes equipped items as well as the twelve inventory cells.
-   d.ownedWeapons[0]=Mathf.Clamp(d.ownedWeapons[0],1,14);d.ownedWeapons[1]=Mathf.Clamp(d.ownedWeapons[1],0,14);
+   d.ownedWeapons[0]=Mathf.Clamp(d.ownedWeapons[0],1,14);for(int i=1;i<4;i++)d.ownedWeapons[i]=Mathf.Clamp(d.ownedWeapons[i],0,14);
    if(d.equippedWeapons==null||d.equippedWeapons.Length!=3)d.equippedWeapons=new[]{0,-1,-1};
-   if(d.equippedWeapons[0]<0||d.equippedWeapons[0]>1||d.ownedWeapons[d.equippedWeapons[0]]==0)d.equippedWeapons[0]=0;
-   int second=d.equippedWeapons[1];if(second<0||second>1||d.ownedWeapons[second]<(d.equippedWeapons[0]==second?2:1))d.equippedWeapons[1]=-1;
+   if(d.equippedWeapons[0]<0||d.equippedWeapons[0]>3||d.ownedWeapons[d.equippedWeapons[0]]==0)d.equippedWeapons[0]=0;
+   int second=d.equippedWeapons[1];if(second<0||second>3||d.ownedWeapons[second]<(d.equippedWeapons[0]==second?2:1))d.equippedWeapons[1]=-1;
    d.equippedWeapons[2]=-1;
    return d;
   }

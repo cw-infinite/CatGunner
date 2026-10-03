@@ -3,7 +3,7 @@ namespace VerdantTrail {
  // Regions describe independently generated sheets, never pixels from the reference video.
  public static class SpriteArt {
   public static Sprite Load(string key){
-   bool ui=false;Rect region;Vector2 pivot=new Vector2(.5f,0);bool panel=false;
+   bool ui=false;string atlas=null;Rect region;Vector2 pivot=new Vector2(.5f,0);bool panel=false;
    switch(key){
     case "tree0":region=new Rect(0,0,448,480);break;
     case "tree1":region=new Rect(448,0,448,480);break;
@@ -21,9 +21,13 @@ namespace VerdantTrail {
     case "gem":ui=true;region=new Rect(535,480,415,416);break;
     case "power-art":ui=true;region=new Rect(950,480,385,416);break;
     case "speed-art":ui=true;region=new Rect(1335,480,457,416);break;
-    default:return null;
+    default:
+     if(key.StartsWith("skin")&&int.TryParse(key.Substring(4),out int skin)&&skin>=0&&skin<8){atlas="Art/skins-v1";float[] edges={0,480,910,1344,1792};region=new Rect(edges[skin%4],skin<4?0:450,edges[skin%4+1]-edges[skin%4],skin<4?450:446);}
+     else if(key.StartsWith("weapon")&&int.TryParse(key.Substring(6),out int weapon)&&weapon>=0&&weapon<4){atlas="Art/guns-v2";region=new Rect(weapon%2==0?0:933,weapon<2?0:448,weapon%2==0?933:859,448);pivot=new Vector2(.22f,.45f);}
+     else if(key.StartsWith("scenery")&&int.TryParse(key.Substring(7),out int prop)&&prop>=0&&prop<8){atlas="Art/scenery-v1";region=new Rect(prop%4*448,prop/4*448,448,448);}
+     else return null;break;
    }
-   var texture=Resources.Load<Texture2D>(ui?"Art/ui-v2":"Art/world-v2");
+   var texture=Resources.Load<Texture2D>(atlas??(ui?"Art/ui-v2":"Art/world-v2"));
    if(texture==null)return null;
    float sx=texture.width/1792f,sy=texture.height/896f;
    int left=Mathf.RoundToInt(region.x*sx),right=Mathf.RoundToInt(region.xMax*sx),bottom=texture.height-Mathf.RoundToInt(region.yMax*sy),top=texture.height-Mathf.RoundToInt(region.y*sy);
@@ -33,7 +37,7 @@ namespace VerdantTrail {
    for(int y=bottom;y<top;y++)for(int x=left;x<right;x++)if(pixels[y*texture.width+x].a>20){minX=Mathf.Min(minX,x);maxX=Mathf.Max(maxX,x);minY=Mathf.Min(minY,y);maxY=Mathf.Max(maxY,y);}
    if(maxX<=minX||maxY<=minY)return null;
    var rect=new Rect(minX,minY,maxX-minX+1,maxY-minY+1);
-   float ppu=ui?100:key=="gun"?rect.width/2:rect.height/2;
+   float ppu=ui?100:(key=="gun"||key.StartsWith("weapon"))?rect.width/2:rect.height/2;
    if(ui)pivot=new Vector2(.5f,.5f);
    float border=panel?Mathf.Min((key=="button-art"?98:key=="pill-art"?66:60)*sx,Mathf.Min(rect.width,rect.height)*.49f):0;
    var sprite=Sprite.Create(texture,rect,pivot,ppu,0,SpriteMeshType.FullRect,new Vector4(border,border,border,border));sprite.name="Painted_"+key;return sprite;

@@ -6,7 +6,7 @@ namespace VerdantTrail.Editor {
    void Require(bool ok,string label){if(!ok)throw new Exception("Reward check: "+label);}
    long now=20000L*86400+100;var catalog=ScriptableObject.CreateInstance<RewardCatalog>();
    var save=SaveStore.Sanitize(new SaveData{version=3,stage=3,highestStage=3,gems=5});var sim=new HarvestSimulation(tuning,save);var rewards=new RewardSystem(sim,catalog,()=>now);
-   Require(save.version==4&&save.gems==5&&save.dailyHarvests==0,"v3 migration preserves wallet");
+   Require(save.version==SaveStore.CurrentVersion&&save.gems==5&&save.dailyHarvests==0,"v3 migration preserves wallet");
    Require(!rewards.ClaimMission(0)&&!rewards.ClaimPass(0),"Incomplete rewards unavailable");
    sim.Damage(0,sim.targets[0].hp);sim.Damage(0,999);Require(save.dailyHarvests==1,"One count per destroyed target");
    for(int i=1;i<sim.total;i++)sim.Damage(i,sim.targets[i].hp);sim.Step(.01f);Require(save.dailyStages==1,"Normal stage counts once");sim.Step(.01f);Require(save.dailyStages==1,"No duplicate clear");

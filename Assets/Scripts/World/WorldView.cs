@@ -10,6 +10,7 @@ namespace VerdantTrail {
   SpriteRenderer[] confetti=new SpriteRenderer[100];
   Transform terrain;int serial=-1;float width;
   readonly Dictionary<int,TerrainBatch> terrainBatches=new Dictionary<int,TerrainBatch>();
+  readonly SpriteRenderer[] scenery=new SpriteRenderer[96];
   readonly SpriteRenderer[] groundFlecks=new SpriteRenderer[350];Material terrainMaterial;
   sealed class TerrainBatch {
    public readonly List<Vector3> vertices=new List<Vector3>(512);
@@ -75,13 +76,14 @@ namespace VerdantTrail {
    for(int i=0;i<3;i++) {
     var u=sim.units[i];bool active=i<sim.unitCount;float bob=Mathf.Sin(u.walk)*.035f;
     Set(bodies[i],active,u.position+Vector2.up*bob,new Vector2(.53f,.53f));
+    bodies[i].sprite=OriginalArt.Get(sim.skins?.EquippedArt??"ranger");
     bodies[i].flipX=u.aim.x<0;
     bodies[i].transform.rotation=Quaternion.Euler(0,0,Mathf.Sin(u.walk)*2);
     bodies[i].sortingOrder=500-Mathf.RoundToInt(u.position.y*10);
     Set(shadows[i],active,u.position+Vector2.down*.025f,new Vector2(.45f,.28f));
     Vector2 grip=u.position+Vector2.up*(.47f+bob)-u.aim*(u.flash/.075f*.065f);
     Set(guns[i],active,grip,new Vector2(.31f,.31f));guns[i].flipY=u.aim.x<0;
-    guns[i].color=sim.equipment!=null&&sim.equipment.ForUnit(i)==sim.equipment.catalog.weapons[1]?new Color(1,.72f,.35f):Color.white;
+    int weaponId=sim.save.equippedWeapons[i];guns[i].sprite=OriginalArt.Get("weapon"+Mathf.Max(0,weaponId));guns[i].color=Color.white;
     guns[i].sortingOrder=bodies[i].sortingOrder+1;guns[i].transform.rotation=Quaternion.Euler(0,0,Mathf.Atan2(u.aim.y,u.aim.x)*Mathf.Rad2Deg);
     Set(rings[i],active&&u.target>=0&&sim.targets[u.target].active, u.target>=0?sim.targets[u.target].position+Vector2.up*.35f:Vector2.zero,Vector2.one*.25f);
     Set(flashes[i],active&&u.flash>0,grip+u.aim*.57f,new Vector2(.18f,.22f));flashes[i].transform.rotation=guns[i].transform.rotation;
@@ -106,6 +108,7 @@ namespace VerdantTrail {
    if(terrain==null){terrain=new GameObject("Stage terrain").transform;terrainMaterial=new Material(Shader.Find("Sprites/Default"));}
    foreach(var batch in terrainBatches.Values){batch.vertices.Clear();batch.triangles.Clear();batch.colors.Clear();}
    bool sand=sim.InChallenge?sim.ChallengeIndex>0:sim.save.stage>5;cam.backgroundColor=sand?new Color(.85f,.73f,.51f):new Color(.79f,.84f,.56f);
+   bool blossoms=!sand&&!sim.InChallenge&&sim.save.stage>=3;if(blossoms)cam.backgroundColor=new Color(.81f,.84f,.64f);
    var d=HarvestSimulation.Direction;var n=HarvestSimulation.Normal;Color rock=sand?new Color(.62f,.49f,.33f):new Color(.42f,.30f,.23f);Color top=sand?new Color(.84f,.75f,.54f):new Color(.48f,.64f,.36f);
    if(sim.InChallenge){
     Color ground=cam.backgroundColor;cam.backgroundColor=new Color(.18f,.15f,.12f);
@@ -124,6 +127,13 @@ namespace VerdantTrail {
    }
    foreach(var batch in terrainBatches.Values){batch.mesh.Clear();batch.mesh.SetVertices(batch.vertices);batch.mesh.SetTriangles(batch.triangles,0);batch.mesh.SetColors(batch.colors);batch.mesh.RecalculateBounds();}
    var rng=new System.Random(sim.save.stage*313);
+   for(int i=0;i<scenery.Length;i++){
+    int variant=(sand?4:0)+i%4;if(blossoms&&i%3==0)variant=2;
+    var prop=scenery[i];if(prop==null){prop=OriginalArt.Sprite("Scenery "+i,"scenery"+variant,terrain,-920);scenery[i]=prop;}prop.sprite=OriginalArt.Get("scenery"+variant);
+    float along=i*.95f-12,across=(i%2==0?-1:1)*(4.7f+(float)rng.NextDouble()*.6f);Vector2 location=d*along+n*across;
+    if(sim.InChallenge){float angle=i*Mathf.PI*2/scenery.Length;location=new Vector2(Mathf.Cos(angle),Mathf.Sin(angle))*(sim.tuning.arenaRadius-.45f);}
+    prop.enabled=!sim.InChallenge||i%3==0;prop.transform.position=Pos(location);prop.transform.localScale=Vector3.one*(.32f+(float)rng.NextDouble()*.18f);
+   }
    for(int i=0;i<350;i++) {
     Vector2 p=d*((float)rng.NextDouble()*110-15)+n*((float)rng.NextDouble()*11-5.5f);
     if(sim.InChallenge){float angle=(float)rng.NextDouble()*Mathf.PI*2,radius=(float)rng.NextDouble()*sim.tuning.arenaRadius;p=new Vector2(Mathf.Cos(angle),Mathf.Sin(angle))*radius;}
