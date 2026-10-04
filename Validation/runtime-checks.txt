@@ -187,6 +187,13 @@ PASS: UI raycast found button
 PASS: UI raycast found button
 PASS: UI raycast found button
 PASS: Developer return restores grove and closes overlays
+PASS: Recent damage leaves a visible amber health segment
+PASS: Low health changes the health fill color
+PASS: Hit squash preserves the rooted tree silhouette
+PASS: Delayed health segment catches up
+PASS: Harvest fade starts with health indicators hidden
+PASS: Harvest visual finishes without changing rewards or clear count
+PASS: Stage change resets pooled harvest visuals
 PASS: Active controls fit safe portrait viewport: layout_reference_play.png
 PASS: Active controls fit safe portrait viewport: layout_reference_gear.png
 PASS: UI raycast found button
@@ -210,5 +217,5 @@ PASS: UI raycast found button
 PASS: Safe-area screen-to-HUD drag coordinates roundtrip
 PASS: Dragged tool remains under pointer with safe-area inset
 Engine: 6000.3.25f1; resolution: 470x1024; rendered capture: 588x1280.
-Errors: 0; sampled frames: 1854; mean FPS including captures: 55.9; mean recorded GC bytes/frame: 13601; peak draw calls: 74.
+Errors: 0; sampled frames: 1853; mean FPS including captures: 55.5; mean recorded GC bytes/frame: 14032; peak draw calls: 107.
 Desktop development build measurement; not an Android performance result. Images rendered by the running game's camera and UGUI into a RenderTexture.

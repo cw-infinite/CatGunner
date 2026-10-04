@@ -5,6 +5,9 @@ namespace VerdantTrail {
   HarvestSimulation sim;Camera cam;
   SpriteRenderer[] trees=new SpriteRenderer[128],treeShadow=new SpriteRenderer[128],hpBack=new SpriteRenderer[128],hpFill=new SpriteRenderer[128];
   SpriteRenderer[] trails=new SpriteRenderer[96];
+  readonly SpriteRenderer[] hpLag=new SpriteRenderer[128];
+  readonly float[] shownHealth=new float[128],fallenTime=new float[128];
+  readonly bool[] wasAlive=new bool[128];
   SpriteRenderer[] bullets=new SpriteRenderer[96],notes=new SpriteRenderer[192],sparks=new SpriteRenderer[96];
   SpriteRenderer[] bodies=new SpriteRenderer[3],guns=new SpriteRenderer[3],shadows=new SpriteRenderer[3],rings=new SpriteRenderer[3],flashes=new SpriteRenderer[3];
   TextMesh[] numbers=new TextMesh[128],numberShadows=new TextMesh[128];
@@ -26,8 +29,9 @@ namespace VerdantTrail {
    Transform root=new GameObject("Pooled world visuals").transform;
    for(int i=0;i<trees.Length;i++) {
     trees[i]=OriginalArt.Sprite("Vegetation "+i,"tree0",root,0);treeShadow[i]=OriginalArt.Sprite("Tree shadow","shadow",root,-1000);
-    hpBack[i]=OriginalArt.Sprite("HP border","box",root,1800);hpBack[i].color=new Color(.2f,.25f,.2f);hpBack[i].transform.localScale=new Vector3(.28f,.055f,1);
-    hpFill[i]=OriginalArt.Sprite("HP fill","box",root,1801);hpFill[i].color=new Color(.56f,.91f,.35f);
+    hpBack[i]=OriginalArt.Sprite("HP border "+i,"box",root,1800);hpBack[i].color=new Color(.2f,.25f,.2f);hpBack[i].transform.localScale=new Vector3(.28f,.055f,1);
+    hpFill[i]=OriginalArt.Sprite("HP fill "+i,"box",root,1801);hpFill[i].color=new Color(.56f,.91f,.35f);
+    hpLag[i]=OriginalArt.Sprite("HP damage "+i,"box",root,1801);hpLag[i].color=new Color(1,.70f,.24f);hpFill[i].sortingOrder=1802;
    }
    for(int i=0;i<bullets.Length;i++){bullets[i]=OriginalArt.Sprite("Projectile "+i,"bullet",root,2000);trails[i]=OriginalArt.Sprite("Projectile trail "+i,"bullet",root,1999);trails[i].color=new Color(1,.70f,.2f,.36f);}
    for(int i=0;i<notes.Length;i++)notes[i]=OriginalArt.Sprite("Currency "+i,"note",root,2100);
@@ -48,19 +52,32 @@ namespace VerdantTrail {
   static Vector3 Pos(Vector2 v)=>new Vector3(v.x,v.y,0);
   void Set(SpriteRenderer sr,bool enabled,Vector2 p,Vector2 scale) {sr.enabled=enabled;if(!enabled)return;sr.transform.position=Pos(p);sr.transform.localScale=new Vector3(scale.x,scale.y,1);}
   public void Render(float dt) {
-   if(serial!=sim.stageSerial){serial=sim.stageSerial;BuildTerrain();for(int i=0;i<sim.total;i++)trees[i].sprite=OriginalArt.Get("tree"+sim.targets[i].kind);transform.position=new Vector3(sim.units[0].position.x,sim.units[0].position.y-.8f,-10);}
+   if(serial!=sim.stageSerial){serial=sim.stageSerial;BuildTerrain();for(int i=0;i<trees.Length;i++){wasAlive[i]=sim.targets[i].active;fallenTime[i]=0;shownHealth[i]=sim.targets[i].hp/Mathf.Max(1,sim.targets[i].maxHp);if(i<sim.total)trees[i].sprite=OriginalArt.Get("tree"+sim.targets[i].kind);}transform.position=new Vector3(sim.units[0].position.x,sim.units[0].position.y-.8f,-10);}
    Vector3 wanted=new Vector3(sim.units[0].position.x,sim.units[0].position.y-.8f,-10);
    transform.position=Vector3.Lerp(transform.position,wanted,1-Mathf.Exp(-sim.tuning.cameraDamping*dt));
    for(int i=0;i<trees.Length;i++) {
-    var t=sim.targets[i];bool visible=t.active;
+    var t=sim.targets[i];
+    // Visual-only hit/death state: the simulation still awards harvest rewards immediately.
+    if(wasAlive[i]&&!t.active)fallenTime[i]=.24f;
+    wasAlive[i]=t.active;fallenTime[i]=Mathf.Max(0,fallenTime[i]-Mathf.Max(0,dt));
+    bool falling=!t.active&&fallenTime[i]>0,visible=t.active||falling;
     float scale=t.kind==5?sim.tuning.finaleScale:t.kind==3?1.12f:1;
-    Set(trees[i],visible,t.position+Vector2.right*(Mathf.Sin(t.hit*130)*t.hit*.4f),Vector2.one*scale);
-    trees[i].sortingOrder=500-Mathf.RoundToInt(t.position.y*10);trees[i].color=t.hit>0?new Color(1.1f,1.1f,.8f):Color.white;
-    Set(treeShadow[i],visible,t.position,new Vector2(.65f,.42f)*scale);
-    bool health=visible&&t.hp<t.maxHp;
-    Set(hpBack[i],health,t.position+Vector2.up*(2.10f*scale),new Vector2(.48f*scale,.065f));
-    float ratio=t.hp/Mathf.Max(1,t.maxHp);
-    Set(hpFill[i],health,t.position+Vector2.up*(2.10f*scale)+Vector2.left*(1-ratio)*.44f*scale,new Vector2(.44f*ratio*scale,.034f));
+    float hit=Mathf.Clamp01(t.hit/.13f),fall=falling?1-fallenTime[i]/.24f:0;
+    Vector2 size=new Vector2(1+hit*.055f,1-hit*.055f)*scale*(1-fall*.38f);
+    Set(trees[i],visible,t.position+Vector2.right*(Mathf.Sin(t.hit*130)*t.hit*.4f),size);
+    trees[i].transform.rotation=Quaternion.Euler(0,0,fall*18*(i%2==0?1:-1));
+    trees[i].sortingOrder=500-Mathf.RoundToInt(t.position.y*10);
+    trees[i].color=new Color(1,1,1-hit*.20f,1-fall);
+    Set(treeShadow[i],visible,t.position,new Vector2(.65f,.42f)*scale*(1-fall));
+    bool health=t.active&&t.hp<t.maxHp;
+    float ratio=Mathf.Clamp01(t.hp/Mathf.Max(1,t.maxHp));
+    // Keep a short amber damage segment before it catches up to remaining health.
+    shownHealth[i]=ratio>shownHealth[i]?ratio:Mathf.MoveTowards(shownHealth[i],ratio,Mathf.Max(0,dt)*1.35f);
+    Vector2 bar=t.position+Vector2.up*(2.10f*scale);
+    Set(hpBack[i],health,bar,new Vector2(.48f*scale,.065f));
+    Set(hpLag[i],health,bar+Vector2.left*(1-shownHealth[i])*.44f*scale,new Vector2(.44f*shownHealth[i]*scale,.034f));
+    Set(hpFill[i],health,bar+Vector2.left*(1-ratio)*.44f*scale,new Vector2(.44f*ratio*scale,.034f));
+    hpFill[i].color=ratio<.25f?new Color(1,.40f,.25f):ratio<.5f?new Color(1,.80f,.30f):new Color(.56f,.91f,.35f);
    }
    for(int i=0;i<bullets.Length;i++) {
     var s=sim.shots[i];Set(bullets[i],s.active,s.position,new Vector2(.60f,.30f));trails[i].enabled=s.active;if(s.active){Vector2 v=s.aim-s.position;Set(trails[i],true,s.position-v.normalized*.38f,new Vector2(.80f,.20f));trails[i].transform.rotation=bullets[i].transform.rotation=Quaternion.Euler(0,0,Mathf.Atan2(v.y,v.x)*Mathf.Rad2Deg);}
@@ -70,7 +87,8 @@ namespace VerdantTrail {
    for(int i=0;i<numbers.Length;i++) {
     var n=sim.popups[i];var tm=numbers[i];var shade=numberShadows[i];tm.gameObject.SetActive(n.active);shade.gameObject.SetActive(n.active);if(!n.active)continue;
     if(tm.text!=n.text){tm.text=n.text;shade.text=n.text;}
-    tm.transform.position=Pos(n.position+Vector2.right*((i%3-1)*.13f));
+    tm.transform.position=Pos(n.position+Vector2.right*((i%3-1)*.23f));
+    float pop=1+Mathf.Sin(Mathf.Clamp01(n.age/.16f)*Mathf.PI)*.20f;tm.transform.localScale=shade.transform.localScale=Vector3.one*pop;
     Color col=n.income?new Color(.47f,.94f,.23f):new Color(.99f,.98f,.85f);col.a=Mathf.Clamp01((.85f-n.age)*4);tm.color=col;
     shade.transform.position=tm.transform.position+new Vector3(.025f,-.03f,0);shade.color=new Color(.06f,.035f,.015f,col.a);
    }

@@ -31,3 +31,7 @@ Three-cat squads now support separate gear, follower removal, empty middle slots
 ## October 3 reference HUD pass
 
 Original illustrated navigation icons and four colored button surfaces, rounded outlined font, centered cat progress marker, visible banknote upgrade costs, crystal developer grants and grove return controls are implemented. Projectile trails and muzzle flashes improve shot readability. Fish/Pet/Mine/Boss/Hunt remain locked placeholders. See Validation/HUD_REFERENCE_UPDATE.md.
+
+## October 3 harvest feedback pass
+
+Hit squash, a brief tree harvest tilt/fade, delayed amber health damage, low-health colors and animated floating numbers improve three-cat combat readability. Effects reuse existing pools plus one pooled damage-bar renderer per target. See Validation/HARVEST_FEEDBACK_UPDATE.md.

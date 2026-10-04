@@ -14,6 +14,7 @@ This is a playable reference-driven prototype with original generated cartoon sp
 - Gold badges indicate available rewards. Missions show progress bars; selecting a spare tool highlights the equipment slots that accept it. GEAR also shows your crystal balance and inventory capacity.
 - Open **COLLECTION** inside GEAR to inspect four tools and buy additional guns for crystals, then equip them from inventory.
 - **Skin** offers the starter plus eight costumes. Buying adds permanent, cumulative Force/Tempo/Yield bonuses; EQUIP LOOK changes appearance without changing those bonuses. All owned bonuses stay active even with the starter outfit.
+- Trees react to hits and fade when harvested; health bars show recent damage and change color as health drops.
 - Stage **1-5** ends with a durable gold tree before the sand biome.
 - The upper-left settings button opens sound and save controls. Combat continues underneath.
 - The upper-left crossed-tools icon opens **DEV**: add notes or crystals, previous grove, next stage, return from a trial to the saved grove, clear targets, automatic approach and 1x/2x/5x/10x speeds.

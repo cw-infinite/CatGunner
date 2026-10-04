@@ -143,8 +143,28 @@ namespace VerdantTrail {
    int beforeGrove=sim.save.stage;Click(NamedButton("Previous grove"));Check(sim.save.stage==Mathf.Max(1,beforeGrove-1),"Developer previous grove steps back once");Click(NamedButton("Next stage"));Capture("runtime_dev_icons.png");Click(NamedButton("Close"));yield return new WaitForSecondsRealtime(.15f);
    sim.EnterChallenge();yield return new WaitForSecondsRealtime(.2f);Click(NamedButton("DEV"));Click(NamedButton("Return to grove"));yield return new WaitForSecondsRealtime(.15f);Check(!sim.InChallenge&&!root.Hud.IsOverlayOpen&&sim.save.stage==beforeGrove&&Time.timeScale==1,"Developer return restores grove and closes overlays");
    sim.automate=false;var shotIndex=Array.FindIndex(sim.shots,s=>!s.active);sim.shots[shotIndex]=new ShotState{active=true,position=sim.units[0].position+Vector2.right,aim=sim.units[0].position+Vector2.right*3,damage=1};root.World.Render(0);Capture("runtime_projectile_effect.png");sim.shots[shotIndex].active=false;sim.automate=true;
+   CheckHarvestFeedback();
    yield return CheckLayouts();
    Finish();
+  }
+  void CheckHarvestFeedback(){
+   var sim=root.Simulation;int stage=sim.save.stage;sim.Jump(3);root.World.Render(0);
+   var target=sim.targets[0];target.position=sim.units[0].position+Vector2.up*3;sim.targets[0]=target;
+   sim.Damage(0,target.maxHp*.80f);root.World.Render(0);root.Hud.Tick(0);root.Features.Tick(0);
+   var fill=GameObject.Find("HP fill 0").GetComponent<SpriteRenderer>();
+   var lag=GameObject.Find("HP damage 0").GetComponent<SpriteRenderer>();
+   var tree=GameObject.Find("Vegetation 0").GetComponent<SpriteRenderer>();
+   Check(fill.enabled&&lag.enabled&&lag.transform.localScale.x>fill.transform.localScale.x,"Recent damage leaves a visible amber health segment");
+   Check(fill.color.r>fill.color.g,"Low health changes the health fill color");
+   Check(tree.transform.localScale.x>tree.transform.localScale.y,"Hit squash preserves the rooted tree silhouette");
+   Capture("runtime_harvest_feedback.png");root.World.Render(.6f);
+   Check(Mathf.Abs(lag.transform.localScale.x-fill.transform.localScale.x)<.001f,"Delayed health segment catches up");
+   sim.Damage(0,sim.targets[0].hp);int cleared=sim.cleared;root.World.Render(0);
+   Check(tree.enabled&&!fill.enabled&&!lag.enabled,"Harvest fade starts with health indicators hidden");
+   root.World.Render(.12f);Capture("runtime_harvest_fade.png");root.World.Render(.2f);
+   Check(!tree.enabled&&sim.cleared==cleared,"Harvest visual finishes without changing rewards or clear count");
+   sim.Jump(stage);root.World.Render(0);
+   Check(tree.enabled&&tree.color.a==1&&tree.transform.rotation==Quaternion.identity,"Stage change resets pooled harvest visuals");
   }
   IEnumerator CheckLayouts(){
    int[] widths={588,720,600,768},heights={1280,1280,1400,1024};string[] names={"reference","wide_phone","notched_phone","tablet"};
