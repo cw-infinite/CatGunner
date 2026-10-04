@@ -4,6 +4,7 @@ namespace VerdantTrail {
  public sealed class WorldView : MonoBehaviour {
   HarvestSimulation sim;Camera cam;
   SpriteRenderer[] trees=new SpriteRenderer[128],treeShadow=new SpriteRenderer[128],hpBack=new SpriteRenderer[128],hpFill=new SpriteRenderer[128];
+  SpriteRenderer[] trails=new SpriteRenderer[96];
   SpriteRenderer[] bullets=new SpriteRenderer[96],notes=new SpriteRenderer[192],sparks=new SpriteRenderer[96];
   SpriteRenderer[] bodies=new SpriteRenderer[3],guns=new SpriteRenderer[3],shadows=new SpriteRenderer[3],rings=new SpriteRenderer[3],flashes=new SpriteRenderer[3];
   TextMesh[] numbers=new TextMesh[128],numberShadows=new TextMesh[128];
@@ -28,7 +29,7 @@ namespace VerdantTrail {
     hpBack[i]=OriginalArt.Sprite("HP border","box",root,1800);hpBack[i].color=new Color(.2f,.25f,.2f);hpBack[i].transform.localScale=new Vector3(.28f,.055f,1);
     hpFill[i]=OriginalArt.Sprite("HP fill","box",root,1801);hpFill[i].color=new Color(.56f,.91f,.35f);
    }
-   for(int i=0;i<bullets.Length;i++)bullets[i]=OriginalArt.Sprite("Projectile "+i,"bullet",root,2000);
+   for(int i=0;i<bullets.Length;i++){bullets[i]=OriginalArt.Sprite("Projectile "+i,"bullet",root,2000);trails[i]=OriginalArt.Sprite("Projectile trail "+i,"bullet",root,1999);trails[i].color=new Color(1,.70f,.2f,.36f);}
    for(int i=0;i<notes.Length;i++)notes[i]=OriginalArt.Sprite("Currency "+i,"note",root,2100);
    for(int i=0;i<sparks.Length;i++)sparks[i]=OriginalArt.Sprite("Impact "+i,"box",root,2050);
    for(int i=0;i<3;i++) {
@@ -36,10 +37,10 @@ namespace VerdantTrail {
     bodies[i]=OriginalArt.Sprite("Ranger "+i,"ranger",root,0);
     guns[i]=OriginalArt.Sprite("Tool","gun",root,1);
     rings[i]=OriginalArt.Sprite("Target indicator","ring",root,1700);
-    flashes[i]=OriginalArt.Sprite("Muzzle pulse","bullet",root,2001);
+    flashes[i]=OriginalArt.Sprite("Muzzle pulse","muzzle",root,2001);
    }
    for(int i=0;i<numbers.Length;i++) {
-    GameObject go=new GameObject("Floating number "+i);go.transform.SetParent(root);var tm=go.AddComponent<TextMesh>();tm.font=Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");go.GetComponent<MeshRenderer>().sharedMaterial=tm.font.material;tm.fontSize=48;tm.characterSize=.074f;tm.anchor=TextAnchor.MiddleCenter;tm.fontStyle=FontStyle.Bold;go.GetComponent<MeshRenderer>().sortingOrder=2200;numbers[i]=tm;
+    GameObject go=new GameObject("Floating number "+i);go.transform.SetParent(root);var tm=go.AddComponent<TextMesh>();tm.font=UiFinish.Font;go.GetComponent<MeshRenderer>().sharedMaterial=tm.font.material;tm.fontSize=48;tm.characterSize=.074f;tm.anchor=TextAnchor.MiddleCenter;tm.fontStyle=FontStyle.Normal;go.GetComponent<MeshRenderer>().sortingOrder=2200;numbers[i]=tm;
     var shadow=Instantiate(go,root);shadow.name="Number shadow "+i;shadow.GetComponent<MeshRenderer>().sortingOrder=2199;numberShadows[i]=shadow.GetComponent<TextMesh>();
    }
    for(int i=0;i<confetti.Length;i++){confetti[i]=OriginalArt.Sprite("Clear confetti","box",root,2300);confetti[i].color=Color.HSVToRGB((i*.137f)%1,.7f,1);}
@@ -57,21 +58,21 @@ namespace VerdantTrail {
     trees[i].sortingOrder=500-Mathf.RoundToInt(t.position.y*10);trees[i].color=t.hit>0?new Color(1.1f,1.1f,.8f):Color.white;
     Set(treeShadow[i],visible,t.position,new Vector2(.65f,.42f)*scale);
     bool health=visible&&t.hp<t.maxHp;
-    Set(hpBack[i],health,t.position+Vector2.up*(1.93f*scale),new Vector2(.29f*scale,.055f));
+    Set(hpBack[i],health,t.position+Vector2.up*(2.10f*scale),new Vector2(.48f*scale,.065f));
     float ratio=t.hp/Mathf.Max(1,t.maxHp);
-    Set(hpFill[i],health,t.position+Vector2.up*(1.93f*scale)+Vector2.left*(1-ratio)*.25f*scale,new Vector2(.25f*ratio*scale,.031f));
+    Set(hpFill[i],health,t.position+Vector2.up*(2.10f*scale)+Vector2.left*(1-ratio)*.44f*scale,new Vector2(.44f*ratio*scale,.034f));
    }
    for(int i=0;i<bullets.Length;i++) {
-    var s=sim.shots[i];Set(bullets[i],s.active,s.position,new Vector2(.4f,.12f));if(s.active){Vector2 v=s.aim-s.position;bullets[i].transform.rotation=Quaternion.Euler(0,0,Mathf.Atan2(v.y,v.x)*Mathf.Rad2Deg);}
+    var s=sim.shots[i];Set(bullets[i],s.active,s.position,new Vector2(.60f,.30f));trails[i].enabled=s.active;if(s.active){Vector2 v=s.aim-s.position;Set(trails[i],true,s.position-v.normalized*.38f,new Vector2(.80f,.20f));trails[i].transform.rotation=bullets[i].transform.rotation=Quaternion.Euler(0,0,Mathf.Atan2(v.y,v.x)*Mathf.Rad2Deg);}
    }
    for(int i=0;i<notes.Length;i++){var n=sim.drops[i];Set(notes[i],n.active,n.position,Vector2.one*.14f);if(n.active)notes[i].transform.rotation=Quaternion.Euler(0,0,n.age*200+i*23);}
-   for(int i=0;i<sparks.Length;i++){var s=sim.sparks[i];Set(sparks[i],s.active,s.position,Vector2.one*(.05f*(1-s.age/.2f)));sparks[i].color=new Color(1,.85f,.4f);}
+   for(int i=0;i<sparks.Length;i++){var s=sim.sparks[i];Set(sparks[i],s.active,s.position,Vector2.one*(.09f*(1-s.age/.2f)));sparks[i].color=new Color(1,.85f,.4f);}
    for(int i=0;i<numbers.Length;i++) {
     var n=sim.popups[i];var tm=numbers[i];var shade=numberShadows[i];tm.gameObject.SetActive(n.active);shade.gameObject.SetActive(n.active);if(!n.active)continue;
     if(tm.text!=n.text){tm.text=n.text;shade.text=n.text;}
     tm.transform.position=Pos(n.position+Vector2.right*((i%3-1)*.13f));
     Color col=n.income?new Color(.47f,.94f,.23f):new Color(.99f,.98f,.85f);col.a=Mathf.Clamp01((.85f-n.age)*4);tm.color=col;
-    shade.transform.position=tm.transform.position+new Vector3(.025f,-.03f,0);shade.color=new Color(.16f,.20f,.12f,col.a*.95f);
+    shade.transform.position=tm.transform.position+new Vector3(.025f,-.03f,0);shade.color=new Color(.06f,.035f,.015f,col.a);
    }
    for(int i=0;i<3;i++) {
     var u=sim.units[i];bool active=i<sim.unitCount;float bob=Mathf.Sin(u.walk)*.035f;
@@ -85,8 +86,8 @@ namespace VerdantTrail {
     Set(guns[i],active,grip,new Vector2(.31f,.31f));guns[i].flipY=u.aim.x<0;
     int weaponId=sim.equipment!=null?sim.equipment.WeaponIdForUnit(i):0;guns[i].sprite=OriginalArt.Get("weapon"+Mathf.Max(0,weaponId));guns[i].color=Color.white;
     guns[i].sortingOrder=bodies[i].sortingOrder+1;guns[i].transform.rotation=Quaternion.Euler(0,0,Mathf.Atan2(u.aim.y,u.aim.x)*Mathf.Rad2Deg);
-    Set(rings[i],active&&u.target>=0&&sim.targets[u.target].active, u.target>=0?sim.targets[u.target].position+Vector2.up*.35f:Vector2.zero,Vector2.one*.25f);
-    Set(flashes[i],active&&u.flash>0,grip+u.aim*.57f,new Vector2(.18f,.22f));flashes[i].transform.rotation=guns[i].transform.rotation;
+    Set(rings[i],active&&u.target>=0&&sim.targets[u.target].active, u.target>=0?sim.targets[u.target].position+Vector2.up*.35f:Vector2.zero,Vector2.one*.36f);
+    Set(flashes[i],active&&u.flash>0,grip+u.aim*.57f,Vector2.one*(.18f+.10f*u.flash/.075f));flashes[i].transform.rotation=guns[i].transform.rotation;
    }
    bool clear=sim.phase==StagePhase.Clear;
    for(int i=0;i<confetti.Length;i++) {

@@ -63,6 +63,7 @@ namespace VerdantTrail.Editor {
    Prepare();Validate();Directory.CreateDirectory("Builds/Windows");
    var report=BuildPipeline.BuildPlayer(new BuildPlayerOptions{scenes=new[]{"Assets/Scenes/Harvest.unity"},locationPathName="Builds/Windows/VerdantTrail.exe",target=BuildTarget.StandaloneWindows64,options=BuildOptions.Development});
    if(report.summary.result!=BuildResult.Succeeded)throw new Exception("Build failed: "+report.summary.result);
+   File.Copy("Assets/Resources/Fonts/OFL.txt","Builds/Windows/LilitaOne-LICENSE.txt",true);
    File.WriteAllText("Validation/build.txt",$"Unity {Application.unityVersion}\nResult: {report.summary.result}\nBytes: {report.summary.totalSize}\nWarnings: {report.summary.totalWarnings}\nErrors: {report.summary.totalErrors}\n");
   }
  }

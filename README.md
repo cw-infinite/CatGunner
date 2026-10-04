@@ -8,19 +8,21 @@ This is a playable reference-driven prototype with original generated cartoon sp
 - The HUD fits inside the reported safe area and keeps its portrait proportions on wider displays.
 - Shooting and approach are automatic. Drag on the battlefield to override movement; WASD/arrows also work. Pausing or leaving the app clears held touch movement and unfinished inventory drags.
 - Buy **Force**, **Tempo**, or **Yield** at the bottom. Dim cards and red prices indicate insufficient cash.
-- **TRIAL** unlocks at stage 2: clear a 60-second arena for crystals, then return to your grove.
-- **GEAR** unlocks at stage 3: buy spare guns, then drag or tap-equip them into CAT 2 and CAT 3 to build a **three-cat squad**. Each cat fires its own equipped gun. Removing a follower returns its gear to inventory.
+- **Play** unlocks at stage 2: clear a 60-second arena for crystals, then return to your grove.
+- **Gun** unlocks at stage 3: buy spare guns, then drag or tap-equip them into CAT 2 and CAT 3 to build a **three-cat squad**. Each cat fires its own equipped gun. Removing a follower returns its gear to inventory.
 - **DAILY** offers one crystal claim per UTC day. **TASKS** unlocks at stage 3: claim completed objectives for pass points, then claim earned crystal milestones.
 - Gold badges indicate available rewards. Missions show progress bars; selecting a spare tool highlights the equipment slots that accept it. GEAR also shows your crystal balance and inventory capacity.
 - Open **COLLECTION** inside GEAR to inspect four tools and buy additional guns for crystals, then equip them from inventory.
-- **SKINS** offers the starter plus eight costumes. Buying adds permanent, cumulative Force/Tempo/Yield bonuses; EQUIP LOOK changes appearance without changing those bonuses. All owned bonuses stay active even with the starter outfit.
+- **Skin** offers the starter plus eight costumes. Buying adds permanent, cumulative Force/Tempo/Yield bonuses; EQUIP LOOK changes appearance without changing those bonuses. All owned bonuses stay active even with the starter outfit.
 - Stage **1-5** ends with a durable gold tree before the sand biome.
 - The upper-left settings button opens sound and save controls. Combat continues underneath.
-- The **DEV** button is present in this development build: currency, next stage, clear targets, two-unit test, automatic-approach toggle and 1x/2x/5x/10x speeds.
+- The upper-left crossed-tools icon opens **DEV**: add notes or crystals, previous grove, next stage, return from a trial to the saved grove, clear targets, automatic approach and 1x/2x/5x/10x speeds.
 - Settings shows save status. Valid backups or interrupted-write files can recover a damaged save; unrecoverable/newer-version files are protected from overwrite.
 - Progress saves locally every ten seconds, after reward/equipment changes, on focus loss and on exit. Current stage and upgrades persist; in-stage vegetation restarts on reopening.
 
 The automatic-approach default is a documented inference: the video proves joystick input and automatic shooting, but does not establish the exact movement-automation policy or magnet Auto button's function.
+
+New illustrated side rails place Gun/Skin/Fish/Pet on the left and Play/Mine/Boss/Hunt on the right. Fish, Pet, Mine, Boss and Hunt are locked placeholders; their gameplay is not implemented. Upgrade prices remain banknotes. See [HUD reference update](Validation/HUD_REFERENCE_UPDATE.md) for this visual pass.
 
 ## Analysis and comparison
 - [Reference specification](REFERENCE_GAME_SPEC.md): 30 systems with OBSERVED / INFERRED / UNKNOWN labels and implementation order.

@@ -34,6 +34,24 @@ PASS: Weapon sprite loaded: 0
 PASS: Weapon sprite loaded: 1
 PASS: Weapon sprite loaded: 2
 PASS: Weapon sprite loaded: 3
+PASS: Rounded bundled font loaded
+PASS: Illustrated HUD icon loaded: 0
+PASS: Illustrated HUD icon loaded: 1
+PASS: Illustrated HUD icon loaded: 2
+PASS: Illustrated HUD icon loaded: 3
+PASS: Illustrated HUD icon loaded: 4
+PASS: Illustrated HUD icon loaded: 5
+PASS: Illustrated HUD icon loaded: 6
+PASS: Illustrated HUD icon loaded: 7
+PASS: Illustrated HUD icon loaded: 8
+PASS: Illustrated HUD icon loaded: 9
+PASS: Illustrated HUD icon loaded: 10
+PASS: Illustrated HUD icon loaded: 11
+PASS: Unavailable feature stays locked: FISH
+PASS: Unavailable feature stays locked: PET
+PASS: Unavailable feature stays locked: MINE
+PASS: Unavailable feature stays locked: BOSS
+PASS: Unavailable feature stays locked: HUNT
 PASS: Drag moves character through live Update
 PASS: Release stops manual movement
 PASS: Second pointer cannot steal or release active joystick
@@ -158,6 +176,17 @@ PASS: UI raycast found button
 PASS: All three distinct guns persist in filesystem save
 PASS: Three-cat squad enters timed trial
 PASS: Trial return keeps three-cat loadout
+PASS: UI raycast found button
+PASS: UI raycast found button
+PASS: UI raycast found button
+PASS: Developer crystal grants add the displayed amounts
+PASS: UI raycast found button
+PASS: Developer previous grove steps back once
+PASS: UI raycast found button
+PASS: UI raycast found button
+PASS: UI raycast found button
+PASS: UI raycast found button
+PASS: Developer return restores grove and closes overlays
 PASS: Active controls fit safe portrait viewport: layout_reference_play.png
 PASS: Active controls fit safe portrait viewport: layout_reference_gear.png
 PASS: UI raycast found button
@@ -181,5 +210,5 @@ PASS: UI raycast found button
 PASS: Safe-area screen-to-HUD drag coordinates roundtrip
 PASS: Dragged tool remains under pointer with safe-area inset
 Engine: 6000.3.25f1; resolution: 470x1024; rendered capture: 588x1280.
-Errors: 0; sampled frames: 1809; mean FPS including captures: 56.3; mean recorded GC bytes/frame: 10553; peak draw calls: 65.
+Errors: 0; sampled frames: 1854; mean FPS including captures: 55.9; mean recorded GC bytes/frame: 13601; peak draw calls: 74.
 Desktop development build measurement; not an Android performance result. Images rendered by the running game's camera and UGUI into a RenderTexture.

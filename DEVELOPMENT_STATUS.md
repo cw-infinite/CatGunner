@@ -27,3 +27,7 @@ Currency and settings icons, consistent button feedback, ready-to-claim reward b
 The skin gallery is implemented: eight purchasable original costumes plus starter, cumulative bonuses independent of outfit, and v5 save migration. Four weapon looks and eight forest/desert props are integrated. Prices and new weapon balance are prototype tuning. See [skin/content validation](Validation/SKINS_CONTENT_UPDATE.md).
 
 Three-cat squads now support separate gear, follower removal, empty middle slots and v6 save migration. See [three-cat update](Validation/THREE_CAT_UPDATE.md).
+
+## October 3 reference HUD pass
+
+Original illustrated navigation icons and four colored button surfaces, rounded outlined font, centered cat progress marker, visible banknote upgrade costs, crystal developer grants and grove return controls are implemented. Projectile trails and muzzle flashes improve shot readability. Fish/Pet/Mine/Boss/Hunt remain locked placeholders. See Validation/HUD_REFERENCE_UPDATE.md.

@@ -36,4 +36,8 @@ Original implementation uses independently drawn geometric icons and different t
 
 ## Implemented wardrobe and collection - 2026-10-03
 
-SKINS occupies the left rail at normalized y=.655. Its fitted panel contains ownership bonus totals, a three-column nine-look grid, selected-look stats, wallet, a buy/equip action and close. The smaller implemented catalog fits without scrolling; the reference has a larger four-column wardrobe. Collection uses a two-by-two four-gun grid, selected-gun details, purchase action and return. Skin and collection menus receive inset-phone layout checks; skin also receives a tablet capture.
+Skin occupies the left rail at normalized y=.710. Its fitted panel contains ownership bonus totals, a three-column nine-look grid, selected-look stats, wallet, a buy/equip action and close. The smaller implemented catalog fits without scrolling; the reference has a larger four-column wardrobe. Collection uses a two-by-two four-gun grid, selected-gun details, purchase action and return. Skin and collection menus receive inset-phone layout checks; skin also receives a tablet capture.
+
+## Illustrated HUD pass - 2026-10-03
+
+Rail buttons are 14.5% wide and 6% high. From bottom upward: Gun/Skin/Fish/Pet on the left; Play/Mine/Boss/Hunt on the right. Daily and Tasks remain above them. Locked entries display padlocks. The five-node grove track spans x=.30 to .70, centered with the stage label; a cat head marks the current sector. Settings and developer tools use illustrated icon buttons. Bundled Lilita One text is white with a near-black outline. Upgrade cards show enlarged stat icons and banknote price icons. World health bars are wider and thin; orange-white shots have trails and muzzle flashes.

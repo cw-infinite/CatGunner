@@ -22,7 +22,9 @@ namespace VerdantTrail {
     case "power-art":ui=true;region=new Rect(950,480,385,416);break;
     case "speed-art":ui=true;region=new Rect(1335,480,457,416);break;
     default:
-     if(key.StartsWith("skin")&&int.TryParse(key.Substring(4),out int skin)&&skin>=0&&skin<8){atlas="Art/skins-v1";float[] edges={0,480,910,1344,1792};region=new Rect(edges[skin%4],skin<4?0:450,edges[skin%4+1]-edges[skin%4],skin<4?450:446);}
+     if(key.StartsWith("hud")&&int.TryParse(key.Substring(3),out int icon)&&icon>=0&&icon<12){atlas="Art/hud-icons-v1";ui=true;float[] rows={0,338,594,896};int row=icon/4;region=new Rect(icon%4*448,rows[row],448,rows[row+1]-rows[row]);}
+     else if(key.StartsWith("rail")&&int.TryParse(key.Substring(4),out int style)&&style>=0&&style<4){atlas="Art/rail-buttons-v1";ui=true;panel=true;region=new Rect(style%2*896,style/2*448,896,448);}
+     else if(key.StartsWith("skin")&&int.TryParse(key.Substring(4),out int skin)&&skin>=0&&skin<8){atlas="Art/skins-v1";float[] edges={0,480,910,1344,1792};region=new Rect(edges[skin%4],skin<4?0:450,edges[skin%4+1]-edges[skin%4],skin<4?450:446);}
      else if(key.StartsWith("weapon")&&int.TryParse(key.Substring(6),out int weapon)&&weapon>=0&&weapon<4){atlas="Art/guns-v2";region=new Rect(weapon%2==0?0:933,weapon<2?0:448,weapon%2==0?933:859,448);pivot=new Vector2(.22f,.45f);}
      else if(key.StartsWith("scenery")&&int.TryParse(key.Substring(7),out int prop)&&prop>=0&&prop<8){atlas="Art/scenery-v1";region=new Rect(prop%4*448,prop/4*448,448,448);}
      else return null;break;
@@ -39,7 +41,7 @@ namespace VerdantTrail {
    var rect=new Rect(minX,minY,maxX-minX+1,maxY-minY+1);
    float ppu=ui?100:(key=="gun"||key.StartsWith("weapon"))?rect.width/2:rect.height/2;
    if(ui)pivot=new Vector2(.5f,.5f);
-   float border=panel?Mathf.Min((key=="button-art"?98:key=="pill-art"?66:60)*sx,Mathf.Min(rect.width,rect.height)*.49f):0;
+   float border=panel?Mathf.Min((key.StartsWith("rail")?145:key=="button-art"?98:key=="pill-art"?66:60)*sx,Mathf.Min(rect.width,rect.height)*.49f):0;
    var sprite=Sprite.Create(texture,rect,pivot,ppu,0,SpriteMeshType.FullRect,new Vector4(border,border,border,border));sprite.name="Painted_"+key;return sprite;
   }
  }

@@ -25,12 +25,12 @@ namespace VerdantTrail {
   public bool IsOpen=>weapons.activeSelf||offer.activeSelf||result.activeSelf||collection.activeSelf||dailyPanel.activeSelf||missionPanel.activeSelf||skinsPanel.activeSelf;
   RectTransform Rect(string name,Transform parent,float x,float y,float w,float h){if(parent==canvas.transform)parent=hud.ContentRoot;var rt=new GameObject(name,typeof(RectTransform)).GetComponent<RectTransform>();rt.SetParent(parent,false);rt.anchorMin=new Vector2(x,1-y-h);rt.anchorMax=new Vector2(x+w,1-y);rt.offsetMin=rt.offsetMax=Vector2.zero;return rt;}
   Image Panel(string name,Transform parent,float x,float y,float w,float h,Color c){var rt=Rect(name,parent,x,y,w,h);var im=rt.gameObject.AddComponent<Image>();im.color=c;im.sprite=OriginalArt.Get("panel");im.type=Image.Type.Sliced;if(name.EndsWith(" content"))UiFinish.Skin(im,"menu-art");return im;}
-  Text Text(string name,Transform parent,float x,float y,float w,float h,string value,int size=21){var rt=Rect(name,parent,x,y,w,h);var t=rt.gameObject.AddComponent<Text>();t.font=font;t.fontSize=size;t.fontStyle=FontStyle.Bold;t.alignment=TextAnchor.MiddleCenter;t.color=ink;t.text=value;t.raycastTarget=false;return t;}
+  Text Text(string name,Transform parent,float x,float y,float w,float h,string value,int size=21){var rt=Rect(name,parent,x,y,w,h);var t=rt.gameObject.AddComponent<Text>();t.font=font;t.fontSize=size;t.fontStyle=FontStyle.Bold;t.alignment=TextAnchor.MiddleCenter;t.color=ink;t.text=value;t.raycastTarget=false;UiFinish.WhiteText(t);return t;}
   Button Button(string label,Transform parent,float x,float y,float w,float h,UnityEngine.Events.UnityAction action){var im=Panel(label,parent,x,y,w,h,mint);UiFinish.Skin(im,"button-art");var b=im.gameObject.AddComponent<Button>();b.targetGraphic=im;b.onClick.AddListener(action);UiFinish.Button(b);Text("Label",im.transform,0,0,1,1,label,19);return b;}
   GameObject Overlay(string name,float y,float height,out Transform content){var scrim=Panel(name,canvas.transform,0,0,1,1,Color.clear);scrim.sprite=null;hud.Layout.AddBackdrop(scrim.transform,new Color(0,0,0,.43f));content=Panel(name+" content",scrim.transform,.025f,y,.95f,height,new Color(.89f,.79f,.57f)).transform;return scrim.gameObject;}
   void Close(GameObject panel){panel.SetActive(false);hud.ResetMovement();CancelWeaponDrag();}
   public void Initialize(HarvestSimulation model,EquipmentSystem gear,PortraitHud portrait,RewardSystem rewardSystem){
-   sim=model;equipment=gear;hud=portrait;canvas=hud.Canvas;font=Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
+   sim=model;equipment=gear;hud=portrait;canvas=hud.Canvas;font=UiFinish.Font;
    weaponTile=Button("GEAR",canvas.transform,0,.785f,.145f,.05f,()=>OpenWeapons());
    challengeTile=Button("TRIAL",canvas.transform,.855f,.785f,.145f,.05f,()=>{offer.SetActive(true);offer.transform.SetAsLastSibling();hud.ResetMovement();});
    exit=Button("EXIT",canvas.transform,0,.79f,.13f,.045f,()=>{sim.LeaveChallenge();hud.ResetMovement();});
@@ -50,7 +50,7 @@ namespace VerdantTrail {
    offer=Overlay("Trial offer",.32f,.34f,out var o);Text("Trial title",o,.05f,.05f,.9f,.12f,"TIMED HARVEST",27);offerDetail=Text("Objective",o,.08f,.22f,.84f,.36f,"",23);Button("START TRIAL",o,.15f,.64f,.7f,.15f,()=>{if(sim.EnterChallenge())Close(offer);});Button("BACK",o,.3f,.83f,.4f,.1f,()=>Close(offer));offer.SetActive(false);
    result=Overlay("Trial result",.31f,.36f,out var r);resultTitle=Text("Result title",r,.04f,.08f,.92f,.17f,"",28);resultDetail=Text("Result detail",r,.08f,.3f,.84f,.28f,"",24);Button("CONTINUE",r,.15f,.7f,.7f,.16f,()=>{sim.LeaveChallenge();Close(result);});result.SetActive(false);
    ghost=Rect("Dragged tool",canvas.transform,0,0,0,0);ghost.anchorMin=ghost.anchorMax=Vector2.zero;ghost.sizeDelta=new Vector2(95,75);var image=ghost.gameObject.AddComponent<Image>();image.sprite=OriginalArt.Get("gun");image.raycastTarget=false;ghost.gameObject.SetActive(false);
-   BuildCollection();BuildRewards(rewardSystem);BuildSkins();equipment.Changed+=RefreshEquipment;RefreshEquipment();
+   BuildCollection();BuildRewards(rewardSystem);BuildSkins();BuildSideRails();equipment.Changed+=RefreshEquipment;RefreshEquipment();
   }
   public void OpenWeapons(){if(!equipment.Unlocked||sim.InChallenge)return;weapons.SetActive(true);weapons.transform.SetAsLastSibling();hud.ResetMovement();RefreshEquipment();}
   public void EquipWeapon(int id,int slot){if(!equipment.Equip(id,slot))hud.ShowToast("No spare copy of that tool");RefreshEquipment();}
@@ -72,6 +72,7 @@ namespace VerdantTrail {
   }
   public void Tick(float dt){
    bool available=!hud.CoreOverlayOpen&&!IsOpen;weaponTile.gameObject.SetActive(equipment.Unlocked&&!sim.InChallenge&&available);challengeTile.gameObject.SetActive(sim.ChallengeUnlocked&&!sim.InChallenge&&available&&sim.phase==StagePhase.Harvest);
+   foreach(var tile in lockedTiles)tile.gameObject.SetActive(available&&!sim.InChallenge);
    skinsTile.gameObject.SetActive(available&&!sim.InChallenge);
    dailyTile.gameObject.SetActive(available&&!sim.InChallenge);missionTile.gameObject.SetActive(available&&!sim.InChallenge&&rewards.MissionsUnlocked);
    exit.gameObject.SetActive(sim.InChallenge&&sim.phase==StagePhase.Harvest&&!hud.CoreOverlayOpen);timerRoot.SetActive(sim.InChallenge);

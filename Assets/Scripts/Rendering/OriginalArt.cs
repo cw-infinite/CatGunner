@@ -61,7 +61,9 @@ namespace VerdantTrail {
    }else if(key=="gun") {
     pivot=new Vector2(.15f,.5f);p.Box(30,108,156,42,Ink);p.Box(35,114,145,30,C("#789293"));p.Box(174,120,65,17,Ink);p.Box(85,76,22,37,Ink);p.Box(112,142,42,11,C("#e8b663"));
    }else if(key=="bullet") {
-    pivot=new Vector2(.5f,.5f);p.Ellipse(128,128,123,42,new Color32(255,157,57,55));p.Ellipse(128,128,99,19,C("#ffac43"));p.Ellipse(140,128,78,7,C("#fff7c9"));
+    pivot=new Vector2(.5f,.5f);p.Ellipse(128,128,125,60,new Color32(255,172,37,40));p.Ellipse(128,128,116,40,C("#d76b13"));p.Ellipse(132,128,106,31,C("#ffb12e"));p.Ellipse(144,128,90,18,C("#fffce4"));
+   }else if(key=="muzzle") {
+    pivot=new Vector2(.5f,.5f);p.Poly(C("#ffad28"),new Vector2(128,250),new Vector2(153,166),new Vector2(229,193),new Vector2(179,130),new Vector2(248,75),new Vector2(160,91),new Vector2(122,8),new Vector2(102,91),new Vector2(16,62),new Vector2(80,127),new Vector2(22,204),new Vector2(101,168));p.Ellipse(128,128,43,43,C("#fffadc"));
    }else if(key=="note") {
     pivot=new Vector2(.5f,.5f);p.Poly(Ink,new Vector2(43,67),new Vector2(201,83),new Vector2(218,182),new Vector2(58,170));
     p.Poly(C("#8ae46c"),new Vector2(54,78),new Vector2(192,93),new Vector2(205,171),new Vector2(68,160));p.Oval(131,124,25,31,"#c8f599",6);

@@ -35,6 +35,9 @@ namespace VerdantTrail {
    yield return new WaitForSecondsRealtime(2);
    foreach(string art in new[]{"tree0","tree1","tree2","tree3","tree4","tree5","ranger","gun","button-art","menu-art","card-art","pill-art","note","gem","power-art","speed-art"})Check(OriginalArt.Get(art).name=="Painted_"+art,"Generated atlas sprite loaded: "+art);
    for(int i=0;i<8;i++){Check(OriginalArt.Get("skin"+i).name=="Painted_skin"+i,"Costume sprite loaded: "+i);Check(OriginalArt.Get("scenery"+i).name=="Painted_scenery"+i,"Scenery sprite loaded: "+i);}for(int i=0;i<4;i++)Check(OriginalArt.Get("weapon"+i).name=="Painted_weapon"+i,"Weapon sprite loaded: "+i);
+   Check(UiFinish.Font.name=="LilitaOne-Regular","Rounded bundled font loaded");
+   for(int i=0;i<12;i++)Check(OriginalArt.Get("hud"+i).name=="Painted_hud"+i,"Illustrated HUD icon loaded: "+i);
+   foreach(string feature in new[]{"FISH","PET","MINE","BOSS","HUNT"})Check(!NamedButton(feature).interactable,"Unavailable feature stays locked: "+feature);
    Capture("runtime_art_forest.png");
    var sim=root.Simulation;sim.automate=false;
    var drag=FindFirstObjectByType<DragSurface>();Vector2 pos=sim.units[0].position;
@@ -103,11 +106,11 @@ namespace VerdantTrail {
    Check(sim.phase==StagePhase.Clear&&!sim.targets[gold].active,"Squad clears gold tree through normal shooting");Capture("runtime_gold_clear.png");
    yield return new WaitForSecondsRealtime(3.7f);Check(sim.save.stage==6&&sim.targets[0].kind==3,"Gold finale transitions into palm biome");Capture("runtime_world_two.png");
    var dailyBadge=root.Hud.ContentRoot.Find("DAILY/Daily ready badge").gameObject;Check(dailyBadge.activeSelf,"Daily badge shows an available reward");
-   Click(ButtonAt(.07f,.745f));yield return new WaitForSecondsRealtime(.15f);Capture("runtime_daily_ready.png");
+   Click(NamedButton("DAILY"));yield return new WaitForSecondsRealtime(.15f);Capture("runtime_daily_ready.png");
    int dailyBefore=sim.save.gems;Click(NamedButton("CLAIM DAILY"));Click(NamedButton("CLAIM DAILY"));yield return new WaitForSecondsRealtime(.15f);
    Check(!dailyBadge.activeSelf,"Daily badge clears after collecting reward");
    Check(sim.save.gems==dailyBefore+root.Rewards.catalog.dailyGems[0]&&sim.save.attendanceClaims==1,"Daily UI grants one reward despite repeated click");Capture("runtime_daily_collected.png");Click(NamedButton("CLOSE DAILY"));yield return new WaitForSecondsRealtime(.15f);
-   Click(ButtonAt(.93f,.745f));yield return new WaitForSecondsRealtime(.15f);Capture("runtime_missions_ready.png");
+   Click(NamedButton("TASKS"));yield return new WaitForSecondsRealtime(.15f);Capture("runtime_missions_ready.png");
    int pointsBefore=sim.save.passPoints;Click(NamedButton("Claim mission 0"));Click(NamedButton("Claim mission 0"));Click(NamedButton("Claim mission 3"));yield return new WaitForSecondsRealtime(.15f);
    Check(sim.save.passPoints==pointsBefore+2*root.Rewards.catalog.pointsPerMission,"Mission UI claims completed objectives once");
    int passBefore=sim.save.gems;Click(NamedButton("Claim pass 0"));Click(NamedButton("Claim pass 0"));yield return new WaitForSecondsRealtime(.15f);
@@ -136,6 +139,10 @@ namespace VerdantTrail {
    Click(NamedButton("X"));yield return new WaitForSecondsRealtime(2);Capture("runtime_three_cat_squad.png");
    SaveStore.SaveTo(sim.save,path);var squadSave=SaveStore.LoadFrom(path);Check(squadSave.version==SaveStore.CurrentVersion&&squadSave.equippedWeapons[0]==2&&squadSave.equippedWeapons[1]==1&&squadSave.equippedWeapons[2]==3,"All three distinct guns persist in filesystem save");
    bool threeTrial=sim.EnterChallenge();yield return new WaitForSecondsRealtime(.3f);Check(threeTrial&&sim.unitCount==3,"Three-cat squad enters timed trial");Capture("runtime_three_cat_trial.png");sim.LeaveChallenge();yield return new WaitForSecondsRealtime(.15f);Check(sim.unitCount==3&&root.Equipment.WeaponIdForUnit(2)==3,"Trial return keeps three-cat loadout");
+   Click(NamedButton("DEV"));yield return new WaitForSecondsRealtime(.15f);int beforeCrystals=sim.save.gems;Click(NamedButton("+100 crystals"));Click(NamedButton("+1000 crystals"));Check(sim.save.gems==beforeCrystals+1100,"Developer crystal grants add the displayed amounts");
+   int beforeGrove=sim.save.stage;Click(NamedButton("Previous grove"));Check(sim.save.stage==Mathf.Max(1,beforeGrove-1),"Developer previous grove steps back once");Click(NamedButton("Next stage"));Capture("runtime_dev_icons.png");Click(NamedButton("Close"));yield return new WaitForSecondsRealtime(.15f);
+   sim.EnterChallenge();yield return new WaitForSecondsRealtime(.2f);Click(NamedButton("DEV"));Click(NamedButton("Return to grove"));yield return new WaitForSecondsRealtime(.15f);Check(!sim.InChallenge&&!root.Hud.IsOverlayOpen&&sim.save.stage==beforeGrove&&Time.timeScale==1,"Developer return restores grove and closes overlays");
+   sim.automate=false;var shotIndex=Array.FindIndex(sim.shots,s=>!s.active);sim.shots[shotIndex]=new ShotState{active=true,position=sim.units[0].position+Vector2.right,aim=sim.units[0].position+Vector2.right*3,damage=1};root.World.Render(0);Capture("runtime_projectile_effect.png");sim.shots[shotIndex].active=false;sim.automate=true;
    yield return CheckLayouts();
    Finish();
   }
