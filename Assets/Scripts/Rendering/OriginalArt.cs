@@ -62,6 +62,12 @@ namespace VerdantTrail {
     pivot=new Vector2(.15f,.5f);p.Box(30,108,156,42,Ink);p.Box(35,114,145,30,C("#789293"));p.Box(174,120,65,17,Ink);p.Box(85,76,22,37,Ink);p.Box(112,142,42,11,C("#e8b663"));
    }else if(key=="bullet") {
     pivot=new Vector2(.5f,.5f);p.Ellipse(128,128,125,60,new Color32(255,172,37,40));p.Ellipse(128,128,116,40,C("#d76b13"));p.Ellipse(132,128,106,31,C("#ffb12e"));p.Ellipse(144,128,90,18,C("#fffce4"));
+   }else if(key=="shot1") {
+    pivot=new Vector2(.5f,.5f);p.Poly(C("#268bab"),new Vector2(8,100),new Vector2(105,130),new Vector2(87,165),new Vector2(246,140),new Vector2(143,108),new Vector2(159,78));p.Poly(C("#c9ffff"),new Vector2(35,108),new Vector2(135,141),new Vector2(113,151),new Vector2(216,137),new Vector2(119,118));
+   }else if(key=="shot2"||key=="shot3") {
+    pivot=new Vector2(.5f,.5f);bool sun=key=="shot3";p.Ellipse(128,128,114,114,sun?C("#ed941e"):C("#507c32"));p.Ellipse(128,128,94,94,sun?C("#ffdf68"):C("#b5e77c"));p.Ellipse(110,148,56,56,C("#fffbdc"));
+   }else if(key=="shockwave") {
+    pivot=new Vector2(.5f,.5f);p.Ellipse(128,128,119,119,Color.white);p.Ellipse(128,128,99,99,new Color32(0,0,0,0));
    }else if(key=="muzzle") {
     pivot=new Vector2(.5f,.5f);p.Poly(C("#ffad28"),new Vector2(128,250),new Vector2(153,166),new Vector2(229,193),new Vector2(179,130),new Vector2(248,75),new Vector2(160,91),new Vector2(122,8),new Vector2(102,91),new Vector2(16,62),new Vector2(80,127),new Vector2(22,204),new Vector2(101,168));p.Ellipse(128,128,43,43,C("#fffadc"));
    }else if(key=="note") {

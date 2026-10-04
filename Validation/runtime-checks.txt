@@ -194,6 +194,44 @@ PASS: Delayed health segment catches up
 PASS: Harvest fade starts with health indicators hidden
 PASS: Harvest visual finishes without changing rewards or clear count
 PASS: Stage change resets pooled harvest visuals
+PASS: UI raycast found button
+PASS: UI raycast found button
+PASS: Developer next theme advances to the next grove
+PASS: UI raycast found button
+PASS: Theme spans all five sectors: Meadow Woods
+PASS: Theme repeats after ten groves: 0
+PASS: Theme tree and scenery loaded: 0
+PASS: Theme spans all five sectors: Sunlit Coast
+PASS: Theme repeats after ten groves: 1
+PASS: Theme tree and scenery loaded: 1
+PASS: Theme spans all five sectors: Blossom Spring
+PASS: Theme repeats after ten groves: 2
+PASS: Theme tree and scenery loaded: 2
+PASS: Theme spans all five sectors: Amber Autumn
+PASS: Theme repeats after ten groves: 3
+PASS: Theme tree and scenery loaded: 3
+PASS: Theme spans all five sectors: Snowfall Pines
+PASS: Theme repeats after ten groves: 4
+PASS: Theme tree and scenery loaded: 4
+PASS: Theme spans all five sectors: Moonlit Willow
+PASS: Theme repeats after ten groves: 5
+PASS: Theme tree and scenery loaded: 5
+PASS: Theme spans all five sectors: Bamboo Garden
+PASS: Theme repeats after ten groves: 6
+PASS: Theme tree and scenery loaded: 6
+PASS: Theme spans all five sectors: Mushroom Hollow
+PASS: Theme repeats after ten groves: 7
+PASS: Theme tree and scenery loaded: 7
+PASS: Theme spans all five sectors: Crystal Valley
+PASS: Theme repeats after ten groves: 8
+PASS: Theme tree and scenery loaded: 8
+PASS: Theme spans all five sectors: Ember Grove
+PASS: Theme repeats after ten groves: 9
+PASS: Theme tree and scenery loaded: 9
+PASS: Weapon impact retains source style and single-target damage: 0
+PASS: Weapon impact retains source style and single-target damage: 1
+PASS: Weapon impact retains source style and single-target damage: 2
+PASS: Weapon impact retains source style and single-target damage: 3
 PASS: Active controls fit safe portrait viewport: layout_reference_play.png
 PASS: Active controls fit safe portrait viewport: layout_reference_gear.png
 PASS: UI raycast found button
@@ -217,5 +255,5 @@ PASS: UI raycast found button
 PASS: Safe-area screen-to-HUD drag coordinates roundtrip
 PASS: Dragged tool remains under pointer with safe-area inset
 Engine: 6000.3.25f1; resolution: 470x1024; rendered capture: 588x1280.
-Errors: 0; sampled frames: 1853; mean FPS including captures: 55.5; mean recorded GC bytes/frame: 14032; peak draw calls: 107.
+Errors: 0; sampled frames: 1852; mean FPS including captures: 54.0; mean recorded GC bytes/frame: 86249; peak draw calls: 479.
 Desktop development build measurement; not an Android performance result. Images rendered by the running game's camera and UGUI into a RenderTexture.

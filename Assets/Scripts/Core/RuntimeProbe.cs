@@ -144,8 +144,31 @@ namespace VerdantTrail {
    sim.EnterChallenge();yield return new WaitForSecondsRealtime(.2f);Click(NamedButton("DEV"));Click(NamedButton("Return to grove"));yield return new WaitForSecondsRealtime(.15f);Check(!sim.InChallenge&&!root.Hud.IsOverlayOpen&&sim.save.stage==beforeGrove&&Time.timeScale==1,"Developer return restores grove and closes overlays");
    sim.automate=false;var shotIndex=Array.FindIndex(sim.shots,s=>!s.active);sim.shots[shotIndex]=new ShotState{active=true,position=sim.units[0].position+Vector2.right,aim=sim.units[0].position+Vector2.right*3,damage=1};root.World.Render(0);Capture("runtime_projectile_effect.png");sim.shots[shotIndex].active=false;sim.automate=true;
    CheckHarvestFeedback();
+   CheckThemesAndWeapons();
    yield return CheckLayouts();
    Finish();
+  }
+  void CheckThemesAndWeapons(){
+   var sim=root.Simulation;int oldStage=sim.save.stage;bool auto=sim.automate;sim.automate=false;
+   Click(NamedButton("DEV"));Click(NamedButton("Next theme"));Check(sim.save.stage==Mathf.Min(100,((oldStage-1)/5+1)*5+1),"Developer next theme advances to the next grove");Click(NamedButton("Close"));
+   for(int theme=0;theme<10;theme++){
+    int stage=theme*5+1;Check(GroveThemes.Index(stage)==theme&&GroveThemes.Index(stage+4)==theme,"Theme spans all five sectors: "+GroveThemes.Names[theme]);
+    Check(GroveThemes.Index(stage+50)==theme,"Theme repeats after ten groves: "+theme);
+    Check(OriginalArt.Get("grovetree"+theme).name=="Painted_grovetree"+theme&&OriginalArt.Get("groveprop"+theme).name=="Painted_groveprop"+theme,"Theme tree and scenery loaded: "+theme);
+    sim.Jump(stage);Vector2 anchor=sim.targets[0].position-Vector2.up*3;
+    for(int u=0;u<3;u++){sim.units[u].position=anchor+new Vector2(u==0?0:u==1?-1:1,u==0?0:-.6f);sim.units[u].aim=Vector2.right;sim.units[u].cooldown=999;}
+    root.World.Render(0);root.Hud.Tick(.2f);root.Features.Tick(.2f);Capture("theme_"+(theme+1).ToString("00")+".png");
+   }
+   sim.Jump(3);int held=sim.save.equippedWeapons[0];int impacts=0,lastStyle=-1;Action<Vector2,int> observe=(point,style)=>{impacts++;lastStyle=style;};sim.ProjectileImpact+=observe;
+   for(int weapon=0;weapon<4;weapon++){
+    for(int u=0;u<3;u++)sim.units[u].cooldown=999;
+    sim.save.equippedWeapons[0]=weapon;sim.units[0].aim=Vector2.right;root.World.Render(0);
+    Vector2 hit=sim.units[0].position+new Vector2(2,2);float hp=sim.targets[0].hp;sim.shots[0]=new ShotState{active=true,target=0,position=hit,aim=hit,damage=1,weaponId=weapon};sim.Step(.001f);root.World.Render(0);
+    Check(lastStyle==weapon&&impacts==weapon+1&&Mathf.Abs(sim.targets[0].hp-(hp-1))<.01f,"Weapon impact retains source style and single-target damage: "+weapon);
+    sim.shots[1]=new ShotState{active=true,target=0,position=sim.units[0].position+new Vector2(1,1),aim=hit,damage=1,weaponId=weapon};root.World.Render(.07f);root.Hud.Tick(.2f);Capture("weapon_effect_"+weapon+".png");
+    sim.shots[1].active=false;root.World.Render(.4f);
+   }
+   sim.ProjectileImpact-=observe;sim.save.equippedWeapons[0]=held;sim.automate=auto;sim.Jump(oldStage);root.World.Render(0);root.Hud.Tick(.2f);
   }
   void CheckHarvestFeedback(){
    var sim=root.Simulation;int stage=sim.save.stage;sim.Jump(3);root.World.Render(0);

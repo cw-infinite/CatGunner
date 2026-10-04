@@ -1,0 +1,16 @@
+# Ten grove themes and simplified guns — 2026-10-03
+
+Generated with the built-in image generation tool, transparent_background=true. Original art, not extracted reference pixels. Runtime files: themes-trees-v1.png, themes-props-v1.png, guns-v3.png.
+
+## trees
+
+Original production 2D cartoon game TREE SPRITE ATLAS, transparent background, strict FIVE columns by TWO rows, ten completely isolated full trees centered one per equal cell with generous 15% empty gutters. Warm dark brown thick outlines, rounded chunky shapes, flat cel colors, simple highlights, cute mobile idle cat game style. Consistent elevated 3/4 side view, trunk at bottom, full silhouette uncropped, no ground shadows, no scenery background, no text. Row 1 left to right: lush green rounded oak; tropical coconut palm; pink spring cherry blossom; orange red autumn maple; snowy blue spruce with white snow caps. Row 2: purple twisting enchanted willow; lime green bamboo clump with chunky stalks; red giant mushroom tree with cream spots and thick stem; pale turquoise crystalline tree with faceted branches; charcoal tree with bright orange ember leaves, no smoke. All readable at 90 pixels tall. Every tree stays within its own cell. Actual transparent alpha.
+
+## props
+
+Original 2D cartoon game environment PROP ATLAS on transparent background, FIVE columns TWO rows, exactly ten isolated compact clusters centered one per cell, 18% transparent gutters, thick dark brown outline, rounded forms, flat pastel shading, no text, no ground plane, no shadows. Row1: mossy rocks with tiny daisies for green forest; sandstone rocks with shells for tropical shore; pink flower bush and smooth stone for spring; fallen orange maple leaves and log for autumn; snow-capped blue stones and tiny icy shrub for winter. Row2: purple mushrooms and violet stones for enchanted woodland; bamboo stump and green smooth stone for bamboo garden; small spotted red mushrooms and cream rocks for mushroom grove; pale cyan crystal cluster with violet base for crystal valley; charcoal boulders with subtle orange cracks for ember grove. Each cluster must occupy central 65% of its equal grid cell. Consistent elevated 3/4 mobile game perspective. Genuine transparent alpha.
+
+## guns
+
+Original production 2D cartoon GUN SPRITE ATLAS, transparent background, strict TWO columns TWO rows. Four simple chunky toy blasters pointing horizontally RIGHT, all whole and centered in their cell with 20% transparent gutters. Thick dark brown outlines, clean flat colors, extremely simplified shapes readable at 45px, only 3-4 large color regions per gun, no tiny screws, no filigree, no textures, no text, no effects, no background or shadows. Top left: short walnut and charcoal starter pistol with oversized copper muzzle. Top right: silver and bright blue streamlined electric blaster, one large cyan stripe. Bottom left: green and cream wide-barreled seed grenade launcher, large cylindrical barrel and wooden grip. Bottom right: gold and teal heavy sun cannon, oversized circular muzzle and one large glowing orange chamber. Side-view profiles with grip beneath rear third, barrel pointing RIGHT. Each visibly different silhouette. Genuine transparent alpha.
+

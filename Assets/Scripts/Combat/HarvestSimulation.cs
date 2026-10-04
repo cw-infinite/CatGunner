@@ -3,7 +3,7 @@ using UnityEngine;
 namespace VerdantTrail {
  public enum StagePhase { Harvest, Clear, Transfer, ChallengeResult }
  public struct TargetState { public bool active;public int id,kind;public Vector2 position;public float hp,maxHp,hit; }
- public struct ShotState { public bool active;public int target;public Vector2 position,aim;public float damage,life; }
+ public struct ShotState { public bool active;public int target,weaponId;public Vector2 position,aim;public float damage,life; }
  public struct DropState { public bool active;public Vector2 position,velocity;public float age;public double value; }
  public struct PopupState { public bool active,income;public Vector2 position;public float age;public string text; }
  public struct SparkState { public bool active;public Vector2 position,velocity;public float age; }
@@ -44,6 +44,7 @@ namespace VerdantTrail {
   public int total,cleared,unitCount=1,stageSerial,shotsFired,targetsDestroyed,purchases;
   public double earned; public bool automate=true;
   public Vector2 manualInput;
+  public event Action<Vector2,int> ProjectileImpact;
   public event Action ShotFired,TargetDestroyed,StageCleared,UpgradeBought;
   int popupCursor,sparkCursor;System.Random random;
   public HarvestSimulation(HarvestTuning config,SaveData data){tuning=config;save=data;BeginStage();}
@@ -127,7 +128,7 @@ namespace VerdantTrail {
     ref ShotState shot=ref shots[i];shot.life+=dt;
     Vector2 delta=shot.aim-shot.position;float distance=tuning.projectileSpeed*dt;
     if(delta.sqrMagnitude<=distance*distance) {
-     if(shot.target>=0&&targets[shot.target].active)Damage(shot.target,shot.damage);
+     if(shot.target>=0&&targets[shot.target].active){Damage(shot.target,shot.damage);ProjectileImpact?.Invoke(shot.aim,shot.weaponId);}
      shot.active=false;
     }else {shot.position+=delta.normalized*distance;if(shot.life>1)shot.active=false;}
    }
@@ -136,7 +137,7 @@ namespace VerdantTrail {
   }
   void Fire(int u) {
    for(int i=0;i<shots.Length;i++)if(!shots[i].active) {
-    var unit=units[u];shots[i]=new ShotState{active=true,target=unit.target,position=unit.position+unit.aim*.48f+Vector2.up*.28f,
+    var unit=units[u];shots[i]=new ShotState{active=true,target=unit.target,weaponId=equipment!=null?equipment.WeaponIdForUnit(u):0,position=unit.position+unit.aim*.76f+Vector2.up*.47f,
      aim=targets[unit.target].position+Vector2.up*.38f,damage=EffectiveDamage*(equipment!=null?equipment.ForUnit(u).damageMultiplier:u==0?1:.8f)};
     shotsFired++;ShotFired?.Invoke();return;
    }

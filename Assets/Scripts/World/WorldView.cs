@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 namespace VerdantTrail {
- public sealed class WorldView : MonoBehaviour {
+ public sealed partial class WorldView : MonoBehaviour {
   HarvestSimulation sim;Camera cam;
   SpriteRenderer[] trees=new SpriteRenderer[128],treeShadow=new SpriteRenderer[128],hpBack=new SpriteRenderer[128],hpFill=new SpriteRenderer[128];
   SpriteRenderer[] trails=new SpriteRenderer[96];
@@ -47,12 +47,13 @@ namespace VerdantTrail {
     GameObject go=new GameObject("Floating number "+i);go.transform.SetParent(root);var tm=go.AddComponent<TextMesh>();tm.font=UiFinish.Font;go.GetComponent<MeshRenderer>().sharedMaterial=tm.font.material;tm.fontSize=48;tm.characterSize=.074f;tm.anchor=TextAnchor.MiddleCenter;tm.fontStyle=FontStyle.Normal;go.GetComponent<MeshRenderer>().sortingOrder=2200;numbers[i]=tm;
     var shadow=Instantiate(go,root);shadow.name="Number shadow "+i;shadow.GetComponent<MeshRenderer>().sortingOrder=2199;numberShadows[i]=shadow.GetComponent<TextMesh>();
    }
+   InitializeWeaponEffects(root);
    for(int i=0;i<confetti.Length;i++){confetti[i]=OriginalArt.Sprite("Clear confetti","box",root,2300);confetti[i].color=Color.HSVToRGB((i*.137f)%1,.7f,1);}
   }
   static Vector3 Pos(Vector2 v)=>new Vector3(v.x,v.y,0);
   void Set(SpriteRenderer sr,bool enabled,Vector2 p,Vector2 scale) {sr.enabled=enabled;if(!enabled)return;sr.transform.position=Pos(p);sr.transform.localScale=new Vector3(scale.x,scale.y,1);}
   public void Render(float dt) {
-   if(serial!=sim.stageSerial){serial=sim.stageSerial;BuildTerrain();for(int i=0;i<trees.Length;i++){wasAlive[i]=sim.targets[i].active;fallenTime[i]=0;shownHealth[i]=sim.targets[i].hp/Mathf.Max(1,sim.targets[i].maxHp);if(i<sim.total)trees[i].sprite=OriginalArt.Get("tree"+sim.targets[i].kind);}transform.position=new Vector3(sim.units[0].position.x,sim.units[0].position.y-.8f,-10);}
+   if(serial!=sim.stageSerial){serial=sim.stageSerial;ResetWeaponEffects();BuildTerrain();for(int i=0;i<trees.Length;i++){wasAlive[i]=sim.targets[i].active;fallenTime[i]=0;shownHealth[i]=sim.targets[i].hp/Mathf.Max(1,sim.targets[i].maxHp);if(i<sim.total)trees[i].sprite=OriginalArt.Get(!sim.InChallenge&&sim.targets[i].kind!=5?"grovetree"+GroveThemes.Index(sim.save.stage):"tree"+sim.targets[i].kind);}transform.position=new Vector3(sim.units[0].position.x,sim.units[0].position.y-.8f,-10);}
    Vector3 wanted=new Vector3(sim.units[0].position.x,sim.units[0].position.y-.8f,-10);
    transform.position=Vector3.Lerp(transform.position,wanted,1-Mathf.Exp(-sim.tuning.cameraDamping*dt));
    for(int i=0;i<trees.Length;i++) {
@@ -67,7 +68,9 @@ namespace VerdantTrail {
     Set(trees[i],visible,t.position+Vector2.right*(Mathf.Sin(t.hit*130)*t.hit*.4f),size);
     trees[i].transform.rotation=Quaternion.Euler(0,0,fall*18*(i%2==0?1:-1));
     trees[i].sortingOrder=500-Mathf.RoundToInt(t.position.y*10);
-    trees[i].color=new Color(1,1,1-hit*.20f,1-fall);
+    float opacity=1-fall;
+    if(t.active)for(int u=0;u<sim.unitCount;u++)if(t.position.y<sim.units[u].position.y&&trees[i].bounds.Contains(Pos(sim.units[u].position+Vector2.up*.5f))){opacity*=.42f;break;}
+    trees[i].color=new Color(1,1,1-hit*.20f,opacity);
     Set(treeShadow[i],visible,t.position,new Vector2(.65f,.42f)*scale*(1-fall));
     bool health=t.active&&t.hp<t.maxHp;
     float ratio=Mathf.Clamp01(t.hp/Mathf.Max(1,t.maxHp));
@@ -79,8 +82,9 @@ namespace VerdantTrail {
     Set(hpFill[i],health,bar+Vector2.left*(1-ratio)*.44f*scale,new Vector2(.44f*ratio*scale,.034f));
     hpFill[i].color=ratio<.25f?new Color(1,.40f,.25f):ratio<.5f?new Color(1,.80f,.30f):new Color(.56f,.91f,.35f);
    }
+   RenderWeaponEffects(dt);
    for(int i=0;i<bullets.Length;i++) {
-    var s=sim.shots[i];Set(bullets[i],s.active,s.position,new Vector2(.60f,.30f));trails[i].enabled=s.active;if(s.active){Vector2 v=s.aim-s.position;Set(trails[i],true,s.position-v.normalized*.38f,new Vector2(.80f,.20f));trails[i].transform.rotation=bullets[i].transform.rotation=Quaternion.Euler(0,0,Mathf.Atan2(v.y,v.x)*Mathf.Rad2Deg);}
+    var s=sim.shots[i];int style=Mathf.Clamp(s.weaponId,0,3);bullets[i].sprite=OriginalArt.Get(style==0?"bullet":"shot"+style);Set(bullets[i],s.active,s.position,style<2?new Vector2(.60f,.30f):Vector2.one*(style==2?.24f:.30f));trails[i].color=ShotColor(style,.30f);trails[i].enabled=s.active;if(s.active){Vector2 v=s.aim-s.position;Set(trails[i],true,s.position-v.normalized*.38f,new Vector2(.80f,.20f));trails[i].transform.rotation=bullets[i].transform.rotation=Quaternion.Euler(0,0,Mathf.Atan2(v.y,v.x)*Mathf.Rad2Deg);}
    }
    for(int i=0;i<notes.Length;i++){var n=sim.drops[i];Set(notes[i],n.active,n.position,Vector2.one*.14f);if(n.active)notes[i].transform.rotation=Quaternion.Euler(0,0,n.age*200+i*23);}
    for(int i=0;i<sparks.Length;i++){var s=sim.sparks[i];Set(sparks[i],s.active,s.position,Vector2.one*(.09f*(1-s.age/.2f)));sparks[i].color=new Color(1,.85f,.4f);}
@@ -101,11 +105,11 @@ namespace VerdantTrail {
     bodies[i].sortingOrder=500-Mathf.RoundToInt(u.position.y*10);
     Set(shadows[i],active,u.position+Vector2.down*.025f,new Vector2(.45f,.28f));
     Vector2 grip=u.position+Vector2.up*(.47f+bob)-u.aim*(u.flash/.075f*.065f);
-    Set(guns[i],active,grip,new Vector2(.31f,.31f));guns[i].flipY=u.aim.x<0;
+    Set(guns[i],active,grip,new Vector2(.43f,.43f));guns[i].flipY=u.aim.x<0;
     int weaponId=sim.equipment!=null?sim.equipment.WeaponIdForUnit(i):0;guns[i].sprite=OriginalArt.Get("weapon"+Mathf.Max(0,weaponId));guns[i].color=Color.white;
     guns[i].sortingOrder=bodies[i].sortingOrder+1;guns[i].transform.rotation=Quaternion.Euler(0,0,Mathf.Atan2(u.aim.y,u.aim.x)*Mathf.Rad2Deg);
     Set(rings[i],active&&u.target>=0&&sim.targets[u.target].active, u.target>=0?sim.targets[u.target].position+Vector2.up*.35f:Vector2.zero,Vector2.one*.36f);
-    Set(flashes[i],active&&u.flash>0,grip+u.aim*.57f,Vector2.one*(.18f+.10f*u.flash/.075f));flashes[i].transform.rotation=guns[i].transform.rotation;
+    Set(flashes[i],active&&u.flash>0,grip+u.aim*.76f,Vector2.one*(.18f+.10f*u.flash/.075f));flashes[i].transform.rotation=guns[i].transform.rotation;flashes[i].color=ShotColor(weaponId,1);
    }
    bool clear=sim.phase==StagePhase.Clear;
    for(int i=0;i<confetti.Length;i++) {
@@ -126,9 +130,9 @@ namespace VerdantTrail {
   void BuildTerrain() {
    if(terrain==null){terrain=new GameObject("Stage terrain").transform;terrainMaterial=new Material(Shader.Find("Sprites/Default"));}
    foreach(var batch in terrainBatches.Values){batch.vertices.Clear();batch.triangles.Clear();batch.colors.Clear();}
-   bool sand=sim.InChallenge?sim.ChallengeIndex>0:sim.save.stage>5;cam.backgroundColor=sand?new Color(.85f,.73f,.51f):new Color(.79f,.84f,.56f);
-   bool blossoms=!sand&&!sim.InChallenge&&sim.save.stage>=3;if(blossoms)cam.backgroundColor=new Color(.81f,.84f,.64f);
-   var d=HarvestSimulation.Direction;var n=HarvestSimulation.Normal;Color rock=sand?new Color(.62f,.49f,.33f):new Color(.42f,.30f,.23f);Color top=sand?new Color(.84f,.75f,.54f):new Color(.48f,.64f,.36f);
+   int theme=sim.InChallenge?(sim.ChallengeIndex==0?0:1):GroveThemes.Index(sim.save.stage);
+   cam.backgroundColor=GroveThemes.Floor(theme);
+   var d=HarvestSimulation.Direction;var n=HarvestSimulation.Normal;Color rock=GroveThemes.Cliff(theme),top=GroveThemes.Top(theme);
    if(sim.InChallenge){
     Color ground=cam.backgroundColor;cam.backgroundColor=new Color(.18f,.15f,.12f);
     for(int j=0;j<64;j++){float a=j*Mathf.PI*2/64,b=(j+1)*Mathf.PI*2/64;Vector2 edgeA=new Vector2(Mathf.Cos(a),Mathf.Sin(a))*sim.tuning.arenaRadius,edgeB=new Vector2(Mathf.Cos(b),Mathf.Sin(b))*sim.tuning.arenaRadius;Quad("Arena floor",Vector2.zero,edgeA,edgeB,Vector2.zero,ground,-1100);}
@@ -147,8 +151,8 @@ namespace VerdantTrail {
    foreach(var batch in terrainBatches.Values){batch.mesh.Clear();batch.mesh.SetVertices(batch.vertices);batch.mesh.SetTriangles(batch.triangles,0);batch.mesh.SetColors(batch.colors);batch.mesh.RecalculateBounds();}
    var rng=new System.Random(sim.save.stage*313);
    for(int i=0;i<scenery.Length;i++){
-    int variant=(sand?4:0)+i%4;if(blossoms&&i%3==0)variant=2;
-    var prop=scenery[i];if(prop==null){prop=OriginalArt.Sprite("Scenery "+i,"scenery"+variant,terrain,-920);scenery[i]=prop;}prop.sprite=OriginalArt.Get("scenery"+variant);
+    string propArt="groveprop"+theme;
+    var prop=scenery[i];if(prop==null){prop=OriginalArt.Sprite("Scenery "+i,propArt,terrain,-920);scenery[i]=prop;}prop.sprite=OriginalArt.Get(propArt);
     float along=i*.95f-12,across=(i%2==0?-1:1)*(4.7f+(float)rng.NextDouble()*.6f);Vector2 location=d*along+n*across;
     if(sim.InChallenge){float angle=i*Mathf.PI*2/scenery.Length;location=new Vector2(Mathf.Cos(angle),Mathf.Sin(angle))*(sim.tuning.arenaRadius-.45f);}
     prop.enabled=!sim.InChallenge||i%3==0;prop.transform.position=Pos(location);prop.transform.localScale=Vector3.one*(.32f+(float)rng.NextDouble()*.18f);
@@ -156,9 +160,9 @@ namespace VerdantTrail {
    for(int i=0;i<350;i++) {
     Vector2 p=d*((float)rng.NextDouble()*110-15)+n*((float)rng.NextDouble()*11-5.5f);
     if(sim.InChallenge){float angle=(float)rng.NextDouble()*Mathf.PI*2,radius=(float)rng.NextDouble()*sim.tuning.arenaRadius;p=new Vector2(Mathf.Cos(angle),Mathf.Sin(angle))*radius;}
-    var grass=groundFlecks[i];if(grass==null){grass=OriginalArt.Sprite("Ground fleck","grass",terrain,-950);groundFlecks[i]=grass;}grass.transform.position=Pos(p);grass.transform.localScale=new Vector3(.10f,.10f,1);grass.color=sand?new Color(.65f,.54f,.34f,.3f):new Color(.39f,.59f,.31f,.3f);grass.transform.rotation=Quaternion.Euler(0,0,rng.Next(-30,30));
+    var grass=groundFlecks[i];if(grass==null){grass=OriginalArt.Sprite("Ground fleck","grass",terrain,-950);groundFlecks[i]=grass;}grass.transform.position=Pos(p);grass.transform.localScale=new Vector3(.10f,.10f,1);Color fleck=GroveThemes.Top(theme);fleck.a=.3f;grass.color=fleck;grass.transform.rotation=Quaternion.Euler(0,0,rng.Next(-30,30));
    }
   }
-  void OnDestroy(){foreach(var batch in terrainBatches.Values)if(batch.mesh!=null)Destroy(batch.mesh);if(terrainMaterial!=null)Destroy(terrainMaterial);if(terrain!=null)Destroy(terrain.gameObject);}
+  void OnDestroy(){if(sim!=null)sim.ProjectileImpact-=ShowWeaponImpact;foreach(var batch in terrainBatches.Values)if(batch.mesh!=null)Destroy(batch.mesh);if(terrainMaterial!=null)Destroy(terrainMaterial);if(terrain!=null)Destroy(terrain.gameObject);}
  }
 }

@@ -6,7 +6,7 @@ The game is a playable Windows mechanical prototype. **Visual reconstruction rem
 
 The normal local save inspected on October 2 was at **stage 32, displayed as Grove 7-2**. Validation uses isolated saves and does not advance that player save.
 
-There are **10 configured stage layouts**, arranged as five sectors per world. They repeat with increasing difficulty. The stage counter is capped at 100; this is not a finished 100-level campaign, and reaching the cap does not currently trigger an ending.
+There are **10 encounter-count presets** and **10 grove themes**. Each theme lasts five sectors; Grove 11 repeats Grove 1. Trees, scenery and ground/cliff palettes change together. Encounter layouts and difficulty continue to scale independently. The stage counter is capped at 100; this is not a finished 100-level campaign, and reaching the cap does not currently trigger an ending.
 
 ## Remaining Android prototype milestones
 
@@ -35,3 +35,7 @@ Original illustrated navigation icons and four colored button surfaces, rounded 
 ## October 3 harvest feedback pass
 
 Hit squash, a brief tree harvest tilt/fade, delayed amber health damage, low-health colors and animated floating numbers improve three-cat combat readability. Effects reuse existing pools plus one pooled damage-bar renderer per target. See Validation/HARVEST_FEEDBACK_UPDATE.md.
+
+## October 3 ten-theme expansion
+
+Ten new tree silhouettes and matching scenery sets create meadow, coast, blossom, autumn, snow, willow, bamboo, mushroom, crystal and ember environments. Four larger simplified guns use distinct projectiles and restrained impact effects. DEV offers Next theme for quick inspection. See Validation/TEN_GROVES_UPDATE.md and Assets/Resources/Art/THEME_PROMPTS.md.

@@ -56,6 +56,7 @@ namespace VerdantTrail {
    stage=Label("Stage",canvas.transform,.28f,.133f,.44f,.028f,"",22,Color.white);UiFinish.WhiteText(stage);UiFinish.WhiteText(percent);
    sectorLine=Panel("Sector line",canvas.transform,.30f,.113f,.40f,.005f,paper);
    for(int i=0;i<5;i++){var node=Panel("Sector "+i,canvas.transform,.282f+i*.10f,.106f,.036f,.017f,paper);node.sprite=OriginalArt.Get("disc");sectorNodes[i]=node;}
+   themeLabel=Label("Grove theme",canvas.transform,.23f,.161f,.54f,.022f,"",14,Color.white);
    sectorCat=Panel("Current grove cat",canvas.transform,.27f,.092f,.060f,.040f,Color.white);sectorCat.sprite=OriginalArt.Get("hud1");sectorCat.preserveAspect=true;sectorCat.raycastTarget=false;
    var cashPill=Panel("Cash pill",canvas.transform,.79f,.1f,.196f,.029f,paper);var gemPill=Panel("Gem pill",canvas.transform,.79f,.136f,.196f,.027f,paper);
    var noteIcon=Panel("Notes icon",cashPill.transform,.015f,-.1f,.32f,1.2f,Color.white);noteIcon.sprite=OriginalArt.Get("note");noteIcon.preserveAspect=true;noteIcon.raycastTarget=false;
@@ -97,6 +98,7 @@ namespace VerdantTrail {
    var b=Button(name,canvas.transform,x,.097f,.075f,.035f,Color.white,action);b.GetComponentInChildren<Text>().text="";b.GetComponent<Image>().color=Color.clear;
    var icon=Panel(name+" icon",b.transform,0,0,1,1,Color.white);icon.sprite=OriginalArt.Get(art);icon.preserveAspect=true;icon.raycastTarget=false;
   }
+  Text themeLabel;
   public void ReturnToGrove(){Time.timeScale=1;sim.LeaveChallenge();FindFirstObjectByType<FeatureHud>().ReturnToGrove();if(debug.activeSelf)Toggle(debug);ResetMovement();ShowToast("Back in the grove");}
   void BuildDebug() {
    debug=Modal("Developer tools");debug.transform.parent.gameObject.SetActive(false);
@@ -110,7 +112,8 @@ namespace VerdantTrail {
    Button("Previous grove",debug.transform,.04f,.41f,.44f,.075f,paper,()=>{sim.LeaveChallenge();sim.Jump(Mathf.Max(1,sim.save.stage-1));},18);
    Button("Next stage",debug.transform,.52f,.41f,.44f,.075f,paper,()=>{sim.LeaveChallenge();sim.Jump(sim.save.stage+1);},18);
    Button("Return to grove",debug.transform,.04f,.505f,.92f,.075f,mint,ReturnToGrove,20);
-   Button("Auto approach on / off",debug.transform,.04f,.60f,.92f,.075f,mint,()=>sim.automate=!sim.automate,18);
+   Button("Auto approach",debug.transform,.04f,.60f,.44f,.075f,mint,()=>sim.automate=!sim.automate,18);
+   Button("Next theme",debug.transform,.52f,.60f,.44f,.075f,paper,()=>sim.Jump(Mathf.Min(100,((sim.save.stage-1)/5+1)*5+1)),18);
    int[] rates={1,2,5,10};for(int i=0;i<4;i++){int speed=rates[i];Button(speed+"x",debug.transform,.04f+i*.235f,.70f,.21f,.075f,paper,()=>Time.timeScale=speed,20);}
    Button("Close",debug.transform,.2f,.86f,.6f,.085f,mint,()=>Toggle(debug),20);
    debug.SetActive(false);
@@ -129,6 +132,7 @@ namespace VerdantTrail {
    sectorCat.enabled=!sim.InChallenge;sectorLine.enabled=!sim.InChallenge;stage.enabled=!sim.InChallenge;foreach(var node in sectorNodes)node.enabled=!sim.InChallenge;
    sectorCat.rectTransform.anchorMin=new Vector2(.27f+(sim.save.stage-1)%5*.10f,.868f);sectorCat.rectTransform.anchorMax=new Vector2(.33f+(sim.save.stage-1)%5*.10f,.908f);
    stage.text="GROVE "+((sim.save.stage-1)/5+1)+" - "+((sim.save.stage-1)%5+1);
+   themeLabel.text=sim.InChallenge?"TRIAL ARENA":GroveThemes.Names[GroveThemes.Index(sim.save.stage)];
    percent.text=Mathf.RoundToInt(sim.Progress*100)+"%";progress.rectTransform.anchorMax=new Vector2(sim.Progress,1);
    var lv=upgradeLevels;lv[0]=sim.save.force;lv[1]=sim.save.tempo;lv[2]=sim.save.yield;
    for(int i=0;i<3;i++) {

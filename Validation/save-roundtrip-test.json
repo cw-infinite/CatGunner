@@ -2,7 +2,7 @@
     "version": 6,
     "stage": 6,
     "highestStage": 6,
-    "cash": 6573.0,
+    "cash": 6570.0,
     "gems": 0,
     "force": 15,
     "tempo": 15,
@@ -35,5 +35,5 @@
     "companionProgress": [],
     "prestige": 0,
     "sound": true,
-    "offlineTimestamp": 1791084344
+    "offlineTimestamp": 1791085398
 }

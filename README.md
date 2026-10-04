@@ -15,9 +15,10 @@ This is a playable reference-driven prototype with original generated cartoon sp
 - Open **COLLECTION** inside GEAR to inspect four tools and buy additional guns for crystals, then equip them from inventory.
 - **Skin** offers the starter plus eight costumes. Buying adds permanent, cumulative Force/Tempo/Yield bonuses; EQUIP LOOK changes appearance without changing those bonuses. All owned bonuses stay active even with the starter outfit.
 - Trees react to hits and fade when harvested; health bars show recent damage and change color as health drops.
-- Stage **1-5** ends with a durable gold tree before the sand biome.
+- **Ten grove themes** cycle every ten groves (50 sectors), with matching trees, scenery, ground and cliff colors. Grove 11 returns to Meadow Woods. The HUD names the current theme. Stage **1-5** retains its gold-tree finale before Sunlit Coast.
+- Guns use larger, simpler sprites and four distinct shot effects; the expensive guns have brief local explosions. Foreground trees fade when covering a cat.
 - The upper-left settings button opens sound and save controls. Combat continues underneath.
-- The upper-left crossed-tools icon opens **DEV**: add notes or crystals, previous grove, next stage, return from a trial to the saved grove, clear targets, automatic approach and 1x/2x/5x/10x speeds.
+- The upper-left crossed-tools icon opens **DEV**: add notes or crystals, previous grove, next stage, **Next theme**, return from a trial to the saved grove, clear targets, automatic approach and 1x/2x/5x/10x speeds.
 - Settings shows save status. Valid backups or interrupted-write files can recover a damaged save; unrecoverable/newer-version files are protected from overwrite.
 - Progress saves locally every ten seconds, after reward/equipment changes, on focus loss and on exit. Current stage and upgrades persist; in-stage vegetation restarts on reopening.
 
